@@ -1,14 +1,24 @@
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/layout/Navbar";
+
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Cart from "./pages/Cart";
+import Contact from "./pages/Contact";
+
 function App() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-emerald-400 font-semibold">RESEARCH LAB</p>
+    <>
+      <Navbar />
 
-        <h1 className="text-5xl font-bold mt-3">Peptide Shop</h1>
-
-        <p className="text-zinc-400 mt-4">Istraživački spojevi i peptidi.</p>
-      </div>
-    </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/proizvodi" element={<Products />} />
+        <Route path="/kosarica" element={<Cart />} />
+        <Route path="/kontakt" element={<Contact />} />
+      </Routes>
+    </>
   );
 }
 
