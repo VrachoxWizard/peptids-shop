@@ -1,9 +1,11 @@
 import { ArrowLeft, FlaskConical, ShoppingCart } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { products } from "../data/products";
+import { useCartStore } from "../store/cartStore";
 
 export default function ProductDetails() {
   const { slug } = useParams();
+  const addItem = useCartStore((state) => state.addItem);
 
   const product = products.find((product) => product.slug === slug);
 
@@ -77,6 +79,7 @@ export default function ProductDetails() {
 
             <button
               type="button"
+              onClick={() => addItem(product)}
               className="flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-zinc-950 font-semibold px-6 py-3 rounded-xl transition"
             >
               <ShoppingCart size={18} />
