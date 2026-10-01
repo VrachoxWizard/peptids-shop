@@ -1,5 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import type { Product } from "../../types/product";
+import { Link } from "react-router-dom";
 
 type ProductCardProps = {
   product: Product;
@@ -25,7 +26,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           <span className="text-xs text-zinc-500">{product.amount}</span>
         </div>
 
-        <h2 className="text-xl font-semibold mt-3">{product.name}</h2>
+        <Link
+          to={`/proizvod/${product.slug}`}
+          className="aspect-square bg-zinc-800 flex items-center justify-center"
+        >
+          <h2 className="text-xl font-semibold mt-3 hover:text-emerald-400 transition">
+            {product.name}
+          </h2>
+        </Link>
 
         <p className="text-sm text-zinc-400 mt-2">{product.description}</p>
 
