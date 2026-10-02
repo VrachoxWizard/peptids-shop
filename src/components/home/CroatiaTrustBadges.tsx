@@ -35,61 +35,54 @@ export default function CroatiaTrustBadges() {
       icon: Headphones,
       title: t.croatiaTrust.supportTitle,
       description: t.croatiaTrust.supportDesc,
-      tag: "Radni dan 9-17h",
+      tag: "Radni dan 9–17h",
     },
   ];
 
   return (
-    <section className="relative py-12 sm:py-16 border-b border-white/5 bg-slate-950/60 overflow-hidden">
-      {/* Background radial glow */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[350px] w-[600px] rounded-full bg-sky-500/10 blur-[120px]"
-        aria-hidden="true"
-      />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+    <section className="border-y border-slate-200 bg-slate-50 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-950/50 px-3 py-1 text-xs font-mono font-semibold uppercase tracking-wider text-sky-300 backdrop-blur-md mb-3">
-            <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
-            <span>{t.croatiaTrust.badge}</span>
+        <div className="mb-10 sm:mb-12 max-w-3xl">
+          <div className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-sky-700 mb-2">
+            <span>Švicarski & EU standardi</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
             {t.croatiaTrust.title}
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-zinc-400 leading-relaxed">
+          <p className="mt-2.5 text-sm sm:text-base text-slate-600 leading-relaxed">
             {t.croatiaTrust.description}
           </p>
         </div>
 
-        {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* 4 Pillars - Swiss Horizontal Analytical Split Strip */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200 border border-slate-200 rounded-2xl bg-white shadow-xs overflow-hidden">
           {trustCards.map((card) => {
             const Icon = card.icon;
             return (
               <div
                 key={card.id}
                 data-testid={card.testId}
-                className="liquid-glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
+                className="p-6 sm:p-7 flex flex-col justify-between hover:bg-slate-50/60 transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-950/60 text-sky-400 shadow-sm shadow-sky-500/20">
-                      <Icon size={22} />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-sky-100 bg-sky-50 text-sky-700">
+                      <Icon size={20} />
                     </div>
 
-                    <span className="rounded-full border border-sky-500/20 bg-sky-950/40 px-2.5 py-0.5 text-[10px] font-mono text-sky-300">
+                    <span className="font-mono text-[11px] font-semibold text-slate-600 border border-slate-200 bg-slate-50 rounded-md px-2 py-0.5">
                       {card.tag}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white leading-snug">
+                  <h3 className="text-base font-bold text-slate-900 leading-snug">
                     {card.title}
                   </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                  <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
                     {card.description}
                   </p>
                 </div>
