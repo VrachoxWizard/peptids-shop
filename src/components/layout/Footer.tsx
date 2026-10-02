@@ -1,4 +1,4 @@
-import { FlaskConical } from "lucide-react";
+import { FlaskConical, ShieldAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
 
@@ -7,126 +7,114 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 sm:mt-24 border-t border-zinc-800 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div className="grid gap-8 sm:gap-10 md:grid-cols-3">
-          {/* Brand */}
-          <div>
+    <footer className="mt-16 sm:mt-24 border-t border-slate-200 bg-slate-50 text-slate-600">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        {/* Top Colophon Block: Entity & Direct Contact */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-10 border-b border-slate-200">
+          <div className="lg:col-span-5 space-y-3">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold tracking-tight text-white"
+              className="inline-flex items-center gap-2 text-xl font-serif font-bold tracking-tight text-slate-950"
             >
-              <FlaskConical size={22} className="text-sky-400" />
-              {t.nav.brand}
-              <span className="text-sky-400">{t.nav.brandHighlight}</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-700">
+                <FlaskConical size={18} />
+              </div>
+              <span>{t.nav.brand}</span>
+              <span className="text-sky-700 font-sans font-extrabold text-sm uppercase tracking-wider">
+                {t.nav.brandHighlight}
+              </span>
             </Link>
 
-            <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-zinc-400">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
               {t.footer.brandDesc}
             </p>
 
-            <div className="mt-4 text-xs text-zinc-400 space-y-1 font-mono">
-              <p className="text-sky-300 font-semibold">Distribucijski centar Zagreb, Hrvatska</p>
-              <p>Podrška kupcima: +385 1 4828 111 (9:00-17:00)</p>
+            <div className="pt-2 font-mono text-xs text-slate-700 space-y-1">
+              <p className="font-semibold text-slate-900">Distribucijski logistički centar: Zagreb, Hrvatska</p>
+              <p>Podrška kupcima: <strong className="text-slate-900">+385 1 4828 111</strong> (pon–pet 09:00–17:00)</p>
+              <p>Email: podrska@peptidelab.hr</p>
             </div>
           </div>
 
-          {/* Navigacija */}
-          <div>
-            <h3 className="font-semibold text-sm sm:text-base text-zinc-200">{t.footer.navTitle}</h3>
-
-            <div className="mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 text-xs sm:text-sm">
-              <Link
-                to="/"
-                className="text-zinc-400 hover:text-sky-300 transition"
-              >
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+            {/* Inline Navigation & Section Links */}
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs sm:text-sm font-medium">
+              <Link to="/" className="text-slate-700 hover:text-sky-800 transition">
                 {t.nav.home}
               </Link>
-
-              <Link
-                to="/proizvodi"
-                className="text-zinc-400 hover:text-sky-300 transition"
-              >
+              <Link to="/proizvodi" className="text-slate-700 hover:text-sky-800 transition">
                 {t.nav.products}
               </Link>
-
-              <Link
-                to="/kosarica"
-                className="text-zinc-400 hover:text-sky-300 transition"
-              >
+              <Link to="/kosarica" className="text-slate-700 hover:text-sky-800 transition">
                 {t.nav.cart}
               </Link>
-
-              <Link
-                to="/kontakt"
-                className="text-zinc-400 hover:text-sky-300 transition"
-              >
+              <Link to="/kontakt" className="text-slate-700 hover:text-sky-800 transition">
                 {t.nav.contact}
               </Link>
             </div>
-          </div>
 
-          {/* Informacije */}
-          <div>
-            <h3 className="font-semibold text-sm sm:text-base text-zinc-200">{t.footer.infoTitle}</h3>
+            {/* Courier & Payment Badges */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div>
+                <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                  Dostavni partneri u RH i regiji:
+                </span>
+                <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
+                  <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 font-bold text-slate-800 shadow-xs">
+                    GLS Hrvatska
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 font-bold text-slate-800 shadow-xs">
+                    DPD Croatia
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-slate-600">
+                    Paketomati (24/7)
+                  </span>
+                </div>
+              </div>
 
-            <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-zinc-500">
-              <p>{t.footer.info1}</p>
-
-              <p>{t.footer.info2}</p>
-
-              <p>{t.footer.info3}</p>
+              <div>
+                <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                  Podržani načini plaćanja:
+                </span>
+                <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
+                  <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-bold text-emerald-800">
+                    Pouzeće (Gotovina/Kartica)
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 font-bold text-slate-800 shadow-xs">
+                    Keks Pay
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-slate-700">
+                    Aircash
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-600">
+                    Visa / Mastercard
+                  </span>
+                  <span className="rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-600">
+                    2D Uplatnica
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Courier & Payment Badges */}
-        <div className="mt-10 pt-8 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          <div>
-            <span className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">
-              Dostavni partneri u Hrvatskoj:
-            </span>
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
-                GLS Hrvatska
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
-                DPD Croatia
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono text-zinc-300">
-                Paketomati (24/7)
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <span className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">
-              Podržani načini plaćanja:
-            </span>
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="rounded-lg border border-sky-500/30 bg-sky-950/40 px-3 py-1 font-mono font-bold text-sky-300">
-                Pouzeće (Gotovina/Kartica)
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
-                Keks Pay
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono text-zinc-300">
-                Aircash
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono text-zinc-400">
-                Visa / Mastercard
-              </span>
-              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono text-zinc-400">
-                2D Uplatnica
-              </span>
+        {/* Mandatory Research Notice / Disclaimer */}
+        <div className="py-6 border-b border-slate-200">
+          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/70 p-4 text-xs text-amber-900 leading-relaxed">
+            <ShieldAlert size={18} className="text-amber-700 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-semibold block mb-0.5">Istraživačka namjena spojeva (Research Use Only):</strong>
+              Svi biokemijski spojevi, liofilizirani peptidi i analitički standardi u ponudi namijenjeni su isključivo za in vitro laboratorijska istraživanja, kontrolu kvalitete i znanstveno-tehnološka ispitivanja. Nisu namijenjeni za izravnu primjenu na ljudima ili životinjama, niti kao lijekovi ili prehrambeni dodaci.
             </div>
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-zinc-900 pt-6 text-xs sm:text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {currentYear} {t.footer.copyright}</p>
-
-          <p>{t.footer.builtAs}</p>
+        {/* Bottom Colophon Bar */}
+        <div className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
+          <p>© {currentYear} PeptideLab d.o.o. Sva prava pridržana. Zagreb, Hrvatska.</p>
+          <p className="font-mono text-[11px] text-slate-400">
+            Swiss & EU Pharma Research Standards · ISO 9001:2015 Compliant HPLC
+          </p>
         </div>
       </div>
     </footer>
