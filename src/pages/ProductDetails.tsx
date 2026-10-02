@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ArrowLeft, Minus, Plus, ShoppingCart } from "lucide-react";
+import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -12,7 +12,6 @@ import { useCartStore } from "../store/cartStore";
 
 export default function ProductDetails() {
   const { slug } = useParams();
-
   const navigate = useNavigate();
 
   const [quantity, setQuantity] = useState(1);
@@ -51,7 +50,6 @@ export default function ProductDetails() {
       description: `${product.name} × ${quantity}`,
       action: {
         label: "Otvori košaricu",
-
         onClick: () => navigate("/kosarica"),
       },
     });
@@ -61,13 +59,22 @@ export default function ProductDetails() {
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
-      <Link
-        to="/proizvodi"
-        className="mb-10 inline-flex items-center gap-2 text-zinc-400 transition hover:text-white"
-      >
-        <ArrowLeft size={18} />
-        Povratak na proizvode
-      </Link>
+      {/* Breadcrumbs */}
+      <nav className="mb-10 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+        <Link to="/" className="transition hover:text-white">
+          Početna
+        </Link>
+
+        <ChevronRight size={14} />
+
+        <Link to="/proizvodi" className="transition hover:text-white">
+          Proizvodi
+        </Link>
+
+        <ChevronRight size={14} />
+
+        <span className="text-zinc-300">{product.name}</span>
+      </nav>
 
       <div className="grid gap-12 md:grid-cols-2">
         {/* Product visual */}
