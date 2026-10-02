@@ -48,35 +48,35 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Info */}
-      <div className="p-5">
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-xs font-medium uppercase tracking-wider text-emerald-400">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-emerald-400 truncate">
             {product.category}
           </span>
 
-          <span className="rounded-full bg-zinc-800 px-2.5 py-1 text-xs text-zinc-400">
+          <span className="shrink-0 rounded-full bg-zinc-800 px-2 sm:px-2.5 py-0.5 sm:py-1 text-[11px] sm:text-xs text-zinc-400">
             {product.amount}
           </span>
         </div>
 
-        <Link to={`/proizvod/${product.slug}`}>
-          <h2 className="mt-4 text-xl font-semibold transition group-hover:text-emerald-400">
+        <Link to={`/proizvod/${product.slug}`} className="block">
+          <h2 className="mt-3 sm:mt-4 text-lg sm:text-xl font-semibold leading-snug transition group-hover:text-emerald-400">
             {product.name}
           </h2>
         </Link>
 
-        <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500">
+        <p className="mt-1.5 sm:mt-2 line-clamp-2 min-h-10 text-xs sm:text-sm leading-relaxed text-zinc-500">
           {product.description}
         </p>
 
-        <div className="mt-6 border-t border-zinc-800 pt-5">
-          <div className="flex items-end justify-between gap-4">
+        <div className="mt-5 sm:mt-6 border-t border-zinc-800 pt-4 sm:pt-5">
+          <div className="flex items-end justify-between gap-3">
             <div>
-              <span className="block text-xs text-zinc-500">Cijena</span>
+              <span className="block text-[11px] sm:text-xs text-zinc-500">Cijena</span>
 
-              <span className="mt-1 block text-2xl font-bold">
+              <span className="mt-0.5 sm:mt-1 block text-xl sm:text-2xl font-bold">
                 {product.price.toFixed(2)}
-                <span className="ml-1 text-sm font-normal text-zinc-500">
+                <span className="ml-1 text-xs sm:text-sm font-normal text-zinc-500">
                   €
                 </span>
               </span>
@@ -85,9 +85,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex items-center gap-2 rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-95"
+              className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-400 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-95"
             >
-              <ShoppingCart size={16} />
+              <ShoppingCart size={15} />
               Dodaj
             </button>
           </div>

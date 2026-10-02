@@ -117,19 +117,23 @@ export default function Products() {
     maxPrice !== 100;
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-16">
-      <div className="mb-10">
-        <p className="text-emerald-400 font-medium">KATALOG</p>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+      <div className="mb-8 sm:mb-10">
+        <p className="text-emerald-400 font-medium text-xs sm:text-sm tracking-wider">
+          KATALOG
+        </p>
 
-        <h1 className="text-4xl font-bold mt-2">Istraživački proizvodi</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mt-1.5 sm:mt-2">
+          Istraživački proizvodi
+        </h1>
 
-        <p className="text-zinc-400 mt-3">
+        <p className="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">
           Demo katalog istraživačkih proizvoda.
         </p>
       </div>
 
       {/* Search */}
-      <div className="relative mb-6">
+      <div className="relative mb-5 sm:mb-6">
         <Search
           size={20}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
@@ -142,21 +146,21 @@ export default function Products() {
           onChange={(event) =>
             updateParam("search", event.target.value)
           }
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-12 pr-4 outline-none transition placeholder:text-zinc-600 focus:border-emerald-400"
+          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-11 sm:pl-12 pr-4 text-base outline-none transition placeholder:text-zinc-600 focus:border-emerald-400"
         />
       </div>
 
       {/* Filteri */}
-      <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
-        <div className="flex items-center gap-2 mb-5">
+      <div className="mb-8 sm:mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-5">
+        <div className="flex items-center gap-2 mb-4 sm:mb-5">
           <SlidersHorizontal size={18} className="text-emerald-400" />
 
-          <h2 className="font-semibold">Filteri</h2>
+          <h2 className="font-semibold text-base sm:text-lg">Filteri</h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
           <div>
-            <label className="block text-sm text-zinc-400 mb-2">
+            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
               Kategorija
             </label>
 
@@ -165,7 +169,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("category", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 outline-none focus:border-emerald-400"
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
             >
               {categories.map((categoryName) => (
                 <option key={categoryName} value={categoryName}>
@@ -176,7 +180,7 @@ export default function Products() {
           </div>
 
           <div>
-            <label className="block text-sm text-zinc-400 mb-2">
+            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
               Maksimalna cijena: {maxPrice} €
             </label>
 
@@ -189,12 +193,12 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("maxPrice", event.target.value)
               }
-              className="w-full accent-emerald-400"
+              className="w-full accent-emerald-400 h-2 cursor-pointer"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-zinc-400 mb-2">
+            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
               Sortiranje
             </label>
 
@@ -203,7 +207,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("sort", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 outline-none focus:border-emerald-400"
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
             >
               <option value="default">Zadano</option>
 
@@ -222,7 +226,7 @@ export default function Products() {
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-5 inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition"
+            className="mt-4 sm:mt-5 inline-flex items-center gap-2 text-xs sm:text-sm text-zinc-400 hover:text-white transition"
           >
             <X size={16} />
             Resetiraj filtere
@@ -231,8 +235,8 @@ export default function Products() {
       </div>
 
       {/* Broj rezultata */}
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-sm text-zinc-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs sm:text-sm text-zinc-500">
+        <p>
           Pronađeno proizvoda:{" "}
           <span className="text-white font-semibold">
             {filteredProducts.length}
@@ -240,7 +244,7 @@ export default function Products() {
         </p>
 
         {totalPages > 0 && (
-          <p className="text-sm text-zinc-500">
+          <p>
             Stranica <span className="text-white">{currentPage}</span> od{" "}
             <span className="text-white">{totalPages}</span>
           </p>
@@ -250,7 +254,7 @@ export default function Products() {
       {/* Proizvodi */}
       {paginatedProducts.length > 0 ? (
         <>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -258,15 +262,19 @@ export default function Products() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
+            <nav
+              aria-label="Paginacija"
+              className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+            >
               <button
                 type="button"
                 onClick={previousPage}
                 disabled={currentPage === 1}
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-4 py-2 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Prethodna stranica"
               >
-                <ChevronLeft size={18} />
-                Prethodna
+                <ChevronLeft size={16} />
+                <span className="hidden sm:inline">Prethodna</span>
               </button>
 
               {Array.from({ length: totalPages }, (_, index) => {
@@ -277,11 +285,12 @@ export default function Products() {
                     key={pageNumber}
                     type="button"
                     onClick={() => setCurrentPage(pageNumber)}
-                    className={`h-10 min-w-10 rounded-xl border px-3 font-medium transition ${
+                    className={`h-10 min-w-10 rounded-xl border px-3 text-xs sm:text-sm font-medium transition ${
                       currentPage === pageNumber
                         ? "border-emerald-400 bg-emerald-400 text-zinc-950"
                         : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
                     }`}
+                    aria-current={currentPage === pageNumber ? "page" : undefined}
                   >
                     {pageNumber}
                   </button>
@@ -292,29 +301,30 @@ export default function Products() {
                 type="button"
                 onClick={nextPage}
                 disabled={currentPage === totalPages}
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-4 py-2 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Sljedeća stranica"
               >
-                Sljedeća
-                <ChevronRight size={18} />
+                <span className="hidden sm:inline">Sljedeća</span>
+                <ChevronRight size={16} />
               </button>
-            </div>
+            </nav>
           )}
         </>
       ) : (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 py-20 text-center">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 py-16 sm:py-20 px-4 text-center">
           <Search size={40} className="mx-auto text-zinc-600" />
 
-          <h2 className="text-xl font-semibold mt-5">
+          <h2 className="text-lg sm:text-xl font-semibold mt-5">
             Nema pronađenih proizvoda
           </h2>
 
-          <p className="text-zinc-500 mt-2">
+          <p className="text-zinc-500 text-xs sm:text-sm mt-2">
             Pokušaj promijeniti pretragu ili filtere.
           </p>
 
           <button
             onClick={resetFilters}
-            className="mt-6 rounded-lg bg-emerald-400 px-5 py-2 font-semibold text-zinc-950 hover:bg-emerald-300 transition"
+            className="mt-6 rounded-lg bg-emerald-400 px-5 py-2.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition text-sm"
           >
             Resetiraj filtere
           </button>

@@ -22,12 +22,12 @@ export default function ProductDetails() {
 
   if (!product) {
     return (
-      <main className="max-w-7xl mx-auto px-6 py-16">
-        <h1 className="text-4xl font-bold">Proizvod nije pronađen</h1>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <h1 className="text-2xl sm:text-4xl font-bold">Proizvod nije pronađen</h1>
 
         <Link
           to="/proizvodi"
-          className="mt-6 inline-block text-emerald-400 hover:text-emerald-300"
+          className="mt-6 inline-block text-emerald-400 hover:text-emerald-300 text-sm sm:text-base"
         >
           ← Povratak na proizvode
         </Link>
@@ -44,6 +44,8 @@ export default function ProductDetails() {
   }
 
   function handleAddToCart() {
+    if (!product) return;
+
     addItem(product, quantity);
 
     toast.success("Proizvod dodan u košaricu", {
@@ -58,27 +60,30 @@ export default function ProductDetails() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-12">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
       {/* Breadcrumbs */}
-      <nav className="mb-10 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-        <Link to="/" className="transition hover:text-white">
+      <nav
+        aria-label="Breadcrumb"
+        className="mb-6 sm:mb-10 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-zinc-500 min-w-0"
+      >
+        <Link to="/" className="transition hover:text-white shrink-0">
           Početna
         </Link>
 
-        <ChevronRight size={14} />
+        <ChevronRight size={14} className="shrink-0" />
 
-        <Link to="/proizvodi" className="transition hover:text-white">
+        <Link to="/proizvodi" className="transition hover:text-white shrink-0">
           Proizvodi
         </Link>
 
-        <ChevronRight size={14} />
+        <ChevronRight size={14} className="shrink-0" />
 
-        <span className="text-zinc-300">{product.name}</span>
+        <span className="text-zinc-300 truncate">{product.name}</span>
       </nav>
 
-      <div className="grid gap-12 md:grid-cols-2">
+      <div className="grid gap-8 sm:gap-12 md:grid-cols-2 items-start">
         {/* Product visual */}
-        <div className="overflow-hidden rounded-3xl border border-zinc-800">
+        <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-zinc-800">
           <ProductVisual
             name={product.name}
             category={product.category}
@@ -89,52 +94,52 @@ export default function ProductDetails() {
 
         {/* Product info */}
         <div className="flex flex-col justify-center">
-          <span className="text-sm font-medium uppercase tracking-wider text-emerald-400">
+          <span className="text-xs sm:text-sm font-medium uppercase tracking-wider text-emerald-400">
             {product.category}
           </span>
 
-          <h1 className="mt-3 text-4xl font-bold md:text-5xl">
+          <h1 className="mt-2 sm:mt-3 text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight break-words">
             {product.name}
           </h1>
 
-          <p className="mt-5 text-lg leading-8 text-zinc-400">
+          <p className="mt-3 sm:mt-5 text-base sm:text-lg leading-relaxed text-zinc-400">
             {product.description}
           </p>
 
-          <div className="mt-8 space-y-4 border-t border-zinc-800 pt-8">
-            <div className="flex justify-between">
+          <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 border-t border-zinc-800 pt-6 sm:pt-8 text-xs sm:text-sm">
+            <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Količina pakiranja</span>
 
-              <span>{product.amount}</span>
+              <span className="font-medium text-white">{product.amount}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Kategorija</span>
 
-              <span>{product.category}</span>
+              <span className="font-medium text-white">{product.category}</span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Namjena</span>
 
-              <span>Demo / istraživački katalog</span>
+              <span className="font-medium text-right text-white">Demo / istraživački katalog</span>
             </div>
           </div>
 
           {/* Price */}
-          <div className="mt-10">
-            <span className="block text-sm text-zinc-500">Cijena</span>
+          <div className="mt-8 sm:mt-10">
+            <span className="block text-xs sm:text-sm text-zinc-500">Cijena</span>
 
-            <span className="text-4xl font-bold">
+            <span className="mt-0.5 sm:mt-1 inline-block text-3xl sm:text-4xl font-bold">
               {product.price.toFixed(2)}
 
-              <span className="ml-1 text-lg font-normal text-zinc-500">€</span>
+              <span className="ml-1 text-base sm:text-lg font-normal text-zinc-500">€</span>
             </span>
           </div>
 
           {/* Quantity */}
-          <div className="mt-8">
-            <span className="mb-3 block text-sm font-medium text-zinc-400">
+          <div className="mt-6 sm:mt-8">
+            <span className="mb-2 sm:mb-3 block text-xs sm:text-sm font-medium text-zinc-400">
               Količina
             </span>
 
@@ -143,13 +148,13 @@ export default function ProductDetails() {
                 type="button"
                 onClick={decreaseQuantity}
                 disabled={quantity === 1}
-                className="flex h-11 w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
                 aria-label="Smanji količinu"
               >
                 <Minus size={18} />
               </button>
 
-              <span className="w-14 text-center text-lg font-semibold">
+              <span className="w-12 sm:w-14 text-center text-base sm:text-lg font-semibold">
                 {quantity}
               </span>
 
@@ -157,7 +162,7 @@ export default function ProductDetails() {
                 type="button"
                 onClick={increaseQuantity}
                 disabled={quantity === 99}
-                className="flex h-11 w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
+                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
                 aria-label="Povećaj količinu"
               >
                 <Plus size={18} />
@@ -166,10 +171,10 @@ export default function ProductDetails() {
           </div>
 
           {/* Total */}
-          <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-6">
-            <span className="text-zinc-500">Ukupno</span>
+          <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-5 sm:pt-6">
+            <span className="text-sm sm:text-base text-zinc-500">Ukupno</span>
 
-            <span className="text-2xl font-bold">
+            <span className="text-xl sm:text-2xl font-bold">
               {(product.price * quantity).toFixed(2)} €
             </span>
           </div>
@@ -178,7 +183,7 @@ export default function ProductDetails() {
           <button
             type="button"
             onClick={handleAddToCart}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-4 font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-[0.99]"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-[0.99]"
           >
             <ShoppingCart size={19} />
             Dodaj {quantity} u košaricu

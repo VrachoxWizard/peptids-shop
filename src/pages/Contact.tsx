@@ -83,70 +83,84 @@ export default function Contact() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-16">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
       {/* Header */}
-      <div className="max-w-2xl mb-12">
-        <p className="text-emerald-400 font-medium">KONTAKT</p>
+      <div className="max-w-2xl mb-8 sm:mb-12">
+        <p className="text-emerald-400 font-medium text-xs sm:text-sm tracking-wider">
+          KONTAKT
+        </p>
 
-        <h1 className="text-4xl md:text-5xl font-bold mt-2">Javi nam se</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-1.5 sm:mt-2">
+          Javi nam se
+        </h1>
 
-        <p className="text-zinc-400 mt-4 text-lg">
+        <p className="text-zinc-400 mt-3 sm:mt-4 text-base sm:text-lg">
           Imaš pitanje o demo projektu, katalogu ili funkcionalnostima
           aplikacije? Pošalji poruku.
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
         {/* Kontakt informacije */}
         <div className="space-y-4">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6">
             <Mail size={24} className="text-emerald-400" />
 
-            <h2 className="font-semibold mt-4">Email</h2>
+            <h2 className="font-semibold text-base sm:text-lg mt-3 sm:mt-4">
+              Email
+            </h2>
 
-            <p className="text-sm text-zinc-500 mt-2">info@peptidelab.demo</p>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 sm:mt-2">
+              info@peptidelab.demo
+            </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6">
             <MapPin size={24} className="text-emerald-400" />
 
-            <h2 className="font-semibold mt-4">Lokacija</h2>
+            <h2 className="font-semibold text-base sm:text-lg mt-3 sm:mt-4">
+              Lokacija
+            </h2>
 
-            <p className="text-sm text-zinc-500 mt-2">Zagreb, Hrvatska</p>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 sm:mt-2">
+              Zagreb, Hrvatska
+            </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6">
             <FlaskConical size={24} className="text-emerald-400" />
 
-            <h2 className="font-semibold mt-4">PeptideLab</h2>
+            <h2 className="font-semibold text-base sm:text-lg mt-3 sm:mt-4">
+              PeptideLab
+            </h2>
 
-            <p className="text-sm leading-6 text-zinc-500 mt-2">
+            <p className="text-xs sm:text-sm leading-6 text-zinc-500 mt-1.5 sm:mt-2">
               Demo frontend projekt s fiktivnim istraživačkim proizvodima.
             </p>
           </div>
         </div>
 
         {/* Forma */}
-        <div className="lg:col-span-2 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 md:p-8">
-          <div className="flex items-center gap-3 mb-8">
+        <div className="lg:col-span-2 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-6 md:p-8">
+          <div className="flex items-center gap-3 mb-6 sm:mb-8">
             <MessageSquare size={24} className="text-emerald-400" />
 
-            <h2 className="text-2xl font-bold">Pošalji poruku</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Pošalji poruku</h2>
           </div>
 
           {submitted && (
-            <div className="mb-6 flex items-start gap-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-4">
+            <div className="mb-6 flex items-start gap-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3.5 sm:p-4">
               <CheckCircle2
                 size={20}
                 className="mt-0.5 shrink-0 text-emerald-400"
               />
 
               <div>
-                <p className="font-semibold text-emerald-400">
+                <p className="font-semibold text-emerald-400 text-sm sm:text-base">
                   Poruka je zaprimljena
                 </p>
 
-                <p className="text-sm text-zinc-400 mt-1">
+                <p className="text-xs sm:text-sm text-zinc-400 mt-1">
                   Ovo je demo forma pa se poruka trenutno ne šalje na pravi
                   server.
                 </p>
@@ -154,10 +168,10 @@ export default function Contact() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             {/* Ime */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2">
+              <label htmlFor="name" className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Ime
               </label>
 
@@ -168,7 +182,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Tvoje ime"
-                className={`w-full rounded-xl border bg-zinc-950 px-4 py-3 outline-none transition placeholder:text-zinc-600 ${
+                className={`w-full rounded-xl border bg-zinc-950 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base outline-none transition placeholder:text-zinc-600 ${
                   errors.name
                     ? "border-red-500"
                     : "border-zinc-700 focus:border-emerald-400"
@@ -176,13 +190,13 @@ export default function Contact() {
               />
 
               {errors.name && (
-                <p className="text-sm text-red-400 mt-2">{errors.name}</p>
+                <p className="text-xs sm:text-sm text-red-400 mt-1.5">{errors.name}</p>
               )}
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
+              <label htmlFor="email" className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">
                 Email
               </label>
 
@@ -193,7 +207,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="ime@email.com"
-                className={`w-full rounded-xl border bg-zinc-950 px-4 py-3 outline-none transition placeholder:text-zinc-600 ${
+                className={`w-full rounded-xl border bg-zinc-950 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base outline-none transition placeholder:text-zinc-600 ${
                   errors.email
                     ? "border-red-500"
                     : "border-zinc-700 focus:border-emerald-400"
@@ -201,7 +215,7 @@ export default function Contact() {
               />
 
               {errors.email && (
-                <p className="text-sm text-red-400 mt-2">{errors.email}</p>
+                <p className="text-xs sm:text-sm text-red-400 mt-1.5">{errors.email}</p>
               )}
             </div>
 
@@ -209,7 +223,7 @@ export default function Contact() {
             <div>
               <label
                 htmlFor="message"
-                className="block text-sm font-medium mb-2"
+                className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2"
               >
                 Poruka
               </label>
@@ -217,11 +231,11 @@ export default function Contact() {
               <textarea
                 id="message"
                 name="message"
-                rows={6}
+                rows={5}
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Napiši poruku..."
-                className={`w-full resize-none rounded-xl border bg-zinc-950 px-4 py-3 outline-none transition placeholder:text-zinc-600 ${
+                className={`w-full resize-none rounded-xl border bg-zinc-950 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base outline-none transition placeholder:text-zinc-600 ${
                   errors.message
                     ? "border-red-500"
                     : "border-zinc-700 focus:border-emerald-400"
@@ -229,13 +243,13 @@ export default function Contact() {
               />
 
               {errors.message && (
-                <p className="text-sm text-red-400 mt-2">{errors.message}</p>
+                <p className="text-xs sm:text-sm text-red-400 mt-1.5">{errors.message}</p>
               )}
             </div>
 
             <button
               type="submit"
-              className="rounded-xl bg-emerald-400 px-6 py-3 font-semibold text-zinc-950 hover:bg-emerald-300 transition"
+              className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition text-sm sm:text-base cursor-pointer"
             >
               Pošalji poruku
             </button>

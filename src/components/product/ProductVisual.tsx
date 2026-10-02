@@ -5,6 +5,7 @@ type ProductVisualProps = {
   category: string;
   amount: string;
   large?: boolean;
+  thumbnail?: boolean;
 };
 
 type CategoryStyle = {
@@ -85,13 +86,53 @@ export default function ProductVisual({
   category,
   amount,
   large = false,
+  thumbnail = false,
 }: ProductVisualProps) {
   const style = getCategoryStyle(category);
+
+  if (thumbnail) {
+    return (
+      <div
+        className={`relative flex h-full w-full aspect-square items-center justify-center overflow-hidden bg-gradient-to-br ${style.background}`}
+      >
+        {/* Ambient glow */}
+        <div
+          className={`absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full blur-xl ${style.glow}`}
+        />
+
+        {/* Background grid */}
+        <div className="absolute inset-0 opacity-[0.035]">
+          <div
+            className="h-full w-full"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px)",
+              backgroundSize: "16px 16px",
+            }}
+          />
+        </div>
+
+        {/* Styled icon container representing the vial / product category */}
+        <div
+          className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-xl border shadow-lg backdrop-blur ${style.label} ${style.accent}`}
+        >
+          {style.icon}
+        </div>
+
+        {/* Series code badge */}
+        <div
+          className={`absolute bottom-2 left-2 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-wider ${style.accentSoft} ${style.accent}`}
+        >
+          {style.code}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${style.background} ${
-        large ? "min-h-[520px]" : "aspect-square"
+        large ? "min-h-[320px] sm:min-h-[420px] md:min-h-[500px]" : "aspect-square"
       }`}
     >
       {/* Ambient glow */}
@@ -112,23 +153,23 @@ export default function ProductVisual({
       </div>
 
       {/* Top metadata */}
-      <div className="absolute left-5 top-5">
-        <p className="text-[9px] font-medium tracking-[0.28em] text-zinc-500">
+      <div className="absolute left-3.5 top-3.5 sm:left-5 sm:top-5">
+        <p className="text-[8px] sm:text-[9px] font-medium tracking-[0.28em] text-zinc-500">
           PEPTIDELAB
         </p>
 
         <p
-          className={`mt-1 text-[10px] font-bold tracking-[0.22em] ${style.accent}`}
+          className={`mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] font-bold tracking-[0.22em] ${style.accent}`}
         >
           {style.code} SERIES
         </p>
       </div>
 
       {/* Serial */}
-      <div className="absolute right-5 top-5 text-right">
-        <p className="text-[9px] tracking-[0.2em] text-zinc-600">SAMPLE</p>
+      <div className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 text-right">
+        <p className="text-[8px] sm:text-[9px] tracking-[0.2em] text-zinc-600">SAMPLE</p>
 
-        <p className="mt-1 font-mono text-[10px] text-zinc-500">
+        <p className="mt-0.5 sm:mt-1 font-mono text-[9px] sm:text-[10px] text-zinc-500">
           #{String(name.length * 173).padStart(4, "0")}
         </p>
       </div>
@@ -136,7 +177,7 @@ export default function ProductVisual({
       {/* Product vial */}
       <div
         className={`relative flex flex-col items-center transition duration-500 ${
-          large ? "scale-125" : ""
+          large ? "scale-105 sm:scale-115 md:scale-125" : ""
         }`}
       >
         {/* Cap top */}
@@ -203,13 +244,13 @@ export default function ProductVisual({
 
       {/* Category badge */}
       <div
-        className={`absolute bottom-5 left-5 rounded-full border px-3 py-1.5 text-[10px] font-medium backdrop-blur ${style.label} ${style.accent}`}
+        className={`absolute bottom-3.5 left-3.5 sm:bottom-5 sm:left-5 max-w-[55%] truncate rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-medium backdrop-blur ${style.label} ${style.accent}`}
       >
         {category}
       </div>
 
       {/* Amount badge */}
-      <div className="absolute bottom-5 right-5 rounded-full border border-zinc-700 bg-zinc-950/70 px-3 py-1.5 text-[10px] text-zinc-400 backdrop-blur">
+      <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 shrink-0 rounded-full border border-zinc-700 bg-zinc-950/70 px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] text-zinc-400 backdrop-blur">
         {amount}
       </div>
     </div>
