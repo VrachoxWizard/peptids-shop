@@ -1,6 +1,6 @@
 import { ArrowLeft, FlaskConical, ShoppingCart } from "lucide-react";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ import { useCartStore } from "../store/cartStore";
 
 export default function ProductDetails() {
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const addItem = useCartStore((state) => state.addItem);
 
@@ -34,6 +35,10 @@ export default function ProductDetails() {
 
     toast.success("Proizvod dodan u košaricu", {
       description: product.name,
+      action: {
+        label: "Otvori košaricu",
+        onClick: () => navigate("/kosarica"),
+      },
     });
   }
 
@@ -48,7 +53,6 @@ export default function ProductDetails() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-12">
-        {/* Slika proizvoda */}
         <div className="aspect-square rounded-3xl border border-zinc-800 bg-zinc-900 flex items-center justify-center">
           <div className="w-40 h-56 rounded-xl border border-zinc-700 bg-zinc-950 flex flex-col items-center justify-center">
             <FlaskConical size={40} className="text-emerald-400" />
@@ -59,7 +63,6 @@ export default function ProductDetails() {
           </div>
         </div>
 
-        {/* Informacije */}
         <div className="flex flex-col justify-center">
           <span className="text-emerald-400 text-sm font-medium">
             {product.category}

@@ -1,5 +1,5 @@
 import { ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import type { Product } from "../../types/product";
@@ -10,6 +10,8 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const navigate = useNavigate();
+
   const addItem = useCartStore((state) => state.addItem);
 
   function handleAddToCart() {
@@ -17,6 +19,10 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     toast.success("Proizvod dodan u košaricu", {
       description: product.name,
+      action: {
+        label: "Otvori košaricu",
+        onClick: () => navigate("/kosarica"),
+      },
     });
   }
 
