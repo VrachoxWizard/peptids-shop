@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   ChevronLeft,
@@ -25,6 +25,22 @@ export default function Products() {
   const maxPrice = Number(searchParams.get("maxPrice") || 100);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchInput, setSearchInput] = useState(search);
+  const [prevSearch, setPrevSearch] = useState(search);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  if (prevSearch !== search) {
+    setPrevSearch(search);
+    setSearchInput(search);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const categoryOptions = [
     { value: "Sve", label: t.catalog.allCategories },
@@ -33,24 +49,40 @@ export default function Products() {
     { value: "Referentni uzorci", label: language === "en" ? "Reference Standards" : "Referentni uzorci" },
   ];
 
-  function updateParam(key: string, value: string) {
-    const newParams = new URLSearchParams(searchParams);
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      const newParams = new URLSearchParams(searchParams);
 
-    const isDefault =
-      value === "" ||
-      value === "Sve" ||
-      value === "default" ||
-      (key === "maxPrice" && value === "100");
+      const isDefault =
+        value === "" ||
+        value === "Sve" ||
+        value === "default" ||
+        (key === "maxPrice" && value === "100");
 
-    if (isDefault) {
-      newParams.delete(key);
-    } else {
-      newParams.set(key, value);
+      if (isDefault) {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, value);
+      }
+
+      setSearchParams(newParams);
+      setCurrentPage(1);
+    },
+    [searchParams, setSearchParams],
+  );
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const val = event.target.value;
+    setSearchInput(val);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
 
-    setSearchParams(newParams);
-    setCurrentPage(1);
-  }
+    searchTimeoutRef.current = setTimeout(() => {
+      updateParam("search", val);
+    }, 250);
+  };
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -115,7 +147,9 @@ export default function Products() {
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
-  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const effectivePage = totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
+
+  const startIndex = (effectivePage - 1) * PRODUCTS_PER_PAGE;
 
   const paginatedProducts = filteredProducts.slice(
     startIndex,
@@ -123,16 +157,20 @@ export default function Products() {
   );
 
   function resetFilters() {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    setSearchInput("");
     setSearchParams({});
     setCurrentPage(1);
   }
 
   function previousPage() {
-    setCurrentPage((page) => Math.max(page - 1, 1));
+    setCurrentPage(Math.max(effectivePage - 1, 1));
   }
 
   function nextPage() {
-    setCurrentPage((page) => Math.min(page + 1, totalPages));
+    setCurrentPage(Math.min(effectivePage + 1, totalPages));
   }
 
   const filtersActive =
@@ -168,10 +206,8 @@ export default function Products() {
         <input
           type="text"
           placeholder={t.catalog.searchPlaceholder}
-          value={search}
-          onChange={(event) =>
-            updateParam("search", event.target.value)
-          }
+          value={searchInput}
+          onChange={handleSearchChange}
           className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 py-3.5 pl-11 sm:pl-12 pr-4 text-sm sm:text-base outline-none transition placeholder:text-zinc-500 focus:border-emerald-400/80 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)] backdrop-blur-md text-white"
         />
       </div>
@@ -271,7 +307,7 @@ export default function Products() {
 
         {totalPages > 0 && (
           <p>
-            {t.catalog.page} <span className="text-white">{currentPage}</span> {t.catalog.of}{" "}
+            {t.catalog.page} <span className="text-white">{effectivePage}</span> {t.catalog.of}{" "}
             <span className="text-white">{totalPages}</span>
           </p>
         )}
@@ -281,7 +317,7 @@ export default function Products() {
       {paginatedProducts.length > 0 ? (
         <>
           <motion.div
-            key={currentPage + category + sort + maxPrice + search}
+            key={effectivePage + category + sort + maxPrice + search}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -301,7 +337,7 @@ export default function Products() {
               <button
                 type="button"
                 onClick={previousPage}
-                disabled={currentPage === 1}
+                disabled={effectivePage === 1}
                 className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Prethodna stranica"
               >
@@ -318,11 +354,11 @@ export default function Products() {
                     type="button"
                     onClick={() => setCurrentPage(pageNumber)}
                     className={`h-10 min-w-10 rounded-xl border px-3 text-xs sm:text-sm font-medium transition ${
-                      currentPage === pageNumber
+                      effectivePage === pageNumber
                         ? "border-emerald-400 bg-emerald-400 text-zinc-950"
                         : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
                     }`}
-                    aria-current={currentPage === pageNumber ? "page" : undefined}
+                    aria-current={effectivePage === pageNumber ? "page" : undefined}
                   >
                     {pageNumber}
                   </button>
@@ -332,7 +368,7 @@ export default function Products() {
               <button
                 type="button"
                 onClick={nextPage}
-                disabled={currentPage === totalPages}
+                disabled={effectivePage === totalPages}
                 className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Sljedeća stranica"
               >
