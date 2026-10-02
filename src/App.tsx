@@ -8,6 +8,7 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="/kosarica" element={<Cart />} />
 
           <Route path="/kontakt" element={<Contact />} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
 
