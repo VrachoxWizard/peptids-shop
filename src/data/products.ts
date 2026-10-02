@@ -10,6 +10,7 @@ export const products: Product[] = [
     amount: "10 mg",
     price: 39.9,
     image: "/images/product-placeholder.png",
+    featured: true,
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ export const products: Product[] = [
     amount: "20 mg",
     price: 44.9,
     image: "/images/product-placeholder.png",
+    featured: true,
   },
   {
     id: 4,
@@ -60,6 +62,7 @@ export const products: Product[] = [
     amount: "10 ml",
     price: 24.9,
     image: "/images/product-placeholder.png",
+    featured: true,
   },
   {
     id: 7,

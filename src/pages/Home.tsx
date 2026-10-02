@@ -1,12 +1,17 @@
-import { ArrowRight } from "lucide-react";
-import { FlaskConical, TestTubeDiagonal, Beaker } from "lucide-react";
+import {
+  ArrowRight,
+  Beaker,
+  FlaskConical,
+  TestTubeDiagonal,
+} from "lucide-react";
+
 import { Link } from "react-router-dom";
 
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
 
 export default function Home() {
-  const featuredProducts = products.slice(0, 3);
+  const featuredProducts = products.filter((product) => product.featured);
 
   return (
     <main>
@@ -116,7 +121,7 @@ export default function Home() {
             </h2>
 
             <p className="text-zinc-400 mt-3">
-              Pogledaj neke od proizvoda iz našeg demo kataloga.
+              Odabrani proizvodi iz našeg demo kataloga.
             </p>
           </div>
 

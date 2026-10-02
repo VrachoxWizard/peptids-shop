@@ -7,4 +7,5 @@ export type Product = {
   amount: string;
   price: number;
   image: string;
+  featured?: boolean;
 };
