@@ -1,8 +1,17 @@
+/* Hallmark · macrostructure: catalogue · theme: swiss-pharma · genre: modern-minimal */
 @import "tailwindcss";
+@import "./styles/design-tokens.css";
 
 @theme {
-  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --color-pharma-50: var(--colors-primary-50);
+  --color-pharma-100: var(--colors-primary-100);
+  --color-pharma-500: var(--colors-primary-500);
+  --color-pharma-600: var(--colors-primary-600);
+  --color-pharma-900: var(--colors-primary-900);
 }
 
 html,
@@ -10,44 +19,38 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
-  background-color: #09090b;
-  color: #fafafa;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
-@import "./styles/design-tokens.css";
-
-/* Liquid Glass & Diffusion Tokens - Pharma Trust Blue */
-.liquid-glass {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+/* Swiss Precision Card & Borders */
+.swiss-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border-hairline);
+  box-shadow: var(--shadow-swiss);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.liquid-glass-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 15, 30, 0.9) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+.swiss-card:hover {
+  border-color: #94a3b8;
+  box-shadow: var(--shadow-swiss-lift);
 }
 
-.liquid-glass-card:hover {
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 24px 48px -12px rgba(2, 132, 199, 0.15);
+.swiss-border {
+  border: 1px solid var(--color-border-hairline);
 }
 
-.diffusion-glow {
-  box-shadow: 0 20px 50px -20px rgba(2, 132, 199, 0.25);
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
+/* Tactile Button Feedback */
 .tactile-press {
   transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .tactile-press:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }

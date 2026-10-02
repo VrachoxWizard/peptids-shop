@@ -5,18 +5,21 @@ import { fileURLToPath } from "node:url";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
-describe("Pharma Trust Blue Design Tokens", () => {
-  it("should have design-tokens.css generated with primary color #0284c7", () => {
+describe("Swiss Pharma Light Design Tokens", () => {
+  it("should have light theme tokens defined in design-tokens.css", () => {
     const filePath = path.resolve(currentDir, "./design-tokens.css");
     expect(fs.existsSync(filePath)).toBe(true);
     const content = fs.readFileSync(filePath, "utf-8");
-    expect(content).toContain("--colors-primary");
-    expect(content.toLowerCase()).toContain("#0284c7");
+    expect(content).toContain("--color-bg-base: #ffffff");
+    expect(content).toContain("--color-text-primary: #09090b");
+    expect(content).toContain("--color-accent-pharma: #0284c7");
+    expect(content).toContain("--color-border-hairline");
   });
 
-  it("should include design tokens in index.css", () => {
+  it("should configure display serif and sans fonts in index.css", () => {
     const indexPath = path.resolve(currentDir, "../index.css");
     const content = fs.readFileSync(indexPath, "utf-8");
-    expect(content).toContain("design-tokens.css");
+    expect(content).toContain("Playfair Display");
+    expect(content).toContain("swiss-pharma");
   });
 });
