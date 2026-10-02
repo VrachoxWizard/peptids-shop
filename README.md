@@ -1,75 +1,64 @@
-# React + TypeScript + Vite
+# Peptide Shop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+E-commerce web application for peptide products, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **TypeScript**
+- **Vite** — build tooling
+- **Tailwind CSS v4** — styling
+- **Zustand** — state management
+- **React Router v7** — routing
+- **Motion** — animations
+- **Lucide React** — icons
+- **Zod** — schema validation
+- **Sonner** — toast notifications
+- **Vitest** + **Testing Library** — testing
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+
+- npm
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Install & Run
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm run build
+npm run preview
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Test & Lint
+
+```bash
+npm run test
+npm run lint
+```
+
+## Project Structure
 
 ```
+src/
+├── components/   # Reusable UI components
+├── pages/        # Route pages
+├── data/         # Product data & constants
+├── hooks/        # Custom React hooks
+├── i18n/         # Internationalization (HR/EN)
+├── store/        # Zustand stores
+├── styles/       # Global styles
+├── types/        # TypeScript type definitions
+├── utils/        # Utility functions
+└── test/         # Test setup & utilities
+```
+
+## License
+
+Private — All rights reserved.
