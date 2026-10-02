@@ -1,12 +1,16 @@
 import {
   ArrowRight,
   Beaker,
+  FileText,
   FlaskConical,
+  ShieldCheck,
+  Sparkles,
   TestTubeDiagonal,
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
 
+import HeroShowcase from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
 
@@ -15,30 +19,80 @@ export default function Home() {
 
   return (
     <main>
-      {/* Hero */}
-      <section className="min-h-[60vh] sm:min-h-[70vh] flex items-center justify-center py-12 sm:py-20">
-        <div className="text-center max-w-3xl px-4 sm:px-6">
-          <p className="text-emerald-400 font-medium mb-3 sm:mb-4 text-xs sm:text-sm tracking-wider">
-            RESEARCH LAB
-          </p>
+      {/* Asymmetric Split Hero */}
+      <section className="relative overflow-hidden border-b border-white/5 bg-gradient-to-b from-zinc-950 via-zinc-900/40 to-zinc-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 lg:py-24 min-h-[calc(100dvh-4rem)] flex items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+            {/* Left Content Column */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3.5 py-1.5 backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                <span className="font-mono text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                  LABORATORIJSKI STANDARD ČISTOĆE ≥ 99%
+                </span>
+              </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
-            Istraživački spojevi nove generacije
-          </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-[1.08] text-white">
+                Precizni biokemijski spojevi za istraživanja
+              </h1>
 
-          <p className="text-zinc-400 mt-4 sm:mt-6 text-base sm:text-lg">
-            Demo katalog proizvoda namijenjenih isključivo razvoju i
-            demonstraciji korisničkog sučelja.
-          </p>
+              <p className="text-base sm:text-lg text-zinc-400 max-w-[55ch] leading-relaxed">
+                Katalog visokopročišćenih liofiliziranih peptida i referentnih analitičkih standarda. Svaka serija popraćena je HPLC kromatografskim profilom i masenom spektrometrijom.
+              </p>
 
-          <div className="mt-6 sm:mt-8 flex justify-center">
-            <Link
-              to="/proizvodi"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition"
-            >
-              Pregled proizvoda
-              <ArrowRight size={18} />
-            </Link>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                <Link
+                  to="/proizvodi"
+                  className="tactile-press inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 hover:bg-emerald-300 shadow-lg shadow-emerald-500/20"
+                >
+                  Istraži katalog
+                  <ArrowRight size={18} />
+                </Link>
+
+                <Link
+                  to="/kontakt"
+                  className="tactile-press inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-900/80 px-6 py-3.5 font-medium text-zinc-200 hover:border-white/20 hover:bg-zinc-800 backdrop-blur-sm"
+                >
+                  <FileText size={17} className="text-zinc-400" />
+                  Zatraži specifikacije
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-3 gap-3 border-t border-white/5 pt-6 text-left">
+                <div>
+                  <div className="flex items-center gap-1.5 text-emerald-400 font-mono text-sm sm:text-base font-bold">
+                    <ShieldCheck size={16} />
+                    <span>≥99%</span>
+                  </div>
+                  <p className="mt-0.5 text-xs text-zinc-500">HPLC Čistoća</p>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-1.5 text-zinc-200 font-mono text-sm sm:text-base font-bold">
+                    <Sparkles size={16} className="text-emerald-400" />
+                    <span>Liofilizirano</span>
+                  </div>
+                  <p className="mt-0.5 text-xs text-zinc-500">Zaštićen integritet</p>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-1.5 text-zinc-200 font-mono text-sm sm:text-base font-bold">
+                    <span>COA</span>
+                  </div>
+                  <p className="mt-0.5 text-xs text-zinc-500">Verificirana serija</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Showcase Column */}
+            <div className="lg:col-span-5">
+              <HeroShowcase />
+            </div>
           </div>
         </div>
       </section>
