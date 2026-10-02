@@ -10,11 +10,11 @@ export default function BentoCategories() {
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
         <div>
-          <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-sky-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
             {t.bento.badge}
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tighter text-white mt-2">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mt-2">
             {t.bento.title}
           </h2>
           <p className="text-zinc-400 mt-2 text-sm sm:text-base max-w-xl">
@@ -24,7 +24,7 @@ export default function BentoCategories() {
 
         <Link
           to="/proizvodi"
-          className="tactile-press inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition"
+          className="tactile-press inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-sky-400 hover:text-sky-300 transition"
         >
           {t.bento.viewAll}
           <ArrowRight size={16} />
@@ -36,26 +36,26 @@ export default function BentoCategories() {
         {/* Tile 1: Hero Bento Card (Peptidi) - Spans 2 Columns on LG */}
         <Link
           to="/proizvodi?category=Peptidi"
-          className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900/90 via-zinc-900/50 to-zinc-950 p-7 sm:p-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl lg:col-span-2 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.15)] flex flex-col justify-between min-h-[300px]"
+          className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/90 via-slate-900/50 to-slate-950 p-7 sm:p-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl lg:col-span-2 transition-all duration-300 hover:border-sky-500/40 hover:shadow-[0_20px_50px_-20px_rgba(2,132,199,0.2)] flex flex-col justify-between min-h-[300px]"
         >
           {/* Ambient Glow */}
-          <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl transition-opacity group-hover:opacity-100" />
+          <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl transition-opacity group-hover:opacity-100" />
 
           {/* Top Row: Icon + Badge */}
           <div className="flex items-center justify-between">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 shadow-lg backdrop-blur">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/30 bg-sky-950/40 text-sky-400 shadow-lg backdrop-blur">
               <FlaskConical size={28} />
             </div>
 
-            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950/60 px-3.5 py-1 font-mono text-xs font-medium text-emerald-300">
-              <CheckCircle2 size={13} className="text-emerald-400" />
+            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950/60 px-3.5 py-1 font-mono text-xs font-medium text-sky-300">
+              <CheckCircle2 size={13} className="text-sky-400" />
               <span>{t.bento.purityTag}</span>
             </div>
           </div>
 
           {/* Center Info */}
           <div className="my-6">
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-emerald-300 transition">
+            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white group-hover:text-sky-300 transition">
               {t.bento.peptidesTitle}
             </h3>
             <p className="mt-2.5 text-sm sm:text-base text-zinc-400 max-w-lg leading-relaxed">
@@ -66,7 +66,7 @@ export default function BentoCategories() {
           {/* Bottom Action Footer */}
           <div className="flex items-center justify-between border-t border-white/5 pt-4 text-xs font-medium text-zinc-400">
             <span className="font-mono text-zinc-500">{t.bento.peptidesCount}</span>
-            <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold group-hover:translate-x-1 transition-transform">
+            <span className="inline-flex items-center gap-1.5 text-sky-400 font-semibold group-hover:translate-x-1 transition-transform">
               {t.bento.peptidesAction}
               <ArrowRight size={15} />
             </span>

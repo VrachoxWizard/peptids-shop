@@ -83,7 +83,7 @@ export default function Cart() {
       {/* Header */}
       <div className="mb-8 sm:mb-10 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="font-medium text-emerald-400 text-xs sm:text-sm">{t.cart.badge}</p>
+          <p className="font-medium text-sky-400 text-xs sm:text-sm">{t.cart.badge}</p>
 
           <h1 className="mt-1 sm:mt-2 text-3xl sm:text-4xl font-bold">{t.cart.title}</h1>
         </div>
@@ -129,7 +129,7 @@ export default function Cart() {
                   <div className="flex-1 min-w-0">
                     <Link
                       to={`/proizvod/${item.slug}`}
-                      className="truncate block text-lg font-semibold transition hover:text-emerald-400"
+                      className="truncate block text-lg font-semibold transition hover:text-sky-400"
                     >
                       {localizedProduct.name}
                     </Link>
@@ -218,7 +218,7 @@ export default function Cart() {
                     <div className="flex-1 min-w-0">
                       <Link
                         to={`/proizvod/${item.slug}`}
-                        className="text-base font-semibold leading-snug line-clamp-1 transition hover:text-emerald-400"
+                        className="text-base font-semibold leading-snug line-clamp-1 transition hover:text-sky-400"
                       >
                         {localizedProduct.name}
                       </Link>

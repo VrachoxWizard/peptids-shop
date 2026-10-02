@@ -88,12 +88,12 @@ export default function Contact() {
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
       {/* Header */}
       <div className="max-w-2xl mb-8 sm:mb-12">
-        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-sky-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
           {t.contact.badge}
         </div>
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white mt-2">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mt-2">
           {t.contact.title}
         </h1>
 
@@ -106,7 +106,7 @@ export default function Contact() {
         {/* Kontakt informacije */}
         <div className="space-y-4">
           <div className="rounded-3xl border border-white/10 bg-zinc-900/70 p-5 sm:p-6 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-950/40 text-emerald-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-sky-500/30 bg-sky-950/40 text-sky-400">
               <Mail size={22} />
             </div>
 
@@ -114,7 +114,7 @@ export default function Contact() {
               {t.contact.emailTitle}
             </h2>
 
-            <p className="font-mono text-xs sm:text-sm text-emerald-400 mt-1">
+            <p className="font-mono text-xs sm:text-sm text-sky-400 mt-1">
               {t.contact.emailVal}
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function Contact() {
         {/* Forma */}
         <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-zinc-900/70 p-5 sm:p-7 md:p-8 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-3 mb-6 sm:mb-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-950/40 text-emerald-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-950/40 text-sky-400">
               <MessageSquare size={20} />
             </div>
 
@@ -194,7 +194,7 @@ export default function Contact() {
                 className={`w-full rounded-xl border bg-zinc-950/80 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base text-white outline-none transition placeholder:text-zinc-600 ${
                   errors.name
                     ? "border-red-500/80"
-                    : "border-white/10 focus:border-emerald-400 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)]"
+                    : "border-white/10 focus:border-sky-400 focus:shadow-[0_0_20px_-5px_rgba(2,132,199,0.3)]"
                 }`}
               />
 
@@ -219,7 +219,7 @@ export default function Contact() {
                 className={`w-full rounded-xl border bg-zinc-950/80 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base text-white outline-none transition placeholder:text-zinc-600 ${
                   errors.email
                     ? "border-red-500/80"
-                    : "border-white/10 focus:border-emerald-400 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)]"
+                    : "border-white/10 focus:border-sky-400 focus:shadow-[0_0_20px_-5px_rgba(2,132,199,0.3)]"
                 }`}
               />
 
@@ -247,7 +247,7 @@ export default function Contact() {
                 className={`w-full resize-none rounded-xl border bg-zinc-950/80 px-3.5 sm:px-4 py-2.5 sm:py-3 text-base text-white outline-none transition placeholder:text-zinc-600 ${
                   errors.message
                     ? "border-red-500/80"
-                    : "border-white/10 focus:border-emerald-400 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)]"
+                    : "border-white/10 focus:border-sky-400 focus:shadow-[0_0_20px_-5px_rgba(2,132,199,0.3)]"
                 }`}
               />
 
@@ -258,7 +258,7 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="tactile-press w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition text-sm sm:text-base cursor-pointer shadow-lg shadow-emerald-500/20"
+              className="tactile-press w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-sky-500 px-6 py-3.5 font-semibold text-white hover:bg-sky-400 transition text-sm sm:text-base cursor-pointer shadow-lg shadow-sky-500/25"
             >
               {t.contact.sendBtn}
             </button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
+import { ChevronRight, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -31,7 +31,7 @@ export default function ProductDetails() {
 
         <Link
           to="/proizvodi"
-          className="mt-6 inline-block text-emerald-400 hover:text-emerald-300 text-sm sm:text-base"
+          className="mt-6 inline-block text-sky-400 hover:text-sky-300 text-sm sm:text-base font-medium"
         >
           {t.product.backToProducts}
         </Link>
@@ -99,7 +99,7 @@ export default function ProductDetails() {
 
         {/* Product info */}
         <div className="flex flex-col justify-center">
-          <span className="text-xs sm:text-sm font-medium uppercase tracking-wider text-emerald-400">
+          <span className="text-xs sm:text-sm font-medium uppercase tracking-wider text-sky-400">
             {product.category}
           </span>
 
@@ -125,7 +125,7 @@ export default function ProductDetails() {
             {product.purity && (
               <div className="flex items-center justify-between gap-4">
                 <span className="text-zinc-500">{t.product.hplcPurity}</span>
-                <span className="font-mono font-semibold text-emerald-400">{product.purity}</span>
+                <span className="font-mono font-semibold text-sky-400">{product.purity}</span>
               </div>
             )}
 
@@ -206,11 +206,23 @@ export default function ProductDetails() {
           <button
             type="button"
             onClick={handleAddToCart}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-[0.99]"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-500 px-6 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-lg shadow-sky-500/25 transition hover:bg-sky-400 active:scale-[0.99]"
           >
             <ShoppingCart size={19} />
             {t.product.addToCartWithQty} {quantity > 1 ? `(${quantity})` : ""}
           </button>
+
+          {/* Croatian buyer reassurance */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-sky-500/20 bg-sky-950/20 px-3.5 py-2.5 text-xs text-slate-300">
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <Truck size={14} className="text-sky-400 shrink-0" />
+              {t.trustBar.shipping}
+            </span>
+            <span className="inline-flex items-center gap-1.5 font-medium text-sky-300">
+              <ShieldCheck size={14} className="text-sky-400 shrink-0" />
+              {t.trustBar.payment}
+            </span>
+          </div>
         </div>
       </div>
     </main>

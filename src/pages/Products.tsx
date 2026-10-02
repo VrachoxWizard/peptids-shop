@@ -394,7 +394,7 @@ export default function Products() {
 
           <button
             onClick={resetFilters}
-            className="mt-6 rounded-lg bg-emerald-400 px-5 py-2.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition text-sm"
+            className="mt-6 rounded-lg bg-sky-500 px-5 py-2.5 font-semibold text-white hover:bg-sky-400 transition text-sm shadow-md shadow-sky-500/20"
           >
             {t.catalog.resetFilters}
           </button>
