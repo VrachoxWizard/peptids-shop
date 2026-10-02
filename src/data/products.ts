@@ -4,7 +4,7 @@ export const products: Product[] = [
   {
     id: 1,
     slug: "bpc-157-arginate",
-    name: "BPC-157 Arginate Salt",
+    name: "BPC-157 Arginatna sol",
     nameEn: "BPC-157 Arginate Salt",
     category: "Peptidi",
     categoryEn: "Peptides",
@@ -23,7 +23,7 @@ export const products: Product[] = [
   {
     id: 2,
     slug: "tb-500-thymosin-beta4",
-    name: "TB-500 (Thymosin Beta-4)",
+    name: "TB-500 (Timozin Beta-4)",
     nameEn: "TB-500 (Thymosin Beta-4)",
     category: "Peptidi",
     categoryEn: "Peptides",
@@ -42,7 +42,7 @@ export const products: Product[] = [
   {
     id: 3,
     slug: "ghk-cu-copper-peptide",
-    name: "GHK-Cu Copper Tripeptide",
+    name: "GHK-Cu Bakreni Tripeptid",
     nameEn: "GHK-Cu Copper Tripeptide",
     category: "Peptidi",
     categoryEn: "Peptides",
@@ -60,7 +60,7 @@ export const products: Product[] = [
   {
     id: 4,
     slug: "ipamorelin-acetate",
-    name: "Ipamorelin Acetate",
+    name: "Ipamorelin Acetat",
     nameEn: "Ipamorelin Acetate",
     category: "Peptidi",
     categoryEn: "Peptides",
@@ -78,7 +78,7 @@ export const products: Product[] = [
   {
     id: 5,
     slug: "nad-lyophilized-coenzyme",
-    name: "NAD+ Lyophilized Coenzyme",
+    name: "NAD+ Liofilizirani Koenzim",
     nameEn: "NAD+ Lyophilized Coenzyme",
     category: "Istraživački spojevi",
     categoryEn: "Research Compounds",
@@ -97,7 +97,7 @@ export const products: Product[] = [
   {
     id: 6,
     slug: "semaglutide-reference-standard",
-    name: "Semaglutide Reference Standard",
+    name: "Semaglutid Referentni Standard",
     nameEn: "Semaglutide Reference Standard",
     category: "Referentni uzorci",
     categoryEn: "Reference Standards",
@@ -116,7 +116,7 @@ export const products: Product[] = [
   {
     id: 7,
     slug: "glutathione-reduced-gsh",
-    name: "Glutathione Reduced (GSH)",
+    name: "Glutation Reducirani (GSH)",
     nameEn: "Glutathione Reduced (GSH)",
     category: "Istraživački spojevi",
     categoryEn: "Research Compounds",
@@ -134,7 +134,7 @@ export const products: Product[] = [
   {
     id: 8,
     slug: "cjc-1295-no-dac",
-    name: "CJC-1295 without DAC",
+    name: "CJC-1295 bez DAC-a",
     nameEn: "CJC-1295 without DAC",
     category: "Peptidi",
     categoryEn: "Peptides",
@@ -152,7 +152,7 @@ export const products: Product[] = [
   {
     id: 9,
     slug: "epithalon-tetrapeptide",
-    name: "Epithalon Tetrapeptide",
+    name: "Epithalon Tetrapeptid",
     nameEn: "Epithalon Tetrapeptide",
     category: "Peptidi",
     categoryEn: "Peptides",
