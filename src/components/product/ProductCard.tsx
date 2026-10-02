@@ -132,7 +132,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             ) : (
               <>
                 <ShoppingCart size={15} />
-                <span>{t.product.addToCart}</span>
+                <span>{t.product.addBtn}</span>
               </>
             )}
           </button>

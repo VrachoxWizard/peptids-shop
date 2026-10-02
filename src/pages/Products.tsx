@@ -182,18 +182,17 @@ export default function Products() {
     maxPrice !== 100;
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-slate-900">
       <div className="mb-8 sm:mb-10">
-        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-sky-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-          {t.catalog.badge}
+        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-sky-700">
+          <span>{t.catalog.badge}</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tighter text-white mt-2">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-slate-950 mt-2">
           {t.catalog.title}
         </h1>
 
-        <p className="text-zinc-400 mt-2 text-sm sm:text-base max-w-2xl">
+        <p className="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl">
           {t.catalog.description}
         </p>
       </div>
@@ -201,8 +200,8 @@ export default function Products() {
       {/* Search */}
       <div className="relative mb-5 sm:mb-6">
         <Search
-          size={20}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
+          size={18}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
         />
 
         <input
@@ -210,21 +209,21 @@ export default function Products() {
           placeholder={t.catalog.searchPlaceholder}
           value={searchInput}
           onChange={handleSearchChange}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950/80 py-3.5 pl-11 sm:pl-12 pr-4 text-sm sm:text-base outline-none transition placeholder:text-zinc-500 focus:border-sky-400/80 focus:shadow-[0_0_20px_-5px_rgba(56,189,248,0.25)] backdrop-blur-md text-white"
+          className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 sm:pl-12 pr-4 text-sm sm:text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-700 shadow-xs"
         />
       </div>
 
       {/* Filteri */}
-      <div className="mb-8 sm:mb-10 rounded-3xl border border-white/10 bg-slate-950/70 p-5 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md">
+      <div className="mb-8 sm:mb-10 rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-xs">
         <div className="flex items-center gap-2 mb-4 sm:mb-5">
-          <SlidersHorizontal size={18} className="text-sky-400" />
+          <SlidersHorizontal size={18} className="text-sky-700" />
 
-          <h2 className="font-semibold text-base sm:text-lg text-white">{t.catalog.filtersTitle}</h2>
+          <h2 className="font-serif font-bold text-base sm:text-lg text-slate-900">{t.catalog.filtersTitle}</h2>
         </div>
 
         <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
           <div>
-            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
+            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
               {t.catalog.categoryLabel}
             </label>
 
@@ -233,7 +232,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("category", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-sky-400"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-sky-700 shadow-xs"
             >
               {categoryOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -244,8 +243,8 @@ export default function Products() {
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
-              {t.catalog.maxPriceLabel}: {maxPrice} €
+            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
+              {t.catalog.maxPriceLabel}: <span className="font-mono text-slate-900 font-bold">{maxPrice} €</span>
             </label>
 
             <input
@@ -257,12 +256,12 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("maxPrice", event.target.value)
               }
-              className="w-full accent-sky-400 h-2 cursor-pointer"
+              className="w-full accent-sky-700 h-2 cursor-pointer"
             />
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
+            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
               {t.catalog.sortLabel}
             </label>
 
@@ -271,7 +270,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("sort", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-sky-400"
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-sky-700 shadow-xs"
             >
               <option value="default">{t.catalog.sortDefault}</option>
 
@@ -290,27 +289,27 @@ export default function Products() {
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-4 sm:mt-5 inline-flex items-center gap-2 text-xs sm:text-sm text-zinc-400 hover:text-white transition"
+            className="mt-4 sm:mt-5 inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-600 hover:text-slate-900 font-medium transition"
           >
-            <X size={16} />
+            <X size={15} />
             {t.catalog.resetFilters}
           </button>
         )}
       </div>
 
       {/* Broj rezultata */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs sm:text-sm text-zinc-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs sm:text-sm text-slate-500">
         <p>
           {t.catalog.foundCount}:{" "}
-          <span className="text-white font-semibold">
+          <span className="text-slate-900 font-semibold font-mono">
             {filteredProducts.length}
           </span>
         </p>
 
         {totalPages > 0 && (
           <p>
-            {t.catalog.page} <span className="text-white">{effectivePage}</span> {t.catalog.of}{" "}
-            <span className="text-white">{totalPages}</span>
+            {t.catalog.page} <span className="text-slate-900 font-mono font-semibold">{effectivePage}</span> {t.catalog.of}{" "}
+            <span className="text-slate-900 font-mono font-semibold">{totalPages}</span>
           </p>
         )}
       </div>
@@ -340,7 +339,7 @@ export default function Products() {
                 type="button"
                 onClick={previousPage}
                 disabled={effectivePage === 1}
-                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 text-slate-700 shadow-xs"
                 aria-label="Prethodna stranica"
               >
                 <ChevronLeft size={16} />
@@ -355,10 +354,10 @@ export default function Products() {
                     key={pageNumber}
                     type="button"
                     onClick={() => setCurrentPage(pageNumber)}
-                    className={`h-10 min-w-10 rounded-xl border px-3 text-xs sm:text-sm font-medium transition ${
+                    className={`h-10 min-w-10 rounded-lg border px-3 text-xs sm:text-sm font-mono font-bold transition ${
                       effectivePage === pageNumber
-                        ? "border-sky-400 bg-sky-400 text-zinc-950"
-                        : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-xs"
                     }`}
                     aria-current={effectivePage === pageNumber ? "page" : undefined}
                   >
@@ -371,7 +370,7 @@ export default function Products() {
                 type="button"
                 onClick={nextPage}
                 disabled={effectivePage === totalPages}
-                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 text-slate-700 shadow-xs"
                 aria-label="Sljedeća stranica"
               >
                 <span className="hidden sm:inline">{t.catalog.nextPage}</span>
@@ -381,20 +380,20 @@ export default function Products() {
           )}
         </>
       ) : (
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 py-16 sm:py-20 px-4 text-center">
-          <Search size={40} className="mx-auto text-zinc-600" />
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 py-16 sm:py-20 px-4 text-center">
+          <Search size={36} className="mx-auto text-slate-400" />
 
-          <h2 className="text-lg sm:text-xl font-semibold mt-5">
+          <h2 className="font-serif text-lg sm:text-xl font-bold text-slate-900 mt-5">
             {t.catalog.noResultsTitle}
           </h2>
 
-          <p className="text-zinc-500 text-xs sm:text-sm mt-2">
+          <p className="text-slate-500 text-xs sm:text-sm mt-2">
             {t.catalog.noResultsDesc}
           </p>
 
           <button
             onClick={resetFilters}
-            className="mt-6 rounded-lg bg-sky-500 px-5 py-2.5 font-semibold text-white hover:bg-sky-400 transition text-sm shadow-md shadow-sky-500/20"
+            className="mt-6 rounded-lg bg-slate-900 px-5 py-2.5 font-semibold text-white hover:bg-slate-800 transition text-sm shadow-xs"
           >
             {t.catalog.resetFilters}
           </button>

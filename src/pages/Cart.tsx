@@ -58,18 +58,18 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-        <div className="text-center max-w-md mx-auto rounded-3xl border border-white/10 bg-slate-950/60 p-8 sm:p-12 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-zinc-950/80 text-zinc-500">
-            <ShoppingCart size={32} />
+        <div className="text-center max-w-md mx-auto rounded-2xl border border-slate-200 bg-white p-8 sm:p-12 shadow-xs">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400">
+            <ShoppingCart size={28} />
           </div>
 
-          <h1 className="mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-white">{t.cart.emptyTitle}</h1>
+          <h1 className="font-serif mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{t.cart.emptyTitle}</h1>
 
-          <p className="mt-3 text-sm text-zinc-400">{t.cart.emptyDesc}</p>
+          <p className="mt-2.5 text-sm text-slate-600">{t.cart.emptyDesc}</p>
 
           <Link
             to="/proizvodi"
-            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-xl bg-sky-400 px-6 py-3.5 font-semibold text-zinc-950 transition hover:bg-sky-300 shadow-md shadow-sky-500/20"
+            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-6 py-3 font-semibold text-white transition hover:bg-slate-800 text-sm shadow-xs"
           >
             {t.cart.viewCatalog}
           </Link>
@@ -79,26 +79,26 @@ export default function Cart() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-slate-900">
       {/* Header */}
       <div className="mb-8 sm:mb-10 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="font-medium text-sky-400 text-xs sm:text-sm">{t.cart.badge}</p>
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-sky-700">{t.cart.badge}</p>
 
-          <h1 className="mt-1 sm:mt-2 text-3xl sm:text-4xl font-bold">{t.cart.title}</h1>
+          <h1 className="font-serif mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-slate-950">{t.cart.title}</h1>
         </div>
 
         <button
           type="button"
           onClick={handleClearCart}
-          className="text-xs sm:text-sm text-zinc-500 transition hover:text-red-400"
+          className="text-xs sm:text-sm text-slate-500 transition hover:text-red-600 font-medium"
         >
           {t.cart.clearCart}
         </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
-        {/* Products */}
+      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+        {/* Products list */}
         <div className="space-y-4">
           {items.map((item) => {
             const rawProduct = products.find((p) => p.id === item.id);
@@ -107,14 +107,14 @@ export default function Cart() {
             return (
               <div
                 key={item.id}
-                className="rounded-3xl border border-white/10 bg-zinc-900/70 p-4 sm:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md"
+                className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-xs"
               >
                 {/* Desktop layout: sm and above */}
                 <div className="hidden sm:flex sm:items-center gap-6">
                   {/* Product visual */}
                   <Link
                     to={`/proizvod/${item.slug}`}
-                    className="h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-800"
+                    className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
                   >
                     <ProductVisual
                       name={localizedProduct.name}
@@ -129,81 +129,73 @@ export default function Cart() {
                   <div className="flex-1 min-w-0">
                     <Link
                       to={`/proizvod/${item.slug}`}
-                      className="truncate block text-lg font-semibold transition hover:text-sky-400"
+                      className="truncate block text-base font-bold text-slate-900 transition hover:text-sky-700"
                     >
                       {localizedProduct.name}
                     </Link>
 
-                    <p className="mt-1 text-sm text-zinc-500">{localizedProduct.category}</p>
+                    <p className="mt-0.5 text-xs text-slate-500">{localizedProduct.category} · {localizedProduct.amount}</p>
 
-                    <p className="mt-1 text-sm text-zinc-500">{localizedProduct.amount}</p>
-
-                    <p className="mt-2 font-semibold">
+                    <p className="mt-2 font-mono text-sm font-bold text-slate-900 tabular-nums">
                       {item.price.toFixed(2)} €
-                      <span className="ml-1 text-sm font-normal text-zinc-500">
+                      <span className="ml-1 text-xs font-normal text-slate-500">
                         {t.cart.perUnit}
                       </span>
                     </p>
                   </div>
 
-                  {/* Quantity */}
+                  {/* Quantity Stepper */}
                   <div>
-                    <p className="mb-2 text-center text-xs text-zinc-500">
-                      {t.product.quantity}
-                    </p>
-
-                    <div className="flex items-center rounded-xl border border-white/10 bg-zinc-950/80 p-1">
+                    <div className="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-1">
                       <button
                         type="button"
                         onClick={() => decreaseItem(item.id)}
-                        className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
+                        className="tactile-press flex h-7 w-7 items-center justify-center rounded text-slate-600 hover:bg-white hover:text-slate-900 transition"
                         aria-label={t.cart.decreaseQty}
                       >
-                        <Minus size={15} />
+                        <Minus size={14} />
                       </button>
 
-                      <span className="w-10 text-center font-mono font-semibold text-white">
+                      <span className="w-8 text-center font-mono text-xs font-bold text-slate-900 tabular-nums">
                         {item.quantity}
                       </span>
 
                       <button
                         type="button"
                         onClick={() => increaseItem(item.id)}
-                        className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
+                        className="tactile-press flex h-7 w-7 items-center justify-center rounded text-slate-600 hover:bg-white hover:text-slate-900 transition"
                         aria-label={t.cart.increaseQty}
                       >
-                        <Plus size={15} />
+                        <Plus size={14} />
                       </button>
                     </div>
                   </div>
 
                   {/* Item total */}
-                  <div className="w-28 text-right">
-                    <p className="text-xs text-zinc-500">{t.cart.total}</p>
-
-                    <p className="mt-1 text-lg font-bold">
+                  <div className="w-24 text-right">
+                    <span className="text-[11px] text-slate-400 block font-mono">{t.cart.total}</span>
+                    <span className="mt-0.5 text-base font-bold font-mono text-slate-900 tabular-nums block">
                       {(item.price * item.quantity).toFixed(2)} €
-                    </p>
+                    </span>
                   </div>
 
                   {/* Remove */}
                   <button
                     type="button"
                     onClick={() => handleRemove(item.id, localizedProduct.name)}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-red-500/10 hover:text-red-400"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-600"
                     aria-label={t.cart.removeItem}
                   >
-                    <Trash2 size={19} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
 
                 {/* Mobile layout: below sm */}
-                <div className="flex sm:hidden flex-col gap-4">
+                <div className="flex sm:hidden flex-col gap-3">
                   <div className="flex items-start gap-3">
-                    {/* Thumbnail */}
                     <Link
                       to={`/proizvod/${item.slug}`}
-                      className="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-zinc-800"
+                      className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
                     >
                       <ProductVisual
                         name={localizedProduct.name}
@@ -214,63 +206,58 @@ export default function Cart() {
                       />
                     </Link>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <Link
                         to={`/proizvod/${item.slug}`}
-                        className="text-base font-semibold leading-snug line-clamp-1 transition hover:text-sky-400"
+                        className="text-sm font-bold text-slate-900 line-clamp-1"
                       >
                         {localizedProduct.name}
                       </Link>
 
-                      <p className="mt-0.5 text-xs text-zinc-500">{localizedProduct.category} · {localizedProduct.amount}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">{localizedProduct.category} · {localizedProduct.amount}</p>
 
-                      <p className="mt-1.5 text-sm font-semibold">
+                      <p className="mt-1 text-xs font-mono font-bold text-slate-900 tabular-nums">
                         {item.price.toFixed(2)} €
-                        <span className="ml-1 text-xs font-normal text-zinc-500">{t.cart.perUnit}</span>
                       </p>
                     </div>
 
-                    {/* Remove button */}
                     <button
                       type="button"
                       onClick={() => handleRemove(item.id, localizedProduct.name)}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-red-500/10 hover:text-red-400"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded text-slate-400 hover:text-red-600"
                       aria-label={t.cart.removeItem}
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
 
-                  {/* Mobile Stepper + Total row */}
-                  <div className="flex items-center justify-between border-t border-zinc-800/80 pt-3">
-                    <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-950 p-1">
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-2.5">
+                    <div className="flex items-center rounded-lg border border-slate-200 bg-slate-50 p-0.5">
                       <button
                         type="button"
                         onClick={() => decreaseItem(item.id)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-zinc-800"
+                        className="flex h-7 w-7 items-center justify-center rounded text-slate-600"
                         aria-label={t.cart.decreaseQty}
                       >
-                        <Minus size={14} />
+                        <Minus size={13} />
                       </button>
 
-                      <span className="w-9 text-center text-sm font-semibold">
+                      <span className="w-7 text-center font-mono text-xs font-bold text-slate-900">
                         {item.quantity}
                       </span>
 
                       <button
                         type="button"
                         onClick={() => increaseItem(item.id)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-zinc-800"
+                        className="flex h-7 w-7 items-center justify-center rounded text-slate-600"
                         aria-label={t.cart.increaseQty}
                       >
-                        <Plus size={14} />
+                        <Plus size={13} />
                       </button>
                     </div>
 
                     <div className="text-right">
-                      <span className="block text-[10px] uppercase tracking-wider text-zinc-500">{t.cart.total}</span>
-                      <span className="text-base font-bold text-white">
+                      <span className="text-sm font-bold font-mono text-slate-900 tabular-nums">
                         {(item.price * item.quantity).toFixed(2)} €
                       </span>
                     </div>
@@ -281,36 +268,33 @@ export default function Cart() {
           })}
         </div>
 
-        {/* Summary */}
-        <aside className="h-fit rounded-3xl border border-white/10 bg-slate-950/80 p-5 sm:p-6 lg:sticky lg:top-24 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_-15px_rgba(0,0,0,0.5)] backdrop-blur-md">
-          <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{t.cart.summaryTitle}</h2>
+        {/* Summary Sidebar */}
+        <aside className="h-fit rounded-xl border border-slate-200 bg-white p-5 sm:p-6 lg:sticky lg:top-24 shadow-xs">
+          <h2 className="font-serif text-lg sm:text-xl font-bold text-slate-950 tracking-tight">{t.cart.summaryTitle}</h2>
 
           {/* Free shipping info */}
-          <div className="mt-4 sm:mt-5 rounded-2xl border border-white/5 bg-zinc-950/70 p-4">
-            <div className="flex gap-3">
-              <Truck size={20} className="shrink-0 text-sky-400" />
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3.5">
+            <div className="flex gap-2.5">
+              <Truck size={18} className="shrink-0 text-sky-700 mt-0.5" />
 
               <div className="w-full">
                 {shipping === 0 ? (
                   <>
-                    <p className="text-sm font-semibold text-sky-400">
+                    <p className="text-xs sm:text-sm font-semibold text-emerald-800">
                       {t.cart.freeShipping}
                     </p>
-
-                    <p className="mt-1 text-xs text-zinc-500">
+                    <p className="mt-0.5 text-xs text-slate-500">
                       {t.cart.freeShippingReached}
                     </p>
                   </>
                 ) : (
                   <>
-                    <p className="text-xs sm:text-sm font-semibold text-white">
-                      {t.cart.remainingPrefix}<span className="font-mono text-sky-400">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
+                    <p className="text-xs sm:text-sm font-semibold text-slate-800">
+                      {t.cart.remainingPrefix}<span className="font-mono text-sky-700">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
                     </p>
-
-                    {/* Progress bar */}
-                    <div className="mt-2.5 h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden">
+                    <div className="mt-2 h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
                       <div
-                        className="h-full bg-sky-400 rounded-full transition-all duration-300"
+                        className="h-full bg-sky-700 rounded-full transition-all duration-300"
                         style={{ width: `${Math.min(100, (subtotal / 70) * 100)}%` }}
                       />
                     </div>
@@ -320,9 +304,9 @@ export default function Cart() {
             </div>
           </div>
 
-          {/* Payment Method Selector for Croatian trust */}
+          {/* Payment Method Selector */}
           <div className="mt-5">
-            <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
+            <label className="block font-mono text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
               {t.payments.title}
             </label>
 
@@ -331,22 +315,22 @@ export default function Cart() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod("cod")}
-                className={`w-full text-left p-3 rounded-xl border transition ${
+                className={`w-full text-left p-3 rounded-lg border transition ${
                   paymentMethod === "cod"
-                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
-                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                    ? "border-emerald-600 bg-emerald-50/70"
+                    : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
-                    <Banknote size={15} className="text-sky-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
+                    <Banknote size={15} className="text-emerald-700 shrink-0" />
                     <span>{t.payments.cod}</span>
                   </div>
-                  <span className="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] font-mono text-sky-300 font-semibold shrink-0">
+                  <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 shrink-0">
                     {t.payments.codBadge}
                   </span>
                 </div>
-                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                <p className="mt-1 text-[11px] text-slate-600 pl-6 leading-tight">
                   {t.payments.codDetail}
                 </p>
               </button>
@@ -355,22 +339,22 @@ export default function Cart() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod("keks")}
-                className={`w-full text-left p-3 rounded-xl border transition ${
+                className={`w-full text-left p-3 rounded-lg border transition ${
                   paymentMethod === "keks"
-                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
-                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                    ? "border-sky-600 bg-sky-50/70"
+                    : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
-                    <Smartphone size={15} className="text-sky-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
+                    <Smartphone size={15} className="text-sky-700 shrink-0" />
                     <span>{t.payments.keks}</span>
                   </div>
-                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-mono text-zinc-300 shrink-0">
+                  <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-medium text-slate-700 shrink-0">
                     {t.payments.keksBadge}
                   </span>
                 </div>
-                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                <p className="mt-1 text-[11px] text-slate-600 pl-6 leading-tight">
                   {t.payments.keksDetail}
                 </p>
               </button>
@@ -379,19 +363,17 @@ export default function Cart() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod("card")}
-                className={`w-full text-left p-3 rounded-xl border transition ${
+                className={`w-full text-left p-3 rounded-lg border transition ${
                   paymentMethod === "card"
-                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
-                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                    ? "border-sky-600 bg-sky-50/70"
+                    : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
-                    <CreditCard size={15} className="text-sky-400 shrink-0" />
-                    <span>{t.payments.card}</span>
-                  </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
+                  <CreditCard size={15} className="text-sky-700 shrink-0" />
+                  <span>{t.payments.card}</span>
                 </div>
-                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                <p className="mt-1 text-[11px] text-slate-600 pl-6 leading-tight">
                   {t.payments.cardDetail}
                 </p>
               </button>
@@ -400,45 +382,41 @@ export default function Cart() {
               <button
                 type="button"
                 onClick={() => setPaymentMethod("transfer")}
-                className={`w-full text-left p-3 rounded-xl border transition ${
+                className={`w-full text-left p-3 rounded-lg border transition ${
                   paymentMethod === "transfer"
-                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
-                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                    ? "border-sky-600 bg-sky-50/70"
+                    : "border-slate-200 bg-white hover:bg-slate-50"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
-                    <QrCode size={15} className="text-sky-400 shrink-0" />
-                    <span>{t.payments.transfer}</span>
-                  </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
+                  <QrCode size={15} className="text-sky-700 shrink-0" />
+                  <span>{t.payments.transfer}</span>
                 </div>
-                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                <p className="mt-1 text-[11px] text-slate-600 pl-6 leading-tight">
                   {t.payments.transferDetail}
                 </p>
               </button>
             </div>
           </div>
 
-          <div className="mt-5 sm:mt-6 space-y-3.5 sm:space-y-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">{t.cart.subtotal}</span>
-
-              <span>{subtotal.toFixed(2)} €</span>
+          {/* Pricing Totals */}
+          <div className="mt-5 space-y-3">
+            <div className="flex justify-between text-xs sm:text-sm text-slate-600">
+              <span>{t.cart.subtotal}</span>
+              <span className="font-mono text-slate-900 tabular-nums">{subtotal.toFixed(2)} €</span>
             </div>
 
-            <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">{t.cart.shipping}</span>
-
-              <span>
+            <div className="flex justify-between text-xs sm:text-sm text-slate-600">
+              <span>{t.cart.shipping}</span>
+              <span className="font-mono text-slate-900 tabular-nums">
                 {shipping === 0 ? t.cart.freeShipping : `${shipping.toFixed(2)} €`}
               </span>
             </div>
 
-            <div className="border-t border-zinc-800 pt-3.5 sm:pt-4">
+            <div className="border-t border-slate-200 pt-3">
               <div className="flex items-end justify-between">
-                <span className="font-semibold">{t.cart.total}</span>
-
-                <span className="text-2xl sm:text-3xl font-bold font-mono text-white">{total.toFixed(2)} €</span>
+                <span className="font-bold text-slate-950 text-base">{t.cart.total}</span>
+                <span className="text-2xl font-bold font-mono text-slate-950 tabular-nums">{total.toFixed(2)} €</span>
               </div>
             </div>
           </div>
@@ -447,35 +425,35 @@ export default function Cart() {
           <button
             type="button"
             onClick={() => toast.success(paymentMethod === "cod" ? "Narudžba zaprimljena! Plaćanje pouzećem kuriru pri preuzimanju." : "Preusmjeravanje na sigurno plaćanje...")}
-            className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-400 px-6 py-3.5 text-sm font-bold text-zinc-950 transition hover:bg-sky-300 shadow-lg shadow-sky-500/25"
+            className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 shadow-sm"
           >
             <ShieldCheck size={18} />
             <span>Dovrši narudžbu ({paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})</span>
           </button>
 
           {/* Trust Guarantees Box */}
-          <div className="mt-4 rounded-2xl border border-sky-500/20 bg-sky-950/30 p-3.5 space-y-2 text-xs text-zinc-300">
-            <div className="flex items-center gap-2 text-sky-300 font-medium">
-              <Lock size={14} className="text-sky-400 shrink-0" />
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2 text-xs text-slate-700">
+            <div className="flex items-center gap-2 font-medium text-slate-900">
+              <Lock size={14} className="text-sky-700 shrink-0" />
               <span>{t.payments.sslSecure}</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-300">
-              <PackageCheck size={14} className="text-sky-400 shrink-0" />
+            <div className="flex items-center gap-2 text-slate-600">
+              <PackageCheck size={14} className="text-sky-700 shrink-0" />
               <span>{t.payments.discreteGuarantee}</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-300">
-              <Truck size={14} className="text-sky-400 shrink-0" />
+            <div className="flex items-center gap-2 text-slate-600">
+              <Truck size={14} className="text-sky-700 shrink-0" />
               <span>{t.trustBar.shipping}</span>
             </div>
           </div>
 
-          <p className="mt-4 text-xs leading-5 text-zinc-500">
+          <p className="mt-4 text-[11px] leading-relaxed text-slate-500">
             {t.cart.disclaimer}
           </p>
 
           <Link
             to="/proizvodi"
-            className="mt-4 flex w-full items-center justify-center rounded-xl border border-zinc-700 px-4 py-2.5 text-sm font-semibold transition hover:bg-zinc-800 text-zinc-300"
+            className="mt-3 flex w-full items-center justify-center rounded-lg border border-slate-200 px-4 py-2.5 text-xs sm:text-sm font-semibold transition hover:bg-slate-50 text-slate-700"
           >
             {t.cart.continueShopping}
           </Link>
