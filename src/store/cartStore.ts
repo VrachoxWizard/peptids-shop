@@ -28,7 +28,10 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (product, quantity = 1) =>
         set((state) => {
-          const safeQuantity = Math.max(1, quantity);
+          const safeQuantity =
+            Number.isFinite(quantity) && quantity > 0
+              ? Math.floor(quantity)
+              : 1;
 
           const existingItem = state.items.find(
             (item) => item.id === product.id,
