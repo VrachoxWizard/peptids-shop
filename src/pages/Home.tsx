@@ -1,15 +1,13 @@
 import {
   ArrowRight,
-  Beaker,
   FileText,
-  FlaskConical,
   ShieldCheck,
   Sparkles,
-  TestTubeDiagonal,
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
 
+import BentoCategories from "../components/home/BentoCategories";
 import HeroShowcase from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
@@ -97,84 +95,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Kategorije */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="mb-8 sm:mb-10">
-          <p className="text-emerald-400 font-medium text-xs sm:text-sm tracking-wider">
-            KATEGORIJE
-          </p>
-
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-1.5 sm:mt-2">
-            Istraži kategorije
-          </h2>
-
-          <p className="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">
-            Brzo pronađi proizvode prema vrsti.
-          </p>
-        </div>
-
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          <Link
-            to="/proizvodi?category=Peptidi"
-            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6 hover:border-emerald-400 transition"
-          >
-            <FlaskConical size={32} className="text-emerald-400" />
-
-            <h3 className="text-lg sm:text-xl font-semibold mt-4 sm:mt-5">
-              Peptidi
-            </h3>
-
-            <p className="text-zinc-400 text-xs sm:text-sm mt-2">
-              Demo laboratorijski peptidi iz kataloga.
-            </p>
-
-            <span className="inline-flex items-center gap-2 mt-4 sm:mt-5 text-xs sm:text-sm text-emerald-400 font-medium">
-              Pregled kategorije
-              <ArrowRight size={16} />
-            </span>
-          </Link>
-
-          <Link
-            to="/proizvodi?category=Istraživački%20spojevi"
-            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6 hover:border-emerald-400 transition"
-          >
-            <TestTubeDiagonal size={32} className="text-emerald-400" />
-
-            <h3 className="text-lg sm:text-xl font-semibold mt-4 sm:mt-5">
-              Istraživački spojevi
-            </h3>
-
-            <p className="text-zinc-400 text-xs sm:text-sm mt-2">
-              Fiktivni spojevi za razvoj demo webshopa.
-            </p>
-
-            <span className="inline-flex items-center gap-2 mt-4 sm:mt-5 text-xs sm:text-sm text-emerald-400 font-medium">
-              Pregled kategorije
-              <ArrowRight size={16} />
-            </span>
-          </Link>
-
-          <Link
-            to="/proizvodi?category=Referentni%20uzorci"
-            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-5 sm:p-6 hover:border-emerald-400 transition"
-          >
-            <Beaker size={32} className="text-emerald-400" />
-
-            <h3 className="text-lg sm:text-xl font-semibold mt-4 sm:mt-5">
-              Referentni uzorci
-            </h3>
-
-            <p className="text-zinc-400 text-xs sm:text-sm mt-2">
-              Demo referentni uzorci za laboratorijski katalog.
-            </p>
-
-            <span className="inline-flex items-center gap-2 mt-4 sm:mt-5 text-xs sm:text-sm text-emerald-400 font-medium">
-              Pregled kategorije
-              <ArrowRight size={16} />
-            </span>
-          </Link>
-        </div>
-      </section>
+      {/* Bento Grid 2.0 Kategorije */}
+      <BentoCategories />
 
       {/* Istaknuti proizvodi */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
