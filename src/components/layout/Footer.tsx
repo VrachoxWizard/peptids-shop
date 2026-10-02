@@ -16,14 +16,19 @@ export default function Footer() {
               to="/"
               className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold tracking-tight text-white"
             >
-              <FlaskConical size={22} className="text-emerald-400" />
+              <FlaskConical size={22} className="text-sky-400" />
               {t.nav.brand}
-              <span className="text-emerald-400">{t.nav.brandHighlight}</span>
+              <span className="text-sky-400">{t.nav.brandHighlight}</span>
             </Link>
 
-            <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-zinc-500">
+            <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-zinc-400">
               {t.footer.brandDesc}
             </p>
+
+            <div className="mt-4 text-xs text-zinc-400 space-y-1 font-mono">
+              <p className="text-sky-300 font-semibold">Distribucijski centar Zagreb, Hrvatska</p>
+              <p>Podrška kupcima: +385 1 4828 111 (9:00-17:00)</p>
+            </div>
           </div>
 
           {/* Navigacija */}
@@ -33,28 +38,28 @@ export default function Footer() {
             <div className="mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 text-xs sm:text-sm">
               <Link
                 to="/"
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-sky-300 transition"
               >
                 {t.nav.home}
               </Link>
 
               <Link
                 to="/proizvodi"
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-sky-300 transition"
               >
                 {t.nav.products}
               </Link>
 
               <Link
                 to="/kosarica"
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-sky-300 transition"
               >
                 {t.nav.cart}
               </Link>
 
               <Link
                 to="/kontakt"
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-sky-300 transition"
               >
                 {t.nav.contact}
               </Link>
@@ -75,7 +80,50 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 sm:mt-10 flex flex-col gap-3 border-t border-zinc-800 pt-6 text-xs sm:text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
+        {/* Courier & Payment Badges */}
+        <div className="mt-10 pt-8 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div>
+            <span className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">
+              Dostavni partneri u Hrvatskoj:
+            </span>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
+                GLS Hrvatska
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
+                DPD Croatia
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono text-zinc-300">
+                Paketomati (24/7)
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <span className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">
+              Podržani načini plaćanja:
+            </span>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="rounded-lg border border-sky-500/30 bg-sky-950/40 px-3 py-1 font-mono font-bold text-sky-300">
+                Pouzeće (Gotovina/Kartica)
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono font-bold text-white">
+                Keks Pay
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 font-mono text-zinc-300">
+                Aircash
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono text-zinc-400">
+                Visa / Mastercard
+              </span>
+              <span className="rounded-lg border border-white/10 bg-zinc-900/90 px-2.5 py-1 font-mono text-zinc-400">
+                2D Uplatnica
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-zinc-900 pt-6 text-xs sm:text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {currentYear} {t.footer.copyright}</p>
 
           <p>{t.footer.builtAs}</p>
