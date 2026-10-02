@@ -234,26 +234,41 @@ export default function Products() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-12 flex items-center justify-center gap-4">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={previousPage}
                 disabled={currentPage === 1}
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-5 py-3 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-4 py-2 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronLeft size={18} />
                 Prethodna
               </button>
 
-              <span className="text-sm text-zinc-400">
-                {currentPage} / {totalPages}
-              </span>
+              {Array.from({ length: totalPages }, (_, index) => {
+                const pageNumber = index + 1;
+
+                return (
+                  <button
+                    key={pageNumber}
+                    type="button"
+                    onClick={() => setCurrentPage(pageNumber)}
+                    className={`h-10 min-w-10 rounded-xl border px-3 font-medium transition ${
+                      currentPage === pageNumber
+                        ? "border-emerald-400 bg-emerald-400 text-zinc-950"
+                        : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
 
               <button
                 type="button"
                 onClick={nextPage}
                 disabled={currentPage === totalPages}
-                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-5 py-3 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-4 py-2 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Sljedeća
                 <ChevronRight size={18} />
