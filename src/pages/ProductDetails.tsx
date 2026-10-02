@@ -109,20 +109,38 @@ export default function ProductDetails() {
           <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 border-t border-zinc-800 pt-6 sm:pt-8 text-xs sm:text-sm">
             <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Količina pakiranja</span>
-
               <span className="font-medium text-white">{product.amount}</span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Kategorija</span>
-
               <span className="font-medium text-white">{product.category}</span>
             </div>
 
+            {product.purity && (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-zinc-500">HPLC Čistoća</span>
+                <span className="font-mono font-semibold text-emerald-400">{product.purity}</span>
+              </div>
+            )}
+
+            {product.casNumber && (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-zinc-500">CAS Registar</span>
+                <span className="font-mono font-medium text-zinc-300">{product.casNumber}</span>
+              </div>
+            )}
+
+            {product.molecularWeight && (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-zinc-500">Molarna masa</span>
+                <span className="font-mono font-medium text-zinc-300">{product.molecularWeight}</span>
+              </div>
+            )}
+
             <div className="flex items-center justify-between gap-4">
               <span className="text-zinc-500">Namjena</span>
-
-              <span className="font-medium text-right text-white">Demo / istraživački katalog</span>
+              <span className="font-medium text-right text-white">Laboratorijska biokemijska istraživanja</span>
             </div>
           </div>
 

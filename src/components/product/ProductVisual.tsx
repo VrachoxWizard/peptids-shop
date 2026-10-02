@@ -244,13 +244,13 @@ export default function ProductVisual({
 
       {/* Category badge */}
       <div
-        className={`absolute bottom-3.5 left-3.5 sm:bottom-5 sm:left-5 max-w-[55%] truncate rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-medium backdrop-blur ${style.label} ${style.accent}`}
+        className={`absolute bottom-3.5 left-3.5 sm:bottom-5 sm:left-5 max-w-[55%] truncate rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[9px] sm:text-[10px] font-semibold backdrop-blur ${style.label} ${style.accent}`}
       >
         {category}
       </div>
 
       {/* Amount badge */}
-      <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 shrink-0 rounded-full border border-zinc-700 bg-zinc-950/70 px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] text-zinc-400 backdrop-blur">
+      <div className="absolute bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 shrink-0 rounded-full border border-white/10 bg-zinc-950/80 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[9px] sm:text-[10px] text-zinc-400 backdrop-blur">
         {amount}
       </div>
     </div>
