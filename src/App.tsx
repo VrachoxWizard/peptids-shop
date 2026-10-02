@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -14,6 +15,8 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
+
       <Navbar />
 
       <div className="flex-1">
