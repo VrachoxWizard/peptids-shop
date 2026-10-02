@@ -130,7 +130,7 @@ export default function Navbar() {
               type="button"
               onClick={() => setLanguage(language === "hr" ? "en" : "hr")}
               className="flex h-9 items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/80 px-2.5 text-xs font-mono font-bold text-emerald-400"
-              aria-label="Promijeni jezik"
+              aria-label={t.nav.toggleLang}
             >
               <Globe size={14} />
               <span>{language.toUpperCase()}</span>

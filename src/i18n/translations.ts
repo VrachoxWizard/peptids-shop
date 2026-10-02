@@ -10,6 +10,7 @@ export const translations = {
       cart: "Košarica",
       openMenu: "Otvori navigaciju",
       closeMenu: "Zatvori navigaciju",
+      toggleLang: "Promijeni jezik",
     },
 
     // Hero Section
@@ -140,6 +141,10 @@ export const translations = {
       freeShipping: "Besplatno",
       freeShippingReached: "Besplatna demo dostava (prag 100 € dosegnut)",
       remainingForFree: "do besplatne dostave",
+      remainingPrefix: "Još ",
+      decreaseQty: "Smanji količinu",
+      increaseQty: "Povećaj količinu",
+      removeItem: "Ukloni proizvod",
       disclaimer: "Demo prikaz za korisničko sučelje. Stvarna kupnja i naplata nisu omogućeni.",
       continueShopping: "Nastavi pregled kataloga",
     },
@@ -205,6 +210,7 @@ export const translations = {
       cart: "Cart",
       openMenu: "Open navigation",
       closeMenu: "Close navigation",
+      toggleLang: "Switch language",
     },
 
     // Hero Section
@@ -335,6 +341,10 @@ export const translations = {
       freeShipping: "Free",
       freeShippingReached: "Free demo delivery threshold reached (100 €)",
       remainingForFree: "away from free shipping",
+      remainingPrefix: "",
+      decreaseQty: "Decrease quantity",
+      increaseQty: "Increase quantity",
+      removeItem: "Remove item",
       disclaimer: "UI demonstration prototype. Actual purchasing and transactions are disabled.",
       continueShopping: "Continue Browsing",
     },

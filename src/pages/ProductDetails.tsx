@@ -170,7 +170,7 @@ export default function ProductDetails() {
                 onClick={decreaseQuantity}
                 disabled={quantity === 1}
                 className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
-                aria-label="Smanji količinu"
+                aria-label={t.cart.decreaseQty}
               >
                 <Minus size={18} />
               </button>
@@ -184,7 +184,7 @@ export default function ProductDetails() {
                 onClick={increaseQuantity}
                 disabled={quantity === 99}
                 className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-30"
-                aria-label="Povećaj količinu"
+                aria-label={t.cart.increaseQty}
               >
                 <Plus size={18} />
               </button>

@@ -139,7 +139,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => decreaseItem(item.id)}
                         className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
-                        aria-label="Smanji količinu"
+                        aria-label={t.cart.decreaseQty}
                       >
                         <Minus size={15} />
                       </button>
@@ -152,7 +152,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => increaseItem(item.id)}
                         className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
-                        aria-label="Povećaj količinu"
+                        aria-label={t.cart.increaseQty}
                       >
                         <Plus size={15} />
                       </button>
@@ -173,7 +173,7 @@ export default function Cart() {
                     type="button"
                     onClick={() => handleRemove(item.id, localizedProduct.name)}
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-red-500/10 hover:text-red-400"
-                    aria-label="Ukloni proizvod"
+                    aria-label={t.cart.removeItem}
                   >
                     <Trash2 size={19} />
                   </button>
@@ -218,7 +218,7 @@ export default function Cart() {
                       type="button"
                       onClick={() => handleRemove(item.id, localizedProduct.name)}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-red-500/10 hover:text-red-400"
-                      aria-label="Ukloni proizvod"
+                      aria-label={t.cart.removeItem}
                     >
                       <Trash2 size={18} />
                     </button>
@@ -231,7 +231,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => decreaseItem(item.id)}
                         className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-zinc-800"
-                        aria-label="Smanji količinu"
+                        aria-label={t.cart.decreaseQty}
                       >
                         <Minus size={14} />
                       </button>
@@ -244,7 +244,7 @@ export default function Cart() {
                         type="button"
                         onClick={() => increaseItem(item.id)}
                         className="flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-zinc-800"
-                        aria-label="Povećaj količinu"
+                        aria-label={t.cart.increaseQty}
                       >
                         <Plus size={14} />
                       </button>
@@ -286,7 +286,7 @@ export default function Cart() {
                 ) : (
                   <>
                     <p className="text-xs sm:text-sm font-semibold text-white">
-                      Još <span className="font-mono text-emerald-400">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
+                      {t.cart.remainingPrefix}<span className="font-mono text-emerald-400">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
                     </p>
 
                     {/* Progress bar */}
