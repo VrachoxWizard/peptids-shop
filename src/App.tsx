@@ -1,16 +1,18 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import RouteLoading from "./components/common/RouteLoading";
 
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+const Home = lazy(() => import("./pages/Home"));
+const Products = lazy(() => import("./pages/Products"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
@@ -20,19 +22,21 @@ function App() {
       <Navbar />
 
       <div className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
+        <Suspense fallback={<RouteLoading />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route path="/proizvodi" element={<Products />} />
+            <Route path="/proizvodi" element={<Products />} />
 
-          <Route path="/proizvod/:slug" element={<ProductDetails />} />
+            <Route path="/proizvod/:slug" element={<ProductDetails />} />
 
-          <Route path="/kosarica" element={<Cart />} />
+            <Route path="/kosarica" element={<Cart />} />
 
-          <Route path="/kontakt" element={<Contact />} />
+            <Route path="/kontakt" element={<Contact />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </div>
 
       <Footer />
