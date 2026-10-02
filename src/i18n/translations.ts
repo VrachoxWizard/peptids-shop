@@ -190,6 +190,53 @@ export const translations = {
       builtAs: "Izrađeno kao high-agency frontend sučelje.",
     },
 
+    // Top Trust Bar
+    trustBar: {
+      shipping: "Isporuka u RH 24-48h (GLS / DPD / Paketomati)",
+      payment: "Plaćanje pouzećem & Keks Pay / Aircash",
+      discrete: "100% diskretno termo-pakiranje",
+      support: "Podrška u Zagrebu: +385 1 4828 111",
+    },
+
+    // Croatia Trust Badges
+    croatiaTrust: {
+      badge: "SIGURNOST I POVJERENJE U HRVATSKOJ",
+      title: "Zašto kupci u Hrvatskoj biraju PeptideLab?",
+      description:
+        "Bez rizika, bez carinskih zastoja i uz maksimalnu diskreciju – laboratorijski standardi prilagođeni domaćim kupcima.",
+      codTitle: "Plaćanje Pouzećem & Keks Pay",
+      codDesc:
+        "Platite sigurno gotovinom ili karticom kuriru pri preuzimanju paketa ili trenutačno putem Keks Pay / Aircash aplikacije.",
+      deliveryTitle: "Isporuka u RH 24-48h",
+      deliveryDesc:
+        "Skladište u EU/RH. Roba stiže ekspresno putem GLS-a ili DPD-a na adresu ili odabrani paketomat bez carine.",
+      discreteTitle: "100% Diskretno Termo-Pakiranje",
+      discreteDesc:
+        "Neutralne pošiljke bez vanjskih oznaka sadržaja. Termo-izolacija jamči stabilnost liofiliziranih peptida u transportu.",
+      supportTitle: "Korisnička Podrška Zagreb",
+      supportDesc:
+        "Domaći tim na raspolaganju radnim danom 09:00 - 17:00 putem WhatsAppa i telefona za sve upite i savjete.",
+    },
+
+    // Payment methods & checkout trust
+    payments: {
+      title: "Odaberite način plaćanja",
+      cod: "Plaćanje pouzećem (kuriru pri dostavi)",
+      codBadge: "Preporučeno u RH",
+      codDetail: "Gotovinom ili karticom pri preuzimanju paketa. Nema plaćanja unaprijed.",
+      keks: "Keks Pay / Aircash",
+      keksBadge: "Trenutačno",
+      keksDetail: "Brzo i sigurno skeniranjem barkoda putem domaće bankarske aplikacije.",
+      card: "Kreditna / Debitna kartica (3D Secure)",
+      cardDetail: "Sigurna transakcija putem zaštićenog 256-bit SSL protokola.",
+      transfer: "Opća uplatnica / Virman / Internet bankarstvo",
+      transferDetail: "Plaćanje na IBAN u Hrvatskoj s 2D uplatnim kodom.",
+      sslSecure: "256-bit SSL Enkripcija",
+      discreteGuarantee: "Zajamčena diskrecija dostave",
+      freeShippingEligible: "Ostvarili ste besplatnu dostavu!",
+      freeShippingThreshold: "Dodajte još {amount} € za besplatnu GLS dostavu",
+    },
+
     // 404
     notFound: {
       badge: "GREŠKA 404",
@@ -388,6 +435,53 @@ export const translations = {
       info3: "All data presented is part of an educational frontend demonstration.",
       copyright: "PeptideLab Analytics Demo. All rights reserved.",
       builtAs: "Engineered with high-agency frontend standards.",
+    },
+
+    // Top Trust Bar
+    trustBar: {
+      shipping: "Fast EU / Croatia Delivery 24-48h (GLS / DPD / Lockers)",
+      payment: "Cash on Delivery & Instant Mobile Pay (Keks / Aircash)",
+      discrete: "100% Discrete Thermal Packaging",
+      support: "Zagreb Local Support: +385 1 4828 111",
+    },
+
+    // Croatia Trust Badges
+    croatiaTrust: {
+      badge: "SECURITY & BUYER CONFIDENCE",
+      title: "Why Buyers in Croatia Choose PeptideLab",
+      description:
+        "Zero customs delays, cash upon delivery, and verified temperature-safe discrete handling.",
+      codTitle: "Cash on Delivery & Keks Pay",
+      codDesc:
+        "Pay safely to the courier upon parcel arrival with cash/card, or use instant bank app payments.",
+      deliveryTitle: "Express 24-48h Delivery",
+      deliveryDesc:
+        "Stocked in EU/Croatia. Direct doorstep or parcel locker dispatch without customs delays.",
+      discreteTitle: "100% Discrete Thermal Packaging",
+      discreteDesc:
+        "Completely unmarked outer parcel with internal cold insulation preserving lyophilized peptides.",
+      supportTitle: "Local Support in Zagreb",
+      supportDesc:
+        "Dedicated local support desk reachable Mon-Fri 09:00 - 17:00 via WhatsApp and phone.",
+    },
+
+    // Payment methods & checkout trust
+    payments: {
+      title: "Select Payment Method",
+      cod: "Cash on Delivery (Pay to courier)",
+      codBadge: "Most Popular in HR",
+      codDetail: "Pay upon physical delivery. No upfront payment required.",
+      keks: "Keks Pay / Aircash",
+      keksBadge: "Instant",
+      keksDetail: "Quick zero-fee payment via verified mobile banking app.",
+      card: "Credit / Debit Card (3D Secure)",
+      cardDetail: "Protected with end-to-end 256-bit bank grade encryption.",
+      transfer: "Bank Wire / SEPA Transfer",
+      transferDetail: "Direct bank transfer with instant QR / IBAN reference.",
+      sslSecure: "256-bit SSL Encrypted",
+      discreteGuarantee: "Guaranteed discrete shipping",
+      freeShippingEligible: "You unlocked free delivery!",
+      freeShippingThreshold: "Add {amount} € more for free GLS shipping",
     },
 
     // 404
