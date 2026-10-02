@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Check, ShoppingCart, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -13,8 +13,17 @@ type ProductCardProps = {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [justAdded, setJustAdded] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { t, language } = useTranslation();
   const addItem = useCartStore((state) => state.addItem);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const loc = getLocalizedProduct(product, language);
 
@@ -23,9 +32,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     addItem(product);
 
-    // Silent inline tactile confirmation
+    // Silent inline tactile confirmation with cleanup
     setJustAdded(true);
-    setTimeout(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setJustAdded(false);
     }, 1400);
   }
@@ -86,7 +96,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Delivery & origin trust signal - Flat row without card-in-card */}
           <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-600 font-medium">
             <Truck size={14} className="text-sky-700 shrink-0" />
-            <span>Zaliha u RH (24–48h)</span>
+            <span>{t.product.stockReassurance}</span>
           </div>
 
           {/* Optional CAS specification line */}
@@ -127,7 +137,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {justAdded ? (
               <>
                 <Check size={15} />
-                <span>{language === "hr" ? "Dodano" : "Added"}</span>
+                <span>{t.product.addedInline}</span>
               </>
             ) : (
               <>

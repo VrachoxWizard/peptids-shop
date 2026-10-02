@@ -104,6 +104,8 @@ export default function ProductVisual({
           <img
             src={image}
             alt={name}
+            loading="lazy"
+            decoding="async"
             onError={() => setImageFailed(true)}
             className="h-full w-full object-cover object-center"
           />
@@ -135,6 +137,8 @@ export default function ProductVisual({
         <img
           src={image}
           alt={name}
+          loading="lazy"
+          decoding="async"
           onError={() => setImageFailed(true)}
           className="h-full w-full object-cover object-center transition duration-500"
         />

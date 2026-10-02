@@ -3,10 +3,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
 
 export default function Footer() {
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
-
-  const isHr = language === "hr";
 
   return (
     <footer className="mt-16 sm:mt-24 border-t border-slate-200 bg-slate-50 text-slate-600">
@@ -33,14 +31,12 @@ export default function Footer() {
 
             <div className="pt-2 font-mono text-xs text-slate-700 space-y-1">
               <p className="font-semibold text-slate-900">
-                {isHr
-                  ? "Distribucijski logistički centar: Zagreb, Hrvatska"
-                  : "Distribution Logistics Hub: Zagreb, Croatia"}
+                {t.footer.distributionCenter}
               </p>
               <p>
-                {isHr ? "Podrška kupcima:" : "Customer Support:"}{" "}
+                {t.footer.customerSupport}{" "}
                 <strong className="text-slate-900">+385 1 4828 111</strong>{" "}
-                {isHr ? "(pon–pet 09:00–17:00)" : "(Mon–Fri 09:00–17:00)"}
+                {t.footer.workingHours}
               </p>
               <p>Email: podrska@peptidelab.hr</p>
             </div>
@@ -67,7 +63,7 @@ export default function Footer() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div>
                 <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">
-                  {isHr ? "Dostavni partneri u RH i regiji:" : "Delivery partners in Croatia & EU:"}
+                  {t.footer.deliveryPartners}
                 </span>
                 <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
                   <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 font-bold text-slate-800 shadow-xs">
@@ -77,18 +73,18 @@ export default function Footer() {
                     DPD Croatia
                   </span>
                   <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-slate-600">
-                    {isHr ? "Paketomati (24/7)" : "Parcel Lockers (24/7)"}
+                    {t.footer.parcelLockers}
                   </span>
                 </div>
               </div>
 
               <div>
                 <span className="block font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">
-                  {isHr ? "Podržani načini plaćanja:" : "Supported payment methods:"}
+                  {t.footer.paymentPartners}
                 </span>
                 <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
                   <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-bold text-emerald-800">
-                    {isHr ? "Pouzeće (Gotovina/Kartica)" : "Cash on Delivery (Cash/Card)"}
+                    {t.footer.codPartner}
                   </span>
                   <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 font-bold text-slate-800 shadow-xs">
                     Keks Pay
@@ -100,7 +96,7 @@ export default function Footer() {
                     Visa / Mastercard
                   </span>
                   <span className="rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-600">
-                    {isHr ? "2D Uplatnica" : "Bank Transfer"}
+                    {t.footer.bankSlip}
                   </span>
                 </div>
               </div>
@@ -113,15 +109,15 @@ export default function Footer() {
           <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50/70 p-4 text-xs text-amber-900 leading-relaxed">
             <ShieldAlert size={18} className="text-amber-700 shrink-0 mt-0.5" />
             <div>
-              <strong className="font-semibold block mb-0.5">Istraživačka namjena spojeva (Research Use Only):</strong>
-              Svi biokemijski spojevi, liofilizirani peptidi i analitički standardi u ponudi namijenjeni su isključivo za in vitro laboratorijska istraživanja, kontrolu kvalitete i znanstveno-tehnološka ispitivanja. Nisu namijenjeni za izravnu primjenu na ljudima ili životinjama, niti kao lijekovi ili prehrambeni dodaci.
+              <strong className="font-semibold block mb-0.5">{t.footer.regulatoryTitle}</strong>
+              {t.footer.regulatoryBody}
             </div>
           </div>
         </div>
 
         {/* Bottom Colophon Bar */}
         <div className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
-          <p>© {currentYear} PeptideLab d.o.o. Sva prava pridržana. Zagreb, Hrvatska.</p>
+          <p>© {currentYear} PeptideLab d.o.o. {t.footer.rightsReserved} Zagreb, Hrvatska.</p>
           <p className="font-mono text-[11px] text-slate-400">
             Swiss & EU Pharma Research Standards · ISO 9001:2015 Compliant HPLC
           </p>

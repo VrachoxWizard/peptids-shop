@@ -11,6 +11,7 @@ export const translations = {
       openMenu: "Otvori navigaciju",
       closeMenu: "Zatvori navigaciju",
       toggleLang: "Promijeni jezik",
+      standardsBadge: "Švicarski i EU standardi istraživanja",
     },
 
     // Hero Section
@@ -106,7 +107,8 @@ export const translations = {
     product: {
       priceLabel: "CIJENA",
       addBtn: "Dodaj",
-      addedToast: "Proizvod dodan u košaricu",
+      addedInline: "Dodano",
+      addedToast: "Dodano u košaricu!",
       openCart: "Otvori košaricu",
       packaging: "Količina pakiranja",
       category: "Kategorija",
@@ -121,6 +123,7 @@ export const translations = {
       notFound: "Proizvod nije pronađen",
       backToProducts: "← Povratak na katalog",
       sample: "SAMPLE",
+      stockReassurance: "Zaliha u RH (24–48h)",
     },
 
     // Cart
@@ -139,7 +142,7 @@ export const translations = {
       subtotal: "Međuzbroj",
       shipping: "Dostava",
       freeShipping: "Besplatno",
-      freeShippingReached: "Besplatna demo dostava (prag 100 € dosegnut)",
+      freeShippingReached: "Besplatna dostava (prag 70 € dosegnut)",
       remainingForFree: "do besplatne dostave",
       remainingPrefix: "Još ",
       decreaseQty: "Smanji količinu",
@@ -147,6 +150,10 @@ export const translations = {
       removeItem: "Ukloni proizvod",
       disclaimer: "Demo prikaz za korisničko sučelje. Stvarna kupnja i naplata nisu omogućeni.",
       continueShopping: "Nastavi pregled kataloga",
+      orderSuccessTitle: "Narudžba zaprimljena!",
+      orderSuccessCodDesc: "Zabilježili smo vašu narudžbu. Plaćanje pouzećem kuriru pri preuzimanju paketa.",
+      orderSuccessSecureDesc: "Zabilježili smo vašu narudžbu. Preusmjeravanje na sigurno plaćanje…",
+      orderSuccessBadge: "Plaćanje pouzećem",
     },
 
     // Contact
@@ -188,6 +195,18 @@ export const translations = {
       info3: "Svi podaci na stranici dio su edukativnog i demonstracijskog korisničkog sučelja.",
       copyright: "PeptideLab Analytics Demo. Sva prava pridržana.",
       builtAs: "Izrađeno kao high-agency frontend sučelje.",
+      regulatoryTitle: "Istraživačka namjena spojeva (Research Use Only):",
+      regulatoryBody:
+        "Svi biokemijski spojevi, liofilizirani peptidi i analitički standardi u ponudi namijenjeni su isključivo za in vitro laboratorijska istraživanja, kontrolu kvalitete i znanstveno-tehnološka ispitivanja. Nisu namijenjeni za izravnu primjenu na ljudima ili životinjama, niti kao lijekovi ili prehrambeni dodaci.",
+      rightsReserved: "Sva prava pridržana.",
+      distributionCenter: "Distribucijski logistički centar: Zagreb, Hrvatska",
+      customerSupport: "Podrška kupcima:",
+      workingHours: "(pon–pet 09:00–17:00)",
+      deliveryPartners: "Dostavni partneri u RH i regiji:",
+      paymentPartners: "Podržani načini plaćanja:",
+      parcelLockers: "Paketomati (24/7)",
+      codPartner: "Pouzeće (Gotovina/Kartica)",
+      bankSlip: "2D Uplatnica",
     },
 
     // Top Trust Bar
@@ -200,7 +219,7 @@ export const translations = {
 
     // Croatia Trust Badges
     croatiaTrust: {
-      badge: "SIGURNOST I POVJERENJE U HRVATSKOJ",
+      badge: "Švicarski & EU standardi",
       title: "Zašto kupci u Hrvatskoj biraju PeptideLab?",
       description:
         "Bez rizika, bez carinskih zastoja i uz maksimalnu diskreciju – laboratorijski standardi prilagođeni domaćim kupcima.",
@@ -216,6 +235,10 @@ export const translations = {
       supportTitle: "Korisnička Podrška Zagreb",
       supportDesc:
         "Domaći tim na raspolaganju radnim danom 09:00–17:00 putem WhatsAppa i telefona za sve upite i savjete.",
+      tagNoRisk: "Bez rizika",
+      tagEuWarehouse: "EU skladište",
+      tagThermo: "Termo-zaštita",
+      tagSupport: "Radni dan 9–17h",
     },
 
     // Payment methods & checkout trust
@@ -258,6 +281,7 @@ export const translations = {
       openMenu: "Open navigation",
       closeMenu: "Close navigation",
       toggleLang: "Switch language",
+      standardsBadge: "Swiss & EU Research Standards",
     },
 
     // Hero Section
@@ -276,7 +300,7 @@ export const translations = {
       metricCoaLabel: "Verified Batch",
       showcaseBadge: "HPLC VALIDATED",
       showcasePurity: "PURITY ≥ 99.4%",
-      casNumber: "CAS REGISTRY",
+      casNumber: "CAS NUMBER",
       format: "FORMAT",
       formatValue: "Lyophilized",
       storage: "STORAGE",
@@ -290,45 +314,45 @@ export const translations = {
       badge: "CATALOG ARCHITECTURE",
       title: "Explore Compound Categories",
       description:
-        "All compounds are classified according to specific molecular structures and analytical research protocols.",
-      viewAll: "View All Categories",
+        "All compounds are classified by defined molecular sequences and research analytical protocols.",
+      viewAll: "View all categories",
       purityTag: "HPLC ≥ 99.0%",
       peptidesTitle: "Synthetic Peptides",
       peptidesDesc:
-        "High-stability lyophilized amino acid sequences, including BPC-157, TB-500, GHK-Cu, and Epithalon for biochemical laboratory research.",
-      peptidesCount: "Collection: 6 Formulations",
-      peptidesAction: "Explore Peptides",
+        "Lyophilized amino acid sequences with high biochemical integrity, including BPC-157, TB-500, GHK-Cu, and Epithalon for research assays.",
+      peptidesCount: "Collection: 6 formulations",
+      peptidesAction: "Browse peptides",
 
       compoundsBadge: "R&D ANALYTICS",
       compoundsTitle: "Research Compounds",
       compoundsDesc:
-        "Metabolic coenzymes and redox molecules (NAD+, Glutathione) synthesized for cellular research and redox balance studies.",
-      compoundsCount: "Molecular Compounds",
-      compoundsAction: "Explore Compounds",
+        "Metabolic coenzymes and redox molecules (NAD+, Glutathione) formulated for cellular kinetics and redox pathways.",
+      compoundsCount: "Molecular compounds",
+      compoundsAction: "Browse compounds",
 
       referenceBadge: "CERTIFIED",
-      referenceTitle: "Analytical Reference Standards",
+      referenceTitle: "Reference Standards",
       referenceDesc:
-        "Certified calibration samples for comparative HPLC assaying and mass spectrometry calibration with complete batch documentation.",
-      referenceCas: "CAS Validated",
-      referenceAction: "Explore Standards",
+        "Analytical reference calibration standards engineered for HPLC assay validation and mass spectrometry calibration.",
+      referenceCas: "CAS Validation",
+      referenceAction: "Explore standards",
     },
 
     // Featured section
     featured: {
       badge: "FEATURED",
       title: "Featured Compounds",
-      description: "Selected reference standards and peptides from our analytical repository.",
-      viewAll: "View All Products",
+      description: "Curated research peptides and reference standards from our catalog.",
+      viewAll: "View all products",
     },
 
     // Catalog & Products Page
     catalog: {
-      badge: "ANALYTICAL REPOSITORY",
-      title: "Biochemical Research Catalog",
+      badge: "ANALYTICAL CATALOG",
+      title: "Research Biochemical Compounds",
       description:
-        "Browse lyophilized peptide sequences, investigational molecules, and certified reference standards with purity profiles.",
-      searchPlaceholder: "Search by compound name, category, or CAS registry…",
+        "Explore lyophilized peptides, research compounds, and analytical standards with validated purity ratings.",
+      searchPlaceholder: "Search by compound name, category, or CAS number…",
       filtersTitle: "Catalog Filters",
       categoryLabel: "Category",
       allCategories: "All Categories",
@@ -340,20 +364,21 @@ export const translations = {
       sortNameAsc: "Name: A-Z",
       sortNameDesc: "Name: Z-A",
       resetFilters: "Reset Filters",
-      foundCount: "Compounds Found",
+      foundCount: "Products found",
       page: "Page",
       of: "of",
       previousPage: "Previous",
       nextPage: "Next",
-      noResultsTitle: "No Compounds Found",
-      noResultsDesc: "Try adjusting your search query or filter parameters.",
+      noResultsTitle: "No compounds found",
+      noResultsDesc: "Try adjusting your search criteria or resetting filters.",
     },
 
     // Product Card & Details
     product: {
       priceLabel: "PRICE",
       addBtn: "Add",
-      addedToast: "Item added to cart",
+      addedInline: "Added",
+      addedToast: "Added to cart!",
       openCart: "Open Cart",
       packaging: "Packaging Unit",
       category: "Category",
@@ -368,6 +393,7 @@ export const translations = {
       notFound: "Product Not Found",
       backToProducts: "← Back to Catalog",
       sample: "SAMPLE",
+      stockReassurance: "In stock in Croatia (24–48h)",
     },
 
     // Cart
@@ -386,7 +412,7 @@ export const translations = {
       subtotal: "Subtotal",
       shipping: "Shipping",
       freeShipping: "Free",
-      freeShippingReached: "Free demo delivery threshold reached (100 €)",
+      freeShippingReached: "Free delivery threshold reached (70 €)",
       remainingForFree: "away from free shipping",
       remainingPrefix: "",
       decreaseQty: "Decrease quantity",
@@ -394,6 +420,10 @@ export const translations = {
       removeItem: "Remove item",
       disclaimer: "UI demonstration prototype. Actual purchasing and transactions are disabled.",
       continueShopping: "Continue Browsing",
+      orderSuccessTitle: "Order Confirmed!",
+      orderSuccessCodDesc: "Your order is recorded. Pay cash/card on delivery upon package arrival.",
+      orderSuccessSecureDesc: "Your order is recorded. Redirecting to secure payment…",
+      orderSuccessBadge: "Cash on delivery",
     },
 
     // Contact
@@ -435,6 +465,18 @@ export const translations = {
       info3: "All data presented is part of an educational frontend demonstration.",
       copyright: "PeptideLab Analytics Demo. All rights reserved.",
       builtAs: "Engineered with high-agency frontend standards.",
+      regulatoryTitle: "Research Use Only (RUO) Notice:",
+      regulatoryBody:
+        "All biochemical compounds, lyophilized peptides, and analytical reference standards are strictly intended for in-vitro laboratory research, quality control, and scientific assays. Not for human or animal consumption, diagnostic, or therapeutic use.",
+      rightsReserved: "All rights reserved.",
+      distributionCenter: "Distribution Logistics Hub: Zagreb, Croatia",
+      customerSupport: "Customer Support:",
+      workingHours: "(Mon–Fri 09:00–17:00)",
+      deliveryPartners: "Delivery partners in Croatia & EU:",
+      paymentPartners: "Supported payment methods:",
+      parcelLockers: "Parcel Lockers (24/7)",
+      codPartner: "Cash on Delivery (Cash/Card)",
+      bankSlip: "Bank Transfer",
     },
 
     // Top Trust Bar
@@ -447,7 +489,7 @@ export const translations = {
 
     // Croatia Trust Badges
     croatiaTrust: {
-      badge: "SECURITY & BUYER CONFIDENCE",
+      badge: "Swiss & EU Standards",
       title: "Why Buyers in Croatia Choose PeptideLab",
       description:
         "Zero customs delays, cash upon delivery, and verified temperature-safe discrete handling.",
@@ -463,6 +505,10 @@ export const translations = {
       supportTitle: "Local Support in Zagreb",
       supportDesc:
         "Dedicated local support desk reachable Mon–Fri 09:00–17:00 via WhatsApp and phone.",
+      tagNoRisk: "Zero Risk",
+      tagEuWarehouse: "EU Warehouse",
+      tagThermo: "Thermal Protection",
+      tagSupport: "Weekdays 9–17h",
     },
 
     // Payment methods & checkout trust

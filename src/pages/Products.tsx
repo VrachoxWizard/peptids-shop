@@ -13,8 +13,7 @@ import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
-
-const PRODUCTS_PER_PAGE = 6;
+import { SHOP_CONFIG } from "../config/shop";
 
 export default function Products() {
   const { t, language } = useTranslation();
@@ -31,7 +30,7 @@ export default function Products() {
   const [prevSearch, setPrevSearch] = useState(search);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (prevSearch !== search) {
+  if (search !== prevSearch) {
     setPrevSearch(search);
     setSearchInput(search);
   }
@@ -147,21 +146,18 @@ export default function Products() {
     return result;
   }, [search, category, sort, maxPrice, language]);
 
-  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProducts.length / SHOP_CONFIG.PRODUCTS_PER_PAGE);
 
   const effectivePage = totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
 
-  const startIndex = (effectivePage - 1) * PRODUCTS_PER_PAGE;
+  const startIndex = (effectivePage - 1) * SHOP_CONFIG.PRODUCTS_PER_PAGE;
 
   const paginatedProducts = filteredProducts.slice(
     startIndex,
-    startIndex + PRODUCTS_PER_PAGE,
+    startIndex + SHOP_CONFIG.PRODUCTS_PER_PAGE,
   );
 
   function resetFilters() {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
     setSearchInput("");
     setSearchParams({});
     setCurrentPage(1);
@@ -223,11 +219,12 @@ export default function Products() {
 
         <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
           <div>
-            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
+            <label htmlFor="category-select" className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
               {t.catalog.categoryLabel}
             </label>
 
             <select
+              id="category-select"
               value={category}
               onChange={(event) =>
                 updateParam("category", event.target.value)
@@ -243,11 +240,12 @@ export default function Products() {
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
+            <label htmlFor="max-price-input" className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
               {t.catalog.maxPriceLabel}: <span className="font-mono text-slate-900 font-bold">{maxPrice} €</span>
             </label>
 
             <input
+              id="max-price-input"
               type="range"
               min="0"
               max="100"
@@ -261,11 +259,12 @@ export default function Products() {
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
+            <label htmlFor="sort-select" className="block text-xs sm:text-sm text-slate-600 mb-1.5 sm:mb-2 font-medium">
               {t.catalog.sortLabel}
             </label>
 
             <select
+              id="sort-select"
               value={sort}
               onChange={(event) =>
                 updateParam("sort", event.target.value)

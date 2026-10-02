@@ -6,29 +6,25 @@ import {
   MapPin,
   MessageSquare,
 } from "lucide-react";
-import { z } from "zod";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
-
-type FormData = {
-  name: string;
-  email: string;
-  message: string;
-};
-
-type FormErrors = Partial<Record<keyof FormData, string>>;
+import {
+  type ContactFormData,
+  type ContactFormErrors,
+  validateContactForm,
+} from "../utils/validation";
 
 export default function Contact() {
   const { t } = useTranslation();
   useDocumentTitle(t.contact.title);
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     message: "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<ContactFormErrors>({});
   const [submitted, setSubmitted] = useState(false);
 
   function handleChange(
@@ -54,23 +50,14 @@ export default function Contact() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const schema = z.object({
-      name: z.string().min(2, t.contact.valName),
-      email: z.string().email(t.contact.valEmail),
-      message: z.string().min(10, t.contact.valMessage),
+    const result = validateContactForm(formData, {
+      valName: t.contact.valName,
+      valEmail: t.contact.valEmail,
+      valMessage: t.contact.valMessage,
     });
 
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const newErrors: FormErrors = {};
-
-      result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FormData;
-        newErrors[field] = issue.message;
-      });
-
-      setErrors(newErrors);
+    if (!result.isValid) {
+      setErrors(result.errors);
       return;
     }
 

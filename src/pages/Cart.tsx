@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Banknote,
+  CheckCircle2,
   CreditCard,
   Lock,
   Minus,
@@ -22,6 +23,7 @@ import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import { products } from "../data/products";
 import { getLocalizedProduct } from "../types/product";
+import { SHOP_CONFIG, calculateShipping } from "../config/shop";
 
 export default function Cart() {
   const { t, language } = useTranslation();
@@ -33,15 +35,19 @@ export default function Cart() {
   const clearCart = useCartStore((state) => state.clearCart);
 
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "keks" | "card" | "transfer">("cod");
+  const [completedOrder, setCompletedOrder] = useState<{
+    total: number;
+    paymentMethod: "cod" | "keks" | "card" | "transfer";
+  } | null>(null);
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-  const shipping = subtotal >= 70 ? 0 : 4.9;
+  const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
-  const remainingForFreeShipping = Math.max(0, 70 - subtotal);
+  const remainingForFreeShipping = Math.max(0, SHOP_CONFIG.FREE_SHIPPING_THRESHOLD - subtotal);
 
   function handleRemove(id: number, name: string) {
     removeItem(id);
@@ -53,6 +59,68 @@ export default function Cart() {
   function handleClearCart() {
     clearCart();
     toast.success(t.cart.clearedToast);
+  }
+
+  function handleCheckout() {
+    const finalTotal = total;
+    const method = paymentMethod;
+    setCompletedOrder({ total: finalTotal, paymentMethod: method });
+    clearCart();
+    toast.success(
+      method === "cod" ? t.cart.orderSuccessCodDesc : t.cart.orderSuccessSecureDesc,
+    );
+  }
+
+  if (completedOrder) {
+    return (
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <div className="text-center max-w-lg mx-auto rounded-2xl border border-slate-200 bg-white p-8 sm:p-12 shadow-sm">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
+            <CheckCircle2 size={32} />
+          </div>
+
+          <h1 className="font-serif mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            {t.cart.orderSuccessTitle}
+          </h1>
+
+          <p className="mt-2.5 text-sm text-slate-600">
+            {completedOrder.paymentMethod === "cod"
+              ? t.cart.orderSuccessCodDesc
+              : t.cart.orderSuccessSecureDesc}
+          </p>
+
+          <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-left space-y-2 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-500">{t.cart.total}:</span>
+              <strong className="font-mono text-slate-900 text-sm">{completedOrder.total.toFixed(2)} €</strong>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">{t.payments.title}:</span>
+              <span className="font-semibold text-slate-900">
+                {completedOrder.paymentMethod === "cod"
+                  ? t.payments.cod
+                  : completedOrder.paymentMethod === "keks"
+                  ? t.payments.keks
+                  : completedOrder.paymentMethod === "card"
+                  ? t.payments.card
+                  : t.payments.transfer}
+              </span>
+            </div>
+            <div className="flex justify-between border-t border-slate-200 pt-2 text-emerald-800">
+              <span className="font-medium">{t.trustBar.shipping}</span>
+            </div>
+          </div>
+
+          <Link
+            to="/proizvodi"
+            onClick={() => setCompletedOrder(null)}
+            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-6 py-3 font-semibold text-white transition hover:bg-slate-800 text-sm shadow-xs"
+          >
+            {t.cart.continueShopping}
+          </Link>
+        </div>
+      </main>
+    );
   }
 
   if (items.length === 0) {
@@ -295,7 +363,7 @@ export default function Cart() {
                     <div className="mt-2 h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
                       <div
                         className="h-full bg-sky-700 rounded-full transition-[width] duration-300"
-                        style={{ width: `${Math.min(100, (subtotal / 70) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (subtotal / SHOP_CONFIG.FREE_SHIPPING_THRESHOLD) * 100)}%` }}
                       />
                     </div>
                   </>
@@ -424,17 +492,7 @@ export default function Cart() {
           {/* Primary Checkout CTA */}
           <button
             type="button"
-            onClick={() =>
-              toast.success(
-                paymentMethod === "cod"
-                  ? (language === "hr"
-                      ? "Narudžba zaprimljena! Plaćanje pouzećem kuriru pri preuzimanju."
-                      : "Order received! Pay cash on delivery upon parcel arrival.")
-                  : (language === "hr"
-                      ? "Preusmjeravanje na sigurno plaćanje…"
-                      : "Redirecting to secure payment gateway…")
-              )
-            }
+            onClick={handleCheckout}
             className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 shadow-sm"
           >
             <ShieldCheck size={18} />

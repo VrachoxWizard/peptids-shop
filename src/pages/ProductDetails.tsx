@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, ChevronRight, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
@@ -15,6 +15,15 @@ export default function ProductDetails() {
 
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const addItem = useCartStore((state) => state.addItem);
 
@@ -51,7 +60,8 @@ export default function ProductDetails() {
 
     addItem(rawProduct, quantity);
     setJustAdded(true);
-    setTimeout(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setJustAdded(false);
     }, 1500);
 
@@ -209,7 +219,7 @@ export default function ProductDetails() {
             {justAdded ? (
               <>
                 <Check size={18} />
-                <span>{language === "hr" ? "Dodano u košaricu!" : "Added to cart!"}</span>
+                <span>{t.product.addedToast}</span>
               </>
             ) : (
               <>

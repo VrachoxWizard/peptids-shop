@@ -11,7 +11,7 @@ export default function CroatiaTrustBadges() {
       icon: Banknote,
       title: t.croatiaTrust.codTitle,
       description: t.croatiaTrust.codDesc,
-      tag: "Bez rizika",
+      tag: t.croatiaTrust.tagNoRisk,
     },
     {
       id: "delivery",
@@ -19,7 +19,7 @@ export default function CroatiaTrustBadges() {
       icon: Truck,
       title: t.croatiaTrust.deliveryTitle,
       description: t.croatiaTrust.deliveryDesc,
-      tag: "EU skladište",
+      tag: t.croatiaTrust.tagEuWarehouse,
     },
     {
       id: "discrete",
@@ -27,7 +27,7 @@ export default function CroatiaTrustBadges() {
       icon: PackageCheck,
       title: t.croatiaTrust.discreteTitle,
       description: t.croatiaTrust.discreteDesc,
-      tag: "Termo-zaštita",
+      tag: t.croatiaTrust.tagThermo,
     },
     {
       id: "support",
@@ -35,7 +35,7 @@ export default function CroatiaTrustBadges() {
       icon: Headphones,
       title: t.croatiaTrust.supportTitle,
       description: t.croatiaTrust.supportDesc,
-      tag: "Radni dan 9–17h",
+      tag: t.croatiaTrust.tagSupport,
     },
   ];
 
@@ -45,7 +45,7 @@ export default function CroatiaTrustBadges() {
         {/* Section Header */}
         <div className="mb-10 sm:mb-12 max-w-3xl">
           <div className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-sky-700 mb-2">
-            <span>Švicarski & EU standardi</span>
+            <span>{t.croatiaTrust.badge}</span>
           </div>
 
           <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
