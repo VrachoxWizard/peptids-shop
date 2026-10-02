@@ -1,4 +1,4 @@
-import { ArrowUpRight, ShoppingCart } from "lucide-react";
+import { ArrowUpRight, ShoppingCart, Truck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/70 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_12px_32px_-10px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-300 hover:border-emerald-500/30 hover:shadow-[0_20px_45px_-15px_rgba(16,185,129,0.12)] hover:-translate-y-1 flex flex-col justify-between">
+    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_12px_32px_-10px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-300 hover:border-sky-500/40 hover:shadow-[0_20px_45px_-15px_rgba(2,132,199,0.2)] hover:-translate-y-1 flex flex-col justify-between">
       {/* Top Media Section */}
       <div>
         <Link
@@ -56,8 +56,8 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* HPLC Purity Tag if present */}
           {product.purity && (
-            <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-zinc-950/80 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-300 backdrop-blur-md z-10">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full border border-sky-500/30 bg-zinc-950/80 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-300 backdrop-blur-md z-10">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
               <span>{product.purity}</span>
             </div>
           )}
@@ -66,7 +66,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Info & Typography Section */}
         <div className="p-4 sm:p-5">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-emerald-400 truncate">
+            <span className="font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-sky-400 truncate">
               {loc.category}
             </span>
 
@@ -76,7 +76,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           <Link to={`/proizvod/${product.slug}`} className="block mt-2.5">
-            <h2 className="text-base sm:text-lg font-bold leading-snug text-white transition group-hover:text-emerald-300">
+            <h2 className="text-base sm:text-lg font-bold leading-snug text-white transition group-hover:text-sky-300">
               {loc.name}
             </h2>
           </Link>
@@ -84,6 +84,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           <p className="mt-2 line-clamp-2 min-h-10 text-xs sm:text-sm leading-relaxed text-zinc-400">
             {loc.description}
           </p>
+
+          {/* Trust signal badge for delivery & origin */}
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-mono text-sky-300/90 bg-sky-950/40 border border-sky-500/20 rounded-lg px-2.5 py-1">
+            <Truck size={13} className="text-sky-400 shrink-0" />
+            <span>Zaliha u RH (24-48h)</span>
+          </div>
 
           {/* Optional CAS specification line */}
           {product.casNumber && (
@@ -114,7 +120,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             type="button"
             onClick={handleAddToCart}
-            className="tactile-press flex items-center gap-1.5 rounded-xl bg-emerald-400 px-4 py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 shadow-md shadow-emerald-500/10 hover:bg-emerald-300"
+            className="tactile-press flex items-center gap-1.5 rounded-xl bg-sky-400 px-4 py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 shadow-md shadow-sky-500/20 hover:bg-sky-300"
           >
             <ShoppingCart size={15} />
             <span>{t.product.addBtn}</span>

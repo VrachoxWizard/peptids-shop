@@ -184,8 +184,8 @@ export default function Products() {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
       <div className="mb-8 sm:mb-10">
-        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-sky-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
           {t.catalog.badge}
         </div>
 
@@ -210,14 +210,14 @@ export default function Products() {
           placeholder={t.catalog.searchPlaceholder}
           value={searchInput}
           onChange={handleSearchChange}
-          className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 py-3.5 pl-11 sm:pl-12 pr-4 text-sm sm:text-base outline-none transition placeholder:text-zinc-500 focus:border-emerald-400/80 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)] backdrop-blur-md text-white"
+          className="w-full rounded-2xl border border-white/10 bg-slate-950/80 py-3.5 pl-11 sm:pl-12 pr-4 text-sm sm:text-base outline-none transition placeholder:text-zinc-500 focus:border-sky-400/80 focus:shadow-[0_0_20px_-5px_rgba(56,189,248,0.25)] backdrop-blur-md text-white"
         />
       </div>
 
       {/* Filteri */}
-      <div className="mb-8 sm:mb-10 rounded-3xl border border-white/10 bg-zinc-900/70 p-5 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md">
+      <div className="mb-8 sm:mb-10 rounded-3xl border border-white/10 bg-slate-950/70 p-5 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md">
         <div className="flex items-center gap-2 mb-4 sm:mb-5">
-          <SlidersHorizontal size={18} className="text-emerald-400" />
+          <SlidersHorizontal size={18} className="text-sky-400" />
 
           <h2 className="font-semibold text-base sm:text-lg text-white">{t.catalog.filtersTitle}</h2>
         </div>
@@ -233,7 +233,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("category", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-sky-400"
             >
               {categoryOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -257,7 +257,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("maxPrice", event.target.value)
               }
-              className="w-full accent-emerald-400 h-2 cursor-pointer"
+              className="w-full accent-sky-400 h-2 cursor-pointer"
             />
           </div>
 
@@ -271,7 +271,7 @@ export default function Products() {
               onChange={(event) =>
                 updateParam("sort", event.target.value)
               }
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-sky-400"
             >
               <option value="default">{t.catalog.sortDefault}</option>
 
@@ -357,7 +357,7 @@ export default function Products() {
                     onClick={() => setCurrentPage(pageNumber)}
                     className={`h-10 min-w-10 rounded-xl border px-3 text-xs sm:text-sm font-medium transition ${
                       effectivePage === pageNumber
-                        ? "border-emerald-400 bg-emerald-400 text-zinc-950"
+                        ? "border-sky-400 bg-sky-400 text-zinc-950"
                         : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
                     }`}
                     aria-current={effectivePage === pageNumber ? "page" : undefined}
