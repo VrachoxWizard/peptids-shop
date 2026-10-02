@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { FlaskConical, TestTubeDiagonal, Beaker } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import ProductCard from "../components/product/ProductCard";
@@ -29,6 +30,77 @@ export default function Home() {
           >
             Pregled proizvoda
             <ArrowRight size={18} />
+          </Link>
+        </div>
+      </section>
+
+      {/* Kategorije */}
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        <div className="mb-10">
+          <p className="text-emerald-400 font-medium">KATEGORIJE</p>
+
+          <h2 className="text-3xl md:text-4xl font-bold mt-2">
+            Istraži kategorije
+          </h2>
+
+          <p className="text-zinc-400 mt-3">
+            Brzo pronađi proizvode prema vrsti.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          <Link
+            to="/proizvodi"
+            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
+          >
+            <FlaskConical size={32} className="text-emerald-400" />
+
+            <h3 className="text-xl font-semibold mt-5">Peptidi</h3>
+
+            <p className="text-zinc-400 text-sm mt-2">
+              Demo laboratorijski peptidi iz kataloga.
+            </p>
+
+            <span className="inline-flex items-center gap-2 mt-5 text-sm text-emerald-400">
+              Pregled kategorije
+              <ArrowRight size={16} />
+            </span>
+          </Link>
+
+          <Link
+            to="/proizvodi"
+            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
+          >
+            <TestTubeDiagonal size={32} className="text-emerald-400" />
+
+            <h3 className="text-xl font-semibold mt-5">Istraživački spojevi</h3>
+
+            <p className="text-zinc-400 text-sm mt-2">
+              Fiktivni spojevi za razvoj demo webshopa.
+            </p>
+
+            <span className="inline-flex items-center gap-2 mt-5 text-sm text-emerald-400">
+              Pregled kategorije
+              <ArrowRight size={16} />
+            </span>
+          </Link>
+
+          <Link
+            to="/proizvodi"
+            className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
+          >
+            <Beaker size={32} className="text-emerald-400" />
+
+            <h3 className="text-xl font-semibold mt-5">Referentni uzorci</h3>
+
+            <p className="text-zinc-400 text-sm mt-2">
+              Demo referentni uzorci za laboratorijski katalog.
+            </p>
+
+            <span className="inline-flex items-center gap-2 mt-5 text-sm text-emerald-400">
+              Pregled kategorije
+              <ArrowRight size={16} />
+            </span>
           </Link>
         </div>
       </section>
