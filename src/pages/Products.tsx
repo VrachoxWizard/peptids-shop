@@ -1,14 +1,23 @@
-import { useMemo, useState } from "react";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
+
+const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Sve");
   const [sort, setSort] = useState("default");
   const [maxPrice, setMaxPrice] = useState(100);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const categories = [
     "Sve",
@@ -18,7 +27,6 @@ export default function Products() {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Pretraga
     if (search.trim()) {
       const searchValue = search.toLowerCase();
 
@@ -30,15 +38,12 @@ export default function Products() {
       );
     }
 
-    // Kategorija
     if (category !== "Sve") {
       result = result.filter((product) => product.category === category);
     }
 
-    // Maksimalna cijena
     result = result.filter((product) => product.price <= maxPrice);
 
-    // Sortiranje
     switch (sort) {
       case "price-low":
         result.sort((a, b) => a.price - b.price);
@@ -60,11 +65,33 @@ export default function Products() {
     return result;
   }, [search, category, sort, maxPrice]);
 
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+
+  const paginatedProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + PRODUCTS_PER_PAGE,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, category, sort, maxPrice]);
+
   function resetFilters() {
     setSearch("");
     setCategory("Sve");
     setSort("default");
     setMaxPrice(100);
+    setCurrentPage(1);
+  }
+
+  function previousPage() {
+    setCurrentPage((page) => Math.max(page - 1, 1));
+  }
+
+  function nextPage() {
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
   }
 
   const filtersActive =
@@ -75,7 +102,6 @@ export default function Products() {
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-16">
-      {/* Naslov */}
       <div className="mb-10">
         <p className="text-emerald-400 font-medium">KATALOG</p>
 
@@ -111,7 +137,6 @@ export default function Products() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">
-          {/* Kategorija */}
           <div>
             <label className="block text-sm text-zinc-400 mb-2">
               Kategorija
@@ -130,7 +155,6 @@ export default function Products() {
             </select>
           </div>
 
-          {/* Cijena */}
           <div>
             <label className="block text-sm text-zinc-400 mb-2">
               Maksimalna cijena: {maxPrice} €
@@ -147,7 +171,6 @@ export default function Products() {
             />
           </div>
 
-          {/* Sortiranje */}
           <div>
             <label className="block text-sm text-zinc-400 mb-2">
               Sortiranje
@@ -191,15 +214,53 @@ export default function Products() {
             {filteredProducts.length}
           </span>
         </p>
+
+        {totalPages > 0 && (
+          <p className="text-sm text-zinc-500">
+            Stranica <span className="text-white">{currentPage}</span> od{" "}
+            <span className="text-white">{totalPages}</span>
+          </p>
+        )}
       </div>
 
       {/* Proizvodi */}
-      {filteredProducts.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+      {paginatedProducts.length > 0 ? (
+        <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {paginatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={previousPage}
+                disabled={currentPage === 1}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-5 py-3 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronLeft size={18} />
+                Prethodna
+              </button>
+
+              <span className="text-sm text-zinc-400">
+                {currentPage} / {totalPages}
+              </span>
+
+              <button
+                type="button"
+                onClick={nextPage}
+                disabled={currentPage === totalPages}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-5 py-3 font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Sljedeća
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 py-20 text-center">
           <Search size={40} className="mx-auto text-zinc-600" />
