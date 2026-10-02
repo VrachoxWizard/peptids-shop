@@ -6,6 +6,9 @@ export type Product = {
   description: string;
   amount: string;
   price: number;
-  image: string;
+  image?: string;
   featured?: boolean;
+  purity?: string;
+  casNumber?: string;
+  molecularWeight?: string;
 };
