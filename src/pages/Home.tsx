@@ -11,10 +11,12 @@ import BentoCategories from "../components/home/BentoCategories";
 import HeroShowcase from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 
 export default function Home() {
   const { t } = useTranslation();
+  useDocumentTitle();
   const featuredProducts = products.filter((product) => product.featured);
 
   return (

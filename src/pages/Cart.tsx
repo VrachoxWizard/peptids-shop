@@ -4,12 +4,14 @@ import { toast } from "sonner";
 
 import ProductVisual from "../components/product/ProductVisual";
 import { useCartStore } from "../store/cartStore";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import { products } from "../data/products";
 import { getLocalizedProduct } from "../types/product";
 
 export default function Cart() {
   const { t, language } = useTranslation();
+  useDocumentTitle(t.cart.title);
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
   const increaseItem = useCartStore((state) => state.increaseItem);

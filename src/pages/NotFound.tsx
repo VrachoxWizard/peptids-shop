@@ -1,9 +1,11 @@
 import { ArrowLeft, SearchX } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 
 export default function NotFound() {
   const { t } = useTranslation();
+  useDocumentTitle(t.notFound.title);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">

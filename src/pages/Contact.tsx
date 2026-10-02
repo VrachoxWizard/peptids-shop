@@ -7,6 +7,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { z } from "zod";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 
 type FormData = {
@@ -19,6 +20,7 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 
 export default function Contact() {
   const { t } = useTranslation();
+  useDocumentTitle(t.contact.title);
 
   const [formData, setFormData] = useState<FormData>({
     name: "",

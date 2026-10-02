@@ -11,12 +11,14 @@ import { motion } from "motion/react";
 
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
   const { t, language } = useTranslation();
+  useDocumentTitle(t.catalog.title);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";

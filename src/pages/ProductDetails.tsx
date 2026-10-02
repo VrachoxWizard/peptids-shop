@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import ProductVisual from "../components/product/ProductVisual";
 import { products } from "../data/products";
 import { useCartStore } from "../store/cartStore";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import { getLocalizedProduct } from "../types/product";
 
@@ -19,8 +20,11 @@ export default function ProductDetails() {
   const addItem = useCartStore((state) => state.addItem);
 
   const rawProduct = products.find((product) => product.slug === slug);
+  const product = rawProduct ? getLocalizedProduct(rawProduct, language) : null;
 
-  if (!rawProduct) {
+  useDocumentTitle(product ? product.name : t.product.notFound);
+
+  if (!rawProduct || !product) {
     return (
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h1 className="text-2xl sm:text-4xl font-bold">{t.product.notFound}</h1>
@@ -35,8 +39,6 @@ export default function ProductDetails() {
     );
   }
 
-  const product = getLocalizedProduct(rawProduct, language);
-
   function decreaseQuantity() {
     setQuantity((current) => Math.max(1, current - 1));
   }
@@ -46,7 +48,7 @@ export default function ProductDetails() {
   }
 
   function handleAddToCart() {
-    if (!rawProduct) return;
+    if (!rawProduct || !product) return;
 
     addItem(rawProduct, quantity);
 
