@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, ShoppingCart, X } from "lucide-react";
+import { motion } from "motion/react";
 
 import { useCartStore } from "../../store/cartStore";
 
@@ -21,7 +22,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/80 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-16 flex items-center justify-between gap-4">
           {/* Logo */}
@@ -82,9 +83,15 @@ export default function Navbar() {
               <span>Košarica</span>
 
               {itemCount > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1.5 text-xs font-bold text-zinc-950">
+                <motion.span
+                  key={itemCount}
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1.5 font-mono text-[11px] font-bold text-zinc-950 shadow-sm shadow-emerald-500/30"
+                >
                   {itemCount}
-                </span>
+                </motion.span>
               )}
             </Link>
           </div>
@@ -100,9 +107,15 @@ export default function Navbar() {
               <ShoppingCart size={20} />
 
               {itemCount > 0 && (
-                <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1 text-[11px] font-bold text-zinc-950">
+                <motion.span
+                  key={itemCount}
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1 font-mono text-[10px] font-bold text-zinc-950"
+                >
                   {itemCount}
-                </span>
+                </motion.span>
               )}
             </Link>
 

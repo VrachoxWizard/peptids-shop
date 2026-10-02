@@ -7,6 +7,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
@@ -119,16 +120,17 @@ export default function Products() {
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
       <div className="mb-8 sm:mb-10">
-        <p className="text-emerald-400 font-medium text-xs sm:text-sm tracking-wider">
-          KATALOG
-        </p>
+        <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          ANALITIČKI KATALOG
+        </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mt-1.5 sm:mt-2">
-          Istraživački proizvodi
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tighter text-white mt-2">
+          Istraživački biokemijski spojevi
         </h1>
 
-        <p className="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">
-          Demo katalog istraživačkih proizvoda.
+        <p className="text-zinc-400 mt-2 text-sm sm:text-base max-w-2xl">
+          Pregledajte liofilizirane peptide, istraživačke spojeve i certificirane referentne uzorke sa specifikacijama čistoće.
         </p>
       </div>
 
@@ -141,21 +143,21 @@ export default function Products() {
 
         <input
           type="text"
-          placeholder="Pretraži proizvode..."
+          placeholder="Pretraži prema nazivu, kategoriji ili CAS broju..."
           value={search}
           onChange={(event) =>
             updateParam("search", event.target.value)
           }
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-11 sm:pl-12 pr-4 text-base outline-none transition placeholder:text-zinc-600 focus:border-emerald-400"
+          className="w-full rounded-2xl border border-white/10 bg-zinc-900/80 py-3.5 pl-11 sm:pl-12 pr-4 text-sm sm:text-base outline-none transition placeholder:text-zinc-500 focus:border-emerald-400/80 focus:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)] backdrop-blur-md text-white"
         />
       </div>
 
       {/* Filteri */}
-      <div className="mb-8 sm:mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-5">
+      <div className="mb-8 sm:mb-10 rounded-3xl border border-white/10 bg-zinc-900/70 p-5 sm:p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md">
         <div className="flex items-center gap-2 mb-4 sm:mb-5">
           <SlidersHorizontal size={18} className="text-emerald-400" />
 
-          <h2 className="font-semibold text-base sm:text-lg">Filteri</h2>
+          <h2 className="font-semibold text-base sm:text-lg text-white">Filteri kataloga</h2>
         </div>
 
         <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
@@ -254,11 +256,17 @@ export default function Products() {
       {/* Proizvodi */}
       {paginatedProducts.length > 0 ? (
         <>
-          <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            key={currentPage + category + sort + maxPrice + search}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
+          </motion.div>
 
           {/* Pagination */}
           {totalPages > 1 && (

@@ -44,19 +44,21 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <div className="text-center">
-          <ShoppingCart size={48} className="mx-auto text-zinc-600" />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <div className="text-center max-w-md mx-auto rounded-3xl border border-white/10 bg-zinc-900/60 p-8 sm:p-12 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-zinc-950/80 text-zinc-500">
+            <ShoppingCart size={32} />
+          </div>
 
-          <h1 className="mt-6 text-2xl sm:text-3xl font-bold">Košarica je prazna</h1>
+          <h1 className="mt-6 text-2xl sm:text-3xl font-bold tracking-tight text-white">Košarica je prazna</h1>
 
-          <p className="mt-3 text-zinc-400">Dodaj neki proizvod iz kataloga.</p>
+          <p className="mt-3 text-sm text-zinc-400">Dodajte proizvode iz našeg analitičkog kataloga.</p>
 
           <Link
             to="/proizvodi"
-            className="mt-8 inline-block rounded-xl bg-emerald-400 px-6 py-3 font-semibold text-zinc-950 transition hover:bg-emerald-300"
+            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 transition hover:bg-emerald-300 shadow-md shadow-emerald-500/20"
           >
-            Pogledaj proizvode
+            Pregledaj katalog
           </Link>
         </div>
       </main>
@@ -88,7 +90,7 @@ export default function Cart() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-5"
+              className="rounded-3xl border border-white/10 bg-zinc-900/70 p-4 sm:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md"
             >
               {/* Desktop layout: sm and above */}
               <div className="hidden sm:flex sm:items-center gap-6">
@@ -132,27 +134,27 @@ export default function Cart() {
                     Količina
                   </p>
 
-                  <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-950 p-1">
+                  <div className="flex items-center rounded-xl border border-white/10 bg-zinc-950/80 p-1">
                     <button
                       type="button"
                       onClick={() => decreaseItem(item.id)}
-                      className="flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800"
+                      className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
                       aria-label="Smanji količinu"
                     >
-                      <Minus size={16} />
+                      <Minus size={15} />
                     </button>
 
-                    <span className="w-10 text-center font-semibold">
+                    <span className="w-10 text-center font-mono font-semibold text-white">
                       {item.quantity}
                     </span>
 
                     <button
                       type="button"
                       onClick={() => increaseItem(item.id)}
-                      className="flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800"
+                      className="tactile-press flex h-9 w-9 items-center justify-center rounded-lg transition hover:bg-zinc-800 text-zinc-300 hover:text-white"
                       aria-label="Povećaj količinu"
                     >
-                      <Plus size={16} />
+                      <Plus size={15} />
                     </button>
                   </div>
                 </div>
@@ -260,15 +262,15 @@ export default function Cart() {
         </div>
 
         {/* Summary */}
-        <aside className="h-fit rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-6 lg:sticky lg:top-24">
-          <h2 className="text-lg sm:text-xl font-bold">Sažetak košarice</h2>
+        <aside className="h-fit rounded-3xl border border-white/10 bg-zinc-900/80 p-5 sm:p-6 lg:sticky lg:top-24 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_-15px_rgba(0,0,0,0.5)] backdrop-blur-md">
+          <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">Sažetak narudžbe</h2>
 
           {/* Free shipping info */}
-          <div className="mt-4 sm:mt-5 rounded-xl border border-zinc-800 bg-zinc-950 p-3.5 sm:p-4">
+          <div className="mt-4 sm:mt-5 rounded-2xl border border-white/5 bg-zinc-950/70 p-4">
             <div className="flex gap-3">
               <Truck size={20} className="shrink-0 text-emerald-400" />
 
-              <div>
+              <div className="w-full">
                 {shipping === 0 ? (
                   <>
                     <p className="text-sm font-semibold text-emerald-400">
@@ -281,14 +283,17 @@ export default function Cart() {
                   </>
                 ) : (
                   <>
-                    <p className="text-sm font-semibold">
-                      Još {remainingForFreeShipping.toFixed(2)} € do besplatne
-                      dostave
+                    <p className="text-xs sm:text-sm font-semibold text-white">
+                      Još <span className="font-mono text-emerald-400">{remainingForFreeShipping.toFixed(2)} €</span> do besplatne dostave
                     </p>
 
-                    <p className="mt-1 text-xs text-zinc-500">
-                      Besplatna dostava iznad 100 €.
-                    </p>
+                    {/* Progress bar */}
+                    <div className="mt-2.5 h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-400 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, (subtotal / 100) * 100)}%` }}
+                      />
+                    </div>
                   </>
                 )}
               </div>
