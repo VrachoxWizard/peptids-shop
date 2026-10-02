@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
 import type { Product } from "../types/product";
 
 export type CartItem = Product & {
@@ -8,10 +9,15 @@ export type CartItem = Product & {
 
 type CartStore = {
   items: CartItem[];
-  addItem: (product: Product) => void;
+
+  addItem: (product: Product, quantity?: number) => void;
+
   removeItem: (id: number) => void;
+
   increaseItem: (id: number) => void;
+
   decreaseItem: (id: number) => void;
+
   clearCart: () => void;
 };
 
@@ -20,8 +26,10 @@ export const useCartStore = create<CartStore>()(
     (set) => ({
       items: [],
 
-      addItem: (product) =>
+      addItem: (product, quantity = 1) =>
         set((state) => {
+          const safeQuantity = Math.max(1, quantity);
+
           const existingItem = state.items.find(
             (item) => item.id === product.id,
           );
@@ -30,7 +38,10 @@ export const useCartStore = create<CartStore>()(
             return {
               items: state.items.map((item) =>
                 item.id === product.id
-                  ? { ...item, quantity: item.quantity + 1 }
+                  ? {
+                      ...item,
+                      quantity: item.quantity + safeQuantity,
+                    }
                   : item,
               ),
             };
@@ -41,7 +52,7 @@ export const useCartStore = create<CartStore>()(
               ...state.items,
               {
                 ...product,
-                quantity: 1,
+                quantity: safeQuantity,
               },
             ],
           };
@@ -55,7 +66,12 @@ export const useCartStore = create<CartStore>()(
       increaseItem: (id) =>
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+            item.id === id
+              ? {
+                  ...item,
+                  quantity: item.quantity + 1,
+                }
+              : item,
           ),
         })),
 
@@ -63,12 +79,20 @@ export const useCartStore = create<CartStore>()(
         set((state) => ({
           items: state.items
             .map((item) =>
-              item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+              item.id === id
+                ? {
+                    ...item,
+                    quantity: item.quantity - 1,
+                  }
+                : item,
             )
             .filter((item) => item.quantity > 0),
         })),
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () =>
+        set({
+          items: [],
+        }),
     }),
     {
       name: "peptide-shop-cart",
