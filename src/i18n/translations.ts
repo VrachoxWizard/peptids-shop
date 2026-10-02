@@ -81,7 +81,7 @@ export const translations = {
       title: "Istraživački biokemijski spojevi",
       description:
         "Pregledajte liofilizirane peptide, istraživačke spojeve i certificirane referentne uzorke sa specifikacijama čistoće.",
-      searchPlaceholder: "Pretraži prema nazivu, kategoriji ili CAS broju...",
+      searchPlaceholder: "Pretraži prema nazivu, kategoriji ili CAS broju…",
       filtersTitle: "Filteri kataloga",
       categoryLabel: "Kategorija",
       allCategories: "Sve kategorije",
@@ -160,14 +160,14 @@ export const translations = {
       locationTitle: "Istraživački centar",
       locationVal: "Biotech Science Park, Zagreb",
       hoursTitle: "Radno vrijeme podrške",
-      hoursVal: "Pon - Pet: 08:00 - 17:00",
+      hoursVal: "Pon–Pet: 08:00–17:00",
       formTitle: "Pošalji upit za specifikaciju",
       nameLabel: "Ime i prezime / Ustanova",
       namePlaceholder: "Dr. Ivan Horvat ili Naziv Instituta",
       emailLabel: "Poslovni / akademski email",
       emailPlaceholder: "ivan.horvat@institut.hr",
       messageLabel: "Poruka ili upit za specifikaciju",
-      messagePlaceholder: "Navedite željeni spoj, seriju ili analitički upit...",
+      messagePlaceholder: "Navedite željeni spoj, seriju ili analitički upit…",
       sendBtn: "Pošalji laboratorijski upit",
       successTitle: "Poruka uspješno poslana!",
       successDesc: "Vaš upit je zabilježen. Odgovorit ćemo u roku od 24 radna sata.",
@@ -192,7 +192,7 @@ export const translations = {
 
     // Top Trust Bar
     trustBar: {
-      shipping: "Isporuka u RH 24-48h (GLS / DPD / Paketomati)",
+      shipping: "Isporuka u RH 24–48h (GLS / DPD / Paketomati)",
       payment: "Plaćanje pouzećem & Keks Pay / Aircash",
       discrete: "100% diskretno termo-pakiranje",
       support: "Podrška u Zagrebu: +385 1 4828 111",
@@ -207,7 +207,7 @@ export const translations = {
       codTitle: "Plaćanje Pouzećem & Keks Pay",
       codDesc:
         "Platite sigurno gotovinom ili karticom kuriru pri preuzimanju paketa ili trenutačno putem Keks Pay / Aircash aplikacije.",
-      deliveryTitle: "Isporuka u RH 24-48h",
+      deliveryTitle: "Isporuka u RH 24–48h",
       deliveryDesc:
         "Skladište u EU/RH. Roba stiže ekspresno putem GLS-a ili DPD-a na adresu ili odabrani paketomat bez carine.",
       discreteTitle: "100% Diskretno Termo-Pakiranje",
@@ -215,7 +215,7 @@ export const translations = {
         "Neutralne pošiljke bez vanjskih oznaka sadržaja. Termo-izolacija jamči stabilnost liofiliziranih peptida u transportu.",
       supportTitle: "Korisnička Podrška Zagreb",
       supportDesc:
-        "Domaći tim na raspolaganju radnim danom 09:00 - 17:00 putem WhatsAppa i telefona za sve upite i savjete.",
+        "Domaći tim na raspolaganju radnim danom 09:00–17:00 putem WhatsAppa i telefona za sve upite i savjete.",
     },
 
     // Payment methods & checkout trust
@@ -328,7 +328,7 @@ export const translations = {
       title: "Biochemical Research Catalog",
       description:
         "Browse lyophilized peptide sequences, investigational molecules, and certified reference standards with purity profiles.",
-      searchPlaceholder: "Search by compound name, category, or CAS registry...",
+      searchPlaceholder: "Search by compound name, category, or CAS registry…",
       filtersTitle: "Catalog Filters",
       categoryLabel: "Category",
       allCategories: "All Categories",
@@ -407,14 +407,14 @@ export const translations = {
       locationTitle: "Research Facility",
       locationVal: "Biotech Science Park, Zagreb",
       hoursTitle: "Support Hours",
-      hoursVal: "Mon - Fri: 08:00 - 17:00 CET",
+      hoursVal: "Mon–Fri: 08:00–17:00 CET",
       formTitle: "Submit Specification Inquiry",
       nameLabel: "Full Name / Organization",
       namePlaceholder: "Dr. Alex Morgan or Research Institute",
       emailLabel: "Corporate / Academic Email",
       emailPlaceholder: "alex.morgan@institute.org",
       messageLabel: "Message or Analytical Request",
-      messagePlaceholder: "Specify compound, lot number, or analytical inquiry...",
+      messagePlaceholder: "Specify compound, lot number, or analytical inquiry…",
       sendBtn: "Send Laboratory Inquiry",
       successTitle: "Inquiry Sent Successfully!",
       successDesc: "Your request has been logged. Our specialists will respond within 24 business hours.",
@@ -439,7 +439,7 @@ export const translations = {
 
     // Top Trust Bar
     trustBar: {
-      shipping: "Fast EU / Croatia Delivery 24-48h (GLS / DPD / Lockers)",
+      shipping: "Fast EU / Croatia Delivery 24–48h (GLS / DPD / Lockers)",
       payment: "Cash on Delivery & Instant Mobile Pay (Keks / Aircash)",
       discrete: "100% Discrete Thermal Packaging",
       support: "Zagreb Local Support: +385 1 4828 111",
@@ -454,7 +454,7 @@ export const translations = {
       codTitle: "Cash on Delivery & Keks Pay",
       codDesc:
         "Pay safely to the courier upon parcel arrival with cash/card, or use instant bank app payments.",
-      deliveryTitle: "Express 24-48h Delivery",
+      deliveryTitle: "Express 24–48h Delivery",
       deliveryDesc:
         "Stocked in EU/Croatia. Direct doorstep or parcel locker dispatch without customs delays.",
       discreteTitle: "100% Discrete Thermal Packaging",
@@ -462,7 +462,7 @@ export const translations = {
         "Completely unmarked outer parcel with internal cold insulation preserving lyophilized peptides.",
       supportTitle: "Local Support in Zagreb",
       supportDesc:
-        "Dedicated local support desk reachable Mon-Fri 09:00 - 17:00 via WhatsApp and phone.",
+        "Dedicated local support desk reachable Mon–Fri 09:00–17:00 via WhatsApp and phone.",
     },
 
     // Payment methods & checkout trust

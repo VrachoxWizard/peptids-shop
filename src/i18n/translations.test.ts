@@ -4,7 +4,7 @@ import { translations } from "./translations";
 describe("Croatian Trust Translations", () => {
   it("should contain trustBar translations for HR and EN", () => {
     expect(translations.hr.trustBar).toBeDefined();
-    expect(translations.hr.trustBar.shipping).toContain("24-48h");
+    expect(translations.hr.trustBar.shipping).toContain("24–48h");
     expect(translations.hr.trustBar.payment).toContain("pouzećem");
     expect(translations.en.trustBar).toBeDefined();
   });
@@ -13,7 +13,7 @@ describe("Croatian Trust Translations", () => {
     expect(translations.hr.croatiaTrust).toBeDefined();
     expect(translations.hr.croatiaTrust.title).toBeDefined();
     expect(translations.hr.croatiaTrust.codTitle).toContain("Pouzećem");
-    expect(translations.hr.croatiaTrust.deliveryTitle).toContain("24-48h");
+    expect(translations.hr.croatiaTrust.deliveryTitle).toContain("24–48h");
     expect(translations.hr.croatiaTrust.discreteTitle).toContain("Diskretno");
     expect(translations.hr.croatiaTrust.supportTitle).toContain("Zagreb");
 

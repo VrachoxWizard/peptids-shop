@@ -48,7 +48,7 @@ export default function Navbar() {
                 </span>
               </div>
               <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-medium hidden sm:block">
-                Swiss & EU Research Standards
+                {language === "hr" ? "Švicarski i EU standardi istraživanja" : "Swiss & EU Research Standards"}
               </span>
             </div>
           </Link>

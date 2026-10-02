@@ -200,7 +200,7 @@ export default function ProductDetails() {
           <button
             type="button"
             onClick={handleAddToCart}
-            className={`tactile-press mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm sm:text-base font-bold transition-all shadow-xs ${
+            className={`tactile-press mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm sm:text-base font-bold transition-colors duration-150 shadow-xs ${
               justAdded
                 ? "bg-emerald-700 text-white"
                 : "bg-slate-950 text-white hover:bg-slate-800"

@@ -31,7 +31,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <article className="group relative rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xs hover:border-slate-400 hover:shadow-md transition-all flex flex-col justify-between">
+    <article className="group relative rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xs hover:border-slate-400 hover:shadow-md transition-[border-color,box-shadow] duration-200 flex flex-col justify-between">
       {/* Top Media Section */}
       <div>
         <Link
@@ -118,7 +118,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             type="button"
             onClick={handleAddToCart}
-            className={`tactile-press flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+            className={`tactile-press flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-colors duration-150 ${
               justAdded
                 ? "bg-emerald-600 text-white shadow-xs"
                 : "bg-slate-900 text-white hover:bg-slate-800 shadow-xs"

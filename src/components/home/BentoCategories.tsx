@@ -35,7 +35,7 @@ export default function BentoCategories() {
         {/* Tile 1: Peptidi - Spans 2 Columns on LG */}
         <Link
           to="/proizvodi?category=Peptidi"
-          className="group rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 shadow-xs hover:border-slate-400 hover:shadow-md transition-all flex flex-col justify-between min-h-[280px] lg:col-span-2"
+          className="group rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 shadow-xs hover:border-slate-400 hover:shadow-md transition-[border-color,box-shadow] duration-200 flex flex-col justify-between min-h-[280px] lg:col-span-2"
         >
           {/* Top Row: Icon + Badge */}
           <div className="flex items-center justify-between">
@@ -72,7 +72,7 @@ export default function BentoCategories() {
         {/* Tile 2: Istraživački spojevi - Spans 1 Column */}
         <Link
           to="/proizvodi?category=Istraživački%20spojevi"
-          className="group rounded-2xl border border-slate-200 bg-white p-7 shadow-xs hover:border-slate-400 hover:shadow-md transition-all flex flex-col justify-between min-h-[280px]"
+          className="group rounded-2xl border border-slate-200 bg-white p-7 shadow-xs hover:border-slate-400 hover:shadow-md transition-[border-color,box-shadow] duration-200 flex flex-col justify-between min-h-[280px]"
         >
           {/* Top Row: Icon + Status */}
           <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ export default function BentoCategories() {
         {/* Tile 3: Referentni uzorci - Spans Full Width */}
         <Link
           to="/proizvodi?category=Referentni%20uzorci"
-          className="group rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 shadow-xs hover:border-slate-400 hover:shadow-md transition-all lg:col-span-3"
+          className="group rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 shadow-xs hover:border-slate-400 hover:shadow-md transition-[border-color,box-shadow] duration-200 lg:col-span-3"
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start sm:items-center gap-5">

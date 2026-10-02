@@ -294,7 +294,7 @@ export default function Cart() {
                     </p>
                     <div className="mt-2 h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
                       <div
-                        className="h-full bg-sky-700 rounded-full transition-all duration-300"
+                        className="h-full bg-sky-700 rounded-full transition-[width] duration-300"
                         style={{ width: `${Math.min(100, (subtotal / 70) * 100)}%` }}
                       />
                     </div>
@@ -424,11 +424,25 @@ export default function Cart() {
           {/* Primary Checkout CTA */}
           <button
             type="button"
-            onClick={() => toast.success(paymentMethod === "cod" ? "Narudžba zaprimljena! Plaćanje pouzećem kuriru pri preuzimanju." : "Preusmjeravanje na sigurno plaćanje...")}
+            onClick={() =>
+              toast.success(
+                paymentMethod === "cod"
+                  ? (language === "hr"
+                      ? "Narudžba zaprimljena! Plaćanje pouzećem kuriru pri preuzimanju."
+                      : "Order received! Pay cash on delivery upon parcel arrival.")
+                  : (language === "hr"
+                      ? "Preusmjeravanje na sigurno plaćanje…"
+                      : "Redirecting to secure payment gateway…")
+              )
+            }
             className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 shadow-sm"
           >
             <ShieldCheck size={18} />
-            <span>Dovrši narudžbu ({paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})</span>
+            <span>
+              {language === "hr"
+                ? `Dovrši narudžbu (${paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})`
+                : `Complete Order (${paymentMethod === "cod" ? "Cash on Delivery" : "Secure Pay"})`}
+            </span>
           </button>
 
           {/* Trust Guarantees Box */}
