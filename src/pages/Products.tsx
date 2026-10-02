@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,11 +14,20 @@ import { products } from "../data/products";
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
+  const [searchParams] = useSearchParams();
+
+  const categoryFromUrl = searchParams.get("category") || "Sve";
+
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("Sve");
+  const [category, setCategory] = useState(categoryFromUrl);
   const [sort, setSort] = useState("default");
   const [maxPrice, setMaxPrice] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCategory(categoryFromUrl);
+    setCurrentPage(1);
+  }, [categoryFromUrl]);
 
   const categories = [
     "Sve",

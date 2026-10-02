@@ -50,7 +50,7 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-3">
           <Link
-            to="/proizvodi"
+            to="/proizvodi?category=Peptidi"
             className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
           >
             <FlaskConical size={32} className="text-emerald-400" />
@@ -68,7 +68,7 @@ export default function Home() {
           </Link>
 
           <Link
-            to="/proizvodi"
+            to="/proizvodi?category=Istraživački%20spojevi"
             className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
           >
             <TestTubeDiagonal size={32} className="text-emerald-400" />
@@ -86,7 +86,7 @@ export default function Home() {
           </Link>
 
           <Link
-            to="/proizvodi"
+            to="/proizvodi?category=Referentni%20uzorci"
             className="group rounded-2xl border border-zinc-800 bg-zinc-900 p-6 hover:border-emerald-400 transition"
           >
             <Beaker size={32} className="text-emerald-400" />
