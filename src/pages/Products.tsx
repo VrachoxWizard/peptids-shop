@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   ChevronLeft,
@@ -14,25 +14,38 @@ import { products } from "../data/products";
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const categoryFromUrl = searchParams.get("category") || "Sve";
+  const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "Sve";
+  const sort = searchParams.get("sort") || "default";
+  const maxPrice = Number(searchParams.get("maxPrice") || 100);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState(categoryFromUrl);
-  const [sort, setSort] = useState("default");
-  const [maxPrice, setMaxPrice] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    setCategory(categoryFromUrl);
-    setCurrentPage(1);
-  }, [categoryFromUrl]);
 
   const categories = [
     "Sve",
     ...Array.from(new Set(products.map((product) => product.category))),
   ];
+
+  function updateParam(key: string, value: string) {
+    const newParams = new URLSearchParams(searchParams);
+
+    const isDefault =
+      value === "" ||
+      value === "Sve" ||
+      value === "default" ||
+      (key === "maxPrice" && value === "100");
+
+    if (isDefault) {
+      newParams.delete(key);
+    } else {
+      newParams.set(key, value);
+    }
+
+    setSearchParams(newParams);
+    setCurrentPage(1);
+  }
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -84,15 +97,8 @@ export default function Products() {
     startIndex + PRODUCTS_PER_PAGE,
   );
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search, category, sort, maxPrice]);
-
   function resetFilters() {
-    setSearch("");
-    setCategory("Sve");
-    setSort("default");
-    setMaxPrice(100);
+    setSearchParams({});
     setCurrentPage(1);
   }
 
@@ -133,7 +139,9 @@ export default function Products() {
           type="text"
           placeholder="Pretraži proizvode..."
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) =>
+            updateParam("search", event.target.value)
+          }
           className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-12 pr-4 outline-none transition placeholder:text-zinc-600 focus:border-emerald-400"
         />
       </div>
@@ -154,7 +162,9 @@ export default function Products() {
 
             <select
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) =>
+                updateParam("category", event.target.value)
+              }
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 outline-none focus:border-emerald-400"
             >
               {categories.map((categoryName) => (
@@ -176,7 +186,9 @@ export default function Products() {
               max="100"
               step="5"
               value={maxPrice}
-              onChange={(event) => setMaxPrice(Number(event.target.value))}
+              onChange={(event) =>
+                updateParam("maxPrice", event.target.value)
+              }
               className="w-full accent-emerald-400"
             />
           </div>
@@ -188,7 +200,9 @@ export default function Products() {
 
             <select
               value={sort}
-              onChange={(event) => setSort(event.target.value)}
+              onChange={(event) =>
+                updateParam("sort", event.target.value)
+              }
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 outline-none focus:border-emerald-400"
             >
               <option value="default">Zadano</option>
