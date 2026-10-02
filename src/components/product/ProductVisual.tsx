@@ -23,64 +23,65 @@ type CategoryStyle = {
   code: string;
 };
 
-function getCategoryStyle(category: string): CategoryStyle {
-  if (category === "Peptidi" || category === "Peptides") {
-    return {
-      background: "from-sky-50/70 via-white to-slate-100",
-      glow: "bg-sky-500/10",
-      accent: "text-sky-800",
-      accentSoft: "bg-sky-50",
-      cap: "from-sky-700 to-sky-900",
-      bottle: "from-white via-slate-50 to-slate-100",
-      border: "border-slate-200",
-      label: "border-slate-200 bg-white shadow-xs",
-      icon: <FlaskConical size={24} />,
-      code: "PEP",
-    };
-  }
+const DEFAULT_CATEGORY_STYLE: CategoryStyle = {
+  background: "from-slate-50 via-white to-slate-100",
+  glow: "bg-slate-300/10",
+  accent: "text-slate-800",
+  accentSoft: "bg-slate-100",
+  cap: "from-slate-700 to-slate-900",
+  bottle: "from-white via-slate-50 to-slate-100",
+  border: "border-slate-200",
+  label: "border-slate-200 bg-white shadow-xs",
+  icon: <Droplets size={24} />,
+  code: "LAB",
+};
 
-  if (category === "Istraživački spojevi" || category === "Research Compounds") {
-    return {
-      background: "from-slate-50 via-white to-slate-100",
-      glow: "bg-slate-400/10",
-      accent: "text-slate-800",
-      accentSoft: "bg-slate-100",
-      cap: "from-slate-700 to-slate-900",
-      bottle: "from-white via-slate-50 to-slate-100",
-      border: "border-slate-200",
-      label: "border-slate-200 bg-white shadow-xs",
-      icon: <TestTubeDiagonal size={24} />,
-      code: "CMP",
-    };
-  }
-
-  if (category === "Referentni uzorci" || category === "Reference Standards") {
-    return {
-      background: "from-blue-50/60 via-white to-slate-100",
-      glow: "bg-blue-400/10",
-      accent: "text-blue-800",
-      accentSoft: "bg-blue-50",
-      cap: "from-blue-700 to-blue-900",
-      bottle: "from-white via-slate-50 to-slate-100",
-      border: "border-slate-200",
-      label: "border-slate-200 bg-white shadow-xs",
-      icon: <Beaker size={24} />,
-      code: "REF",
-    };
-  }
-
-  return {
+const CATEGORY_STYLE_MAP: Record<string, CategoryStyle> = {
+  Peptidi: {
+    background: "from-sky-50/70 via-white to-slate-100",
+    glow: "bg-sky-500/10",
+    accent: "text-sky-800",
+    accentSoft: "bg-sky-50",
+    cap: "from-sky-700 to-sky-900",
+    bottle: "from-white via-slate-50 to-slate-100",
+    border: "border-slate-200",
+    label: "border-slate-200 bg-white shadow-xs",
+    icon: <FlaskConical size={24} />,
+    code: "PEP",
+  },
+  "Istraživački spojevi": {
     background: "from-slate-50 via-white to-slate-100",
-    glow: "bg-slate-300/10",
+    glow: "bg-slate-400/10",
     accent: "text-slate-800",
     accentSoft: "bg-slate-100",
     cap: "from-slate-700 to-slate-900",
     bottle: "from-white via-slate-50 to-slate-100",
     border: "border-slate-200",
     label: "border-slate-200 bg-white shadow-xs",
-    icon: <Droplets size={24} />,
-    code: "LAB",
-  };
+    icon: <TestTubeDiagonal size={24} />,
+    code: "CMP",
+  },
+  "Referentni uzorci": {
+    background: "from-blue-50/60 via-white to-slate-100",
+    glow: "bg-blue-400/10",
+    accent: "text-blue-800",
+    accentSoft: "bg-blue-50",
+    cap: "from-blue-700 to-blue-900",
+    bottle: "from-white via-slate-50 to-slate-100",
+    border: "border-slate-200",
+    label: "border-slate-200 bg-white shadow-xs",
+    icon: <Beaker size={24} />,
+    code: "REF",
+  },
+};
+
+// Aliases for English category labels
+CATEGORY_STYLE_MAP["Peptides"] = CATEGORY_STYLE_MAP["Peptidi"];
+CATEGORY_STYLE_MAP["Research Compounds"] = CATEGORY_STYLE_MAP["Istraživački spojevi"];
+CATEGORY_STYLE_MAP["Reference Standards"] = CATEGORY_STYLE_MAP["Referentni uzorci"];
+
+function getCategoryStyle(category: string): CategoryStyle {
+  return CATEGORY_STYLE_MAP[category] ?? DEFAULT_CATEGORY_STYLE;
 }
 
 export default function ProductVisual({

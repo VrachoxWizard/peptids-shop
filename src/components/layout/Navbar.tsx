@@ -24,6 +24,12 @@ export default function Navbar() {
     return location.pathname.startsWith(path);
   };
 
+  const navLinks = [
+    { path: "/", label: t.nav.home, matchPrefix: "/" },
+    { path: "/proizvodi", label: t.nav.products, matchPrefix: "/proizvod" },
+    { path: "/kontakt", label: t.nav.contact, matchPrefix: "/kontakt" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
       {/* Gornja traka povjerenja za kupce u Hrvatskoj i regiji */}
@@ -55,38 +61,19 @@ export default function Navbar() {
 
           {/* Desktop navigacija */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
-            <Link
-              to="/"
-              className={`transition font-medium py-1 ${
-                isCurrent("/")
-                  ? "text-sky-700 font-semibold border-b-2 border-sky-700"
-                  : "text-slate-600 hover:text-slate-950"
-              }`}
-            >
-              {t.nav.home}
-            </Link>
-
-            <Link
-              to="/proizvodi"
-              className={`transition font-medium py-1 ${
-                isCurrent("/proizvod")
-                  ? "text-sky-700 font-semibold border-b-2 border-sky-700"
-                  : "text-slate-600 hover:text-slate-950"
-              }`}
-            >
-              {t.nav.products}
-            </Link>
-
-            <Link
-              to="/kontakt"
-              className={`transition font-medium py-1 ${
-                isCurrent("/kontakt")
-                  ? "text-sky-700 font-semibold border-b-2 border-sky-700"
-                  : "text-slate-600 hover:text-slate-950"
-              }`}
-            >
-              {t.nav.contact}
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`transition font-medium py-1 ${
+                  isCurrent(link.matchPrefix)
+                    ? "text-sky-700 font-semibold border-b-2 border-sky-700"
+                    : "text-slate-600 hover:text-slate-950"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
             <Link
               to="/kosarica"
@@ -189,41 +176,20 @@ export default function Navbar() {
         {menuOpen && (
           <div className="md:hidden border-t border-slate-200 py-3 bg-white">
             <div className="flex flex-col space-y-1">
-              <Link
-                to="/"
-                onClick={closeMenu}
-                className={`rounded-lg px-3.5 py-2.5 transition font-medium text-sm ${
-                  isCurrent("/")
-                    ? "bg-sky-50 text-sky-700 font-semibold"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                {t.nav.home}
-              </Link>
-
-              <Link
-                to="/proizvodi"
-                onClick={closeMenu}
-                className={`rounded-lg px-3.5 py-2.5 transition font-medium text-sm ${
-                  isCurrent("/proizvod")
-                    ? "bg-sky-50 text-sky-700 font-semibold"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                {t.nav.products}
-              </Link>
-
-              <Link
-                to="/kontakt"
-                onClick={closeMenu}
-                className={`rounded-lg px-3.5 py-2.5 transition font-medium text-sm ${
-                  isCurrent("/kontakt")
-                    ? "bg-sky-50 text-sky-700 font-semibold"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                {t.nav.contact}
-              </Link>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={closeMenu}
+                  className={`rounded-lg px-3.5 py-2.5 transition font-medium text-sm ${
+                    isCurrent(link.matchPrefix)
+                      ? "bg-sky-50 text-sky-700 font-semibold"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
 
               <Link
                 to="/kosarica"

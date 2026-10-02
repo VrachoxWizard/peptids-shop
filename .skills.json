@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "refactor": {
+      "version": "1.0.0",
+      "installedAt": "2026-10-02T20:54:40.609Z",
+      "platform": "gemini",
+      "contentHash": "718bfd8d8a6b18d4894e23e98f1924d8cf3a09d3e67ca37bd7be0ba6c11847cf"
+    }
+  }
+}
