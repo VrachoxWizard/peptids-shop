@@ -5,9 +5,12 @@ import { useDebounce } from "./useDebounce";
 describe("useDebounce", () => {
   it("delays updating the debounced value", () => {
     vi.useFakeTimers();
-    const { result, rerender } = renderHook(({ val }) => useDebounce(val, 300), {
-      initialProps: { val: "initial" },
-    });
+    const { result, rerender } = renderHook(
+      ({ val }) => useDebounce(val, 300),
+      {
+        initialProps: { val: "initial" },
+      },
+    );
 
     expect(result.current).toBe("initial");
 
