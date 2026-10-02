@@ -1,26 +1,35 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
-import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/proizvodi" element={<Products />} />
-        <Route path="/kosarica" element={<Cart />} />
-        <Route path="/kontakt" element={<Contact />} />
-        <Route path="/proizvod/:slug" element={<ProductDetails />} />
-      </Routes>
-    </>
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/proizvodi" element={<Products />} />
+
+          <Route path="/proizvod/:slug" element={<ProductDetails />} />
+
+          <Route path="/kosarica" element={<Cart />} />
+
+          <Route path="/kontakt" element={<Contact />} />
+        </Routes>
+      </div>
+
+      <Footer />
+    </div>
   );
 }
 
