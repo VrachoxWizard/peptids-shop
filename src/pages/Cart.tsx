@@ -1,4 +1,18 @@
-import { Minus, Plus, ShoppingCart, Trash2, Truck } from "lucide-react";
+import { useState } from "react";
+import {
+  Banknote,
+  CreditCard,
+  Lock,
+  Minus,
+  PackageCheck,
+  Plus,
+  QrCode,
+  ShieldCheck,
+  ShoppingCart,
+  Smartphone,
+  Trash2,
+  Truck,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -18,14 +32,16 @@ export default function Cart() {
   const decreaseItem = useCartStore((state) => state.decreaseItem);
   const clearCart = useCartStore((state) => state.clearCart);
 
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "keks" | "card" | "transfer">("cod");
+
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-  const shipping = subtotal >= 100 ? 0 : 4.9;
+  const shipping = subtotal >= 70 ? 0 : 4.9;
   const total = subtotal + shipping;
-  const remainingForFreeShipping = Math.max(0, 100 - subtotal);
+  const remainingForFreeShipping = Math.max(0, 70 - subtotal);
 
   function handleRemove(id: number, name: string) {
     removeItem(id);
@@ -42,7 +58,7 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-        <div className="text-center max-w-md mx-auto rounded-3xl border border-white/10 bg-zinc-900/60 p-8 sm:p-12 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="text-center max-w-md mx-auto rounded-3xl border border-white/10 bg-slate-950/60 p-8 sm:p-12 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-zinc-950/80 text-zinc-500">
             <ShoppingCart size={32} />
           </div>
@@ -53,7 +69,7 @@ export default function Cart() {
 
           <Link
             to="/proizvodi"
-            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 transition hover:bg-emerald-300 shadow-md shadow-emerald-500/20"
+            className="tactile-press mt-8 inline-flex items-center gap-2 rounded-xl bg-sky-400 px-6 py-3.5 font-semibold text-zinc-950 transition hover:bg-sky-300 shadow-md shadow-sky-500/20"
           >
             {t.cart.viewCatalog}
           </Link>
@@ -266,18 +282,18 @@ export default function Cart() {
         </div>
 
         {/* Summary */}
-        <aside className="h-fit rounded-3xl border border-white/10 bg-zinc-900/80 p-5 sm:p-6 lg:sticky lg:top-24 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_-15px_rgba(0,0,0,0.5)] backdrop-blur-md">
+        <aside className="h-fit rounded-3xl border border-white/10 bg-slate-950/80 p-5 sm:p-6 lg:sticky lg:top-24 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_20px_40px_-15px_rgba(0,0,0,0.5)] backdrop-blur-md">
           <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">{t.cart.summaryTitle}</h2>
 
           {/* Free shipping info */}
           <div className="mt-4 sm:mt-5 rounded-2xl border border-white/5 bg-zinc-950/70 p-4">
             <div className="flex gap-3">
-              <Truck size={20} className="shrink-0 text-emerald-400" />
+              <Truck size={20} className="shrink-0 text-sky-400" />
 
               <div className="w-full">
                 {shipping === 0 ? (
                   <>
-                    <p className="text-sm font-semibold text-emerald-400">
+                    <p className="text-sm font-semibold text-sky-400">
                       {t.cart.freeShipping}
                     </p>
 
@@ -288,19 +304,118 @@ export default function Cart() {
                 ) : (
                   <>
                     <p className="text-xs sm:text-sm font-semibold text-white">
-                      {t.cart.remainingPrefix}<span className="font-mono text-emerald-400">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
+                      {t.cart.remainingPrefix}<span className="font-mono text-sky-400">{remainingForFreeShipping.toFixed(2)} €</span> {t.cart.remainingForFree}
                     </p>
 
                     {/* Progress bar */}
                     <div className="mt-2.5 h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden">
                       <div
-                        className="h-full bg-emerald-400 rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min(100, (subtotal / 100) * 100)}%` }}
+                        className="h-full bg-sky-400 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, (subtotal / 70) * 100)}%` }}
                       />
                     </div>
                   </>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Payment Method Selector for Croatian trust */}
+          <div className="mt-5">
+            <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
+              {t.payments.title}
+            </label>
+
+            <div className="space-y-2">
+              {/* Pouzeće */}
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("cod")}
+                className={`w-full text-left p-3 rounded-xl border transition ${
+                  paymentMethod === "cod"
+                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
+                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
+                    <Banknote size={15} className="text-sky-400 shrink-0" />
+                    <span>{t.payments.cod}</span>
+                  </div>
+                  <span className="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] font-mono text-sky-300 font-semibold shrink-0">
+                    {t.payments.codBadge}
+                  </span>
+                </div>
+                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                  {t.payments.codDetail}
+                </p>
+              </button>
+
+              {/* Keks Pay */}
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("keks")}
+                className={`w-full text-left p-3 rounded-xl border transition ${
+                  paymentMethod === "keks"
+                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
+                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
+                    <Smartphone size={15} className="text-sky-400 shrink-0" />
+                    <span>{t.payments.keks}</span>
+                  </div>
+                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-mono text-zinc-300 shrink-0">
+                    {t.payments.keksBadge}
+                  </span>
+                </div>
+                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                  {t.payments.keksDetail}
+                </p>
+              </button>
+
+              {/* Kartice */}
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("card")}
+                className={`w-full text-left p-3 rounded-xl border transition ${
+                  paymentMethod === "card"
+                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
+                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
+                    <CreditCard size={15} className="text-sky-400 shrink-0" />
+                    <span>{t.payments.card}</span>
+                  </div>
+                </div>
+                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                  {t.payments.cardDetail}
+                </p>
+              </button>
+
+              {/* Virman */}
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("transfer")}
+                className={`w-full text-left p-3 rounded-xl border transition ${
+                  paymentMethod === "transfer"
+                    ? "border-sky-400 bg-sky-950/40 shadow-sm shadow-sky-500/10"
+                    : "border-white/5 bg-zinc-950/60 hover:border-white/10"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white">
+                    <QrCode size={15} className="text-sky-400 shrink-0" />
+                    <span>{t.payments.transfer}</span>
+                  </div>
+                </div>
+                <p className="mt-1 text-[11px] text-zinc-400 pl-6 leading-tight">
+                  {t.payments.transferDetail}
+                </p>
+              </button>
             </div>
           </div>
 
@@ -323,18 +438,44 @@ export default function Cart() {
               <div className="flex items-end justify-between">
                 <span className="font-semibold">{t.cart.total}</span>
 
-                <span className="text-2xl sm:text-3xl font-bold">{total.toFixed(2)} €</span>
+                <span className="text-2xl sm:text-3xl font-bold font-mono text-white">{total.toFixed(2)} €</span>
               </div>
             </div>
           </div>
 
-          <p className="mt-5 text-xs leading-5 text-zinc-600">
+          {/* Primary Checkout CTA */}
+          <button
+            type="button"
+            onClick={() => toast.success(paymentMethod === "cod" ? "Narudžba zaprimljena! Plaćanje pouzećem kuriru pri preuzimanju." : "Preusmjeravanje na sigurno plaćanje...")}
+            className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-400 px-6 py-3.5 text-sm font-bold text-zinc-950 transition hover:bg-sky-300 shadow-lg shadow-sky-500/25"
+          >
+            <ShieldCheck size={18} />
+            <span>Dovrši narudžbu ({paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})</span>
+          </button>
+
+          {/* Trust Guarantees Box */}
+          <div className="mt-4 rounded-2xl border border-sky-500/20 bg-sky-950/30 p-3.5 space-y-2 text-xs text-zinc-300">
+            <div className="flex items-center gap-2 text-sky-300 font-medium">
+              <Lock size={14} className="text-sky-400 shrink-0" />
+              <span>{t.payments.sslSecure}</span>
+            </div>
+            <div className="flex items-center gap-2 text-zinc-300">
+              <PackageCheck size={14} className="text-sky-400 shrink-0" />
+              <span>{t.payments.discreteGuarantee}</span>
+            </div>
+            <div className="flex items-center gap-2 text-zinc-300">
+              <Truck size={14} className="text-sky-400 shrink-0" />
+              <span>{t.trustBar.shipping}</span>
+            </div>
+          </div>
+
+          <p className="mt-4 text-xs leading-5 text-zinc-500">
             {t.cart.disclaimer}
           </p>
 
           <Link
             to="/proizvodi"
-            className="mt-6 flex w-full items-center justify-center rounded-xl border border-zinc-700 px-4 py-3 text-sm font-semibold transition hover:bg-zinc-800"
+            className="mt-4 flex w-full items-center justify-center rounded-xl border border-zinc-700 px-4 py-2.5 text-sm font-semibold transition hover:bg-zinc-800 text-zinc-300"
           >
             {t.cart.continueShopping}
           </Link>
