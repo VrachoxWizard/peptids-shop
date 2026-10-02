@@ -1,5 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 import type { Product } from "../../types/product";
 import { useCartStore } from "../../store/cartStore";
@@ -11,8 +12,16 @@ type ProductCardProps = {
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
 
+  function handleAddToCart() {
+    addItem(product);
+
+    toast.success("Proizvod dodan u košaricu", {
+      description: product.name,
+    });
+  }
+
   return (
-    <article className="group rounded-2xl border border-zinc-800 bg-zinc-900 overflow-hidden hover:border-zinc-700 transition">
+    <article className="group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition hover:border-zinc-700">
       <Link
         to={`/proizvod/${product.slug}`}
         className="aspect-square bg-zinc-800 flex items-center justify-center"
@@ -46,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <button
             type="button"
-            onClick={() => addItem(product)}
+            onClick={handleAddToCart}
             className="flex items-center gap-2 rounded-lg bg-emerald-400 text-zinc-950 px-4 py-2 text-sm font-semibold hover:bg-emerald-300 transition"
           >
             <ShoppingCart size={16} />

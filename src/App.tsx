@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "sonner";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -32,6 +33,8 @@ function App() {
       </div>
 
       <Footer />
+
+      <Toaster position="bottom-right" richColors closeButton theme="dark" />
     </div>
   );
 }
