@@ -1,4 +1,4 @@
-import { ArrowLeft, FlaskConical, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { products } from "../data/products";
 import { useCartStore } from "../store/cartStore";
+import ProductVisual from "../components/product/ProductVisual";
 
 export default function ProductDetails() {
   const { slug } = useParams();
@@ -22,7 +23,7 @@ export default function ProductDetails() {
 
         <Link
           to="/proizvodi"
-          className="inline-block mt-6 text-emerald-400 hover:text-emerald-300"
+          className="mt-6 inline-block text-emerald-400 hover:text-emerald-300"
         >
           ← Povratak na proizvode
         </Link>
@@ -46,35 +47,36 @@ export default function ProductDetails() {
     <main className="max-w-7xl mx-auto px-6 py-12">
       <Link
         to="/proizvodi"
-        className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition mb-10"
+        className="mb-10 inline-flex items-center gap-2 text-zinc-400 transition hover:text-white"
       >
         <ArrowLeft size={18} />
         Povratak na proizvode
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        <div className="aspect-square rounded-3xl border border-zinc-800 bg-zinc-900 flex items-center justify-center">
-          <div className="w-40 h-56 rounded-xl border border-zinc-700 bg-zinc-950 flex flex-col items-center justify-center">
-            <FlaskConical size={40} className="text-emerald-400" />
-
-            <span className="mt-4 text-sm font-bold text-emerald-400">
-              RESEARCH LAB
-            </span>
-          </div>
+      <div className="grid gap-12 md:grid-cols-2">
+        <div className="overflow-hidden rounded-3xl border border-zinc-800">
+          <ProductVisual
+            name={product.name}
+            category={product.category}
+            amount={product.amount}
+            large
+          />
         </div>
 
         <div className="flex flex-col justify-center">
-          <span className="text-emerald-400 text-sm font-medium">
+          <span className="text-sm font-medium uppercase tracking-wider text-emerald-400">
             {product.category}
           </span>
 
-          <h1 className="text-4xl md:text-5xl font-bold mt-3">
+          <h1 className="mt-3 text-4xl font-bold md:text-5xl">
             {product.name}
           </h1>
 
-          <p className="text-zinc-400 text-lg mt-5">{product.description}</p>
+          <p className="mt-5 text-lg leading-8 text-zinc-400">
+            {product.description}
+          </p>
 
-          <div className="border-t border-zinc-800 mt-8 pt-8 space-y-4">
+          <div className="mt-8 space-y-4 border-t border-zinc-800 pt-8">
             <div className="flex justify-between">
               <span className="text-zinc-500">Količina</span>
 
@@ -82,30 +84,39 @@ export default function ProductDetails() {
             </div>
 
             <div className="flex justify-between">
+              <span className="text-zinc-500">Kategorija</span>
+
+              <span>{product.category}</span>
+            </div>
+
+            <div className="flex justify-between">
               <span className="text-zinc-500">Namjena</span>
 
-              <span>Istraživačka uporaba</span>
+              <span>Demo / istraživački katalog</span>
             </div>
           </div>
 
-          <div className="mt-10 flex items-center justify-between gap-6">
-            <span className="text-3xl font-bold">
-              {product.price.toFixed(2)} €
-            </span>
+          <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <span className="block text-sm text-zinc-500">Cijena</span>
+
+              <span className="text-4xl font-bold">
+                {product.price.toFixed(2)}
+                <span className="ml-1 text-lg font-normal text-zinc-500">
+                  €
+                </span>
+              </span>
+            </div>
 
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-zinc-950 font-semibold px-6 py-3 rounded-xl transition"
+              className="flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-95"
             >
               <ShoppingCart size={18} />
               Dodaj u demo košaricu
             </button>
           </div>
-
-          <p className="text-xs text-zinc-600 mt-6">
-            Demo proizvod prikazan isključivo za razvoj korisničkog sučelja.
-          </p>
         </div>
       </div>
     </main>
