@@ -11,6 +11,6 @@ describe("ProductCard Component", () => {
         <ProductCard product={products[0]} />
       </MemoryRouter>
     );
-    expect(screen.getByText(/24-48h/i)).toBeInTheDocument();
+    expect(screen.getByText(/24[-–]48h/i)).toBeInTheDocument();
   });
 });

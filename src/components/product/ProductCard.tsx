@@ -1,6 +1,6 @@
-import { ArrowUpRight, ShoppingCart, Truck } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useState } from "react";
+import { ArrowUpRight, Check, ShoppingCart, Truck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { getLocalizedProduct, type Product } from "../../types/product";
 import { useCartStore } from "../../store/cartStore";
@@ -12,7 +12,7 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const navigate = useNavigate();
+  const [justAdded, setJustAdded] = useState(false);
   const { t, language } = useTranslation();
   const addItem = useCartStore((state) => state.addItem);
 
@@ -23,24 +23,22 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     addItem(product);
 
-    toast.success(t.product.addedToast, {
-      description: `${loc.name} (${product.amount})`,
-      action: {
-        label: t.product.openCart,
-        onClick: () => navigate("/kosarica"),
-      },
-    });
+    // Silent inline tactile confirmation
+    setJustAdded(true);
+    setTimeout(() => {
+      setJustAdded(false);
+    }, 1400);
   }
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_12px_32px_-10px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-300 hover:border-sky-500/40 hover:shadow-[0_20px_45px_-15px_rgba(2,132,199,0.2)] hover:-translate-y-1 flex flex-col justify-between">
+    <article className="group relative rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xs hover:border-slate-400 hover:shadow-md transition-all flex flex-col justify-between">
       {/* Top Media Section */}
       <div>
         <Link
           to={`/proizvod/${product.slug}`}
-          className="relative block overflow-hidden rounded-2xl"
+          className="relative block overflow-hidden rounded-xl border border-slate-100 bg-slate-50"
         >
-          <div className="transition duration-500 group-hover:scale-[1.03]">
+          <div className="transition duration-300 group-hover:scale-[1.02]">
             <ProductVisual
               name={loc.name}
               category={loc.category}
@@ -50,68 +48,68 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Quick Details Floating Arrow */}
-          <div className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-zinc-950/70 opacity-0 backdrop-blur-md transition duration-200 group-hover:opacity-100 z-10">
-            <ArrowUpRight size={15} className="text-zinc-200" />
+          <div className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 bg-white/90 opacity-0 transition duration-200 group-hover:opacity-100 z-10 shadow-xs">
+            <ArrowUpRight size={14} className="text-slate-700" />
           </div>
 
           {/* HPLC Purity Tag if present */}
           {product.purity && (
-            <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full border border-sky-500/30 bg-zinc-950/80 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-300 backdrop-blur-md z-10">
-              <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+            <div className="absolute left-2.5 top-2.5 flex items-center gap-1 rounded-md border border-slate-200 bg-white/95 px-2 py-0.5 font-mono text-[10px] font-semibold text-slate-800 z-10 shadow-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               <span>{product.purity}</span>
             </div>
           )}
         </Link>
 
         {/* Info & Typography Section */}
-        <div className="p-4 sm:p-5">
+        <div className="p-3.5 sm:p-4">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-sky-400 truncate">
+            <span className="font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-sky-700 truncate">
               {loc.category}
             </span>
 
-            <span className="shrink-0 rounded-full border border-white/5 bg-zinc-950/70 px-2.5 py-0.5 font-mono text-[10px] sm:text-[11px] text-zinc-400">
+            <span className="shrink-0 rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[10px] sm:text-[11px] text-slate-600 font-medium">
               {product.amount}
             </span>
           </div>
 
-          <Link to={`/proizvod/${product.slug}`} className="block mt-2.5">
-            <h2 className="text-base sm:text-lg font-bold leading-snug text-white transition group-hover:text-sky-300">
+          <Link to={`/proizvod/${product.slug}`} className="block mt-2">
+            <h3 className="font-serif text-base sm:text-lg font-bold leading-snug text-slate-900 transition group-hover:text-sky-800">
               {loc.name}
-            </h2>
+            </h3>
           </Link>
 
-          <p className="mt-2 line-clamp-2 min-h-10 text-xs sm:text-sm leading-relaxed text-zinc-400">
+          <p className="mt-1.5 line-clamp-2 min-h-9 text-xs sm:text-sm leading-relaxed text-slate-600">
             {loc.description}
           </p>
 
-          {/* Trust signal badge for delivery & origin */}
-          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-mono text-sky-300/90 bg-sky-950/40 border border-sky-500/20 rounded-lg px-2.5 py-1">
-            <Truck size={13} className="text-sky-400 shrink-0" />
-            <span>Zaliha u RH (24-48h)</span>
+          {/* Delivery & origin trust signal - Flat row without card-in-card */}
+          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+            <Truck size={14} className="text-sky-700 shrink-0" />
+            <span>Zaliha u RH (24–48h)</span>
           </div>
 
           {/* Optional CAS specification line */}
           {product.casNumber && (
-            <div className="mt-2.5 flex items-center gap-1.5 font-mono text-[11px] text-zinc-500">
+            <div className="mt-1.5 flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
               <span>CAS:</span>
-              <span className="text-zinc-400">{product.casNumber}</span>
+              <span className="text-slate-700 font-medium">{product.casNumber}</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Bottom Action Section */}
-      <div className="p-4 sm:p-5 pt-0 mt-2 border-t border-white/5">
+      <div className="p-3.5 sm:p-4 pt-0 mt-1 border-t border-slate-100">
         <div className="flex items-end justify-between gap-3 pt-3">
           <div>
-            <span className="block text-[10px] sm:text-[11px] uppercase tracking-wider text-zinc-500 font-mono">
+            <span className="block text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 font-mono">
               {t.product.priceLabel}
             </span>
 
-            <span className="mt-0.5 block text-xl sm:text-2xl font-bold font-mono text-white">
+            <span className="mt-0.5 block text-xl sm:text-2xl font-bold font-mono text-slate-950 tabular-nums">
               {product.price.toFixed(2)}
-              <span className="ml-1 text-xs sm:text-sm font-normal text-zinc-500">
+              <span className="ml-1 text-xs sm:text-sm font-normal text-slate-500">
                 €
               </span>
             </span>
@@ -120,10 +118,23 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             type="button"
             onClick={handleAddToCart}
-            className="tactile-press flex items-center gap-1.5 rounded-xl bg-sky-400 px-4 py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 shadow-md shadow-sky-500/20 hover:bg-sky-300"
+            className={`tactile-press flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+              justAdded
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "bg-slate-900 text-white hover:bg-slate-800 shadow-xs"
+            }`}
           >
-            <ShoppingCart size={15} />
-            <span>{t.product.addBtn}</span>
+            {justAdded ? (
+              <>
+                <Check size={15} />
+                <span>{language === "hr" ? "Dodano" : "Added"}</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart size={15} />
+                <span>{t.product.addToCart}</span>
+              </>
+            )}
           </button>
         </div>
       </div>
