@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 
 import { useCartStore } from "../../store/cartStore";
 import { useTranslation } from "../../i18n/useTranslation";
+import TopTrustBar from "./TopTrustBar";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,7 +25,10 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/80 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
+      {/* Gornja traka povjerenja za kupce u Hrvatskoj */}
+      <TopTrustBar />
+
       <nav className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-16 flex items-center justify-between gap-4">
           {/* Logo */}
@@ -34,7 +38,7 @@ export default function Navbar() {
             className="font-bold text-lg sm:text-xl tracking-tight shrink-0 flex items-center gap-1.5"
           >
             <span>{t.nav.brand}</span>
-            <span className="text-emerald-400 font-extrabold">{t.nav.brandHighlight}</span>
+            <span className="text-sky-400 font-extrabold">{t.nav.brandHighlight}</span>
           </Link>
 
           {/* Desktop navigacija */}
@@ -43,7 +47,7 @@ export default function Navbar() {
               to="/"
               className={`transition font-medium ${
                 isCurrent("/")
-                  ? "text-emerald-400"
+                  ? "text-sky-400"
                   : "text-zinc-300 hover:text-white"
               }`}
             >
@@ -54,7 +58,7 @@ export default function Navbar() {
               to="/proizvodi"
               className={`transition font-medium ${
                 isCurrent("/proizvod")
-                  ? "text-emerald-400"
+                  ? "text-sky-400"
                   : "text-zinc-300 hover:text-white"
               }`}
             >
@@ -65,7 +69,7 @@ export default function Navbar() {
               to="/kontakt"
               className={`transition font-medium ${
                 isCurrent("/kontakt")
-                  ? "text-emerald-400"
+                  ? "text-sky-400"
                   : "text-zinc-300 hover:text-white"
               }`}
             >
@@ -76,7 +80,7 @@ export default function Navbar() {
               to="/kosarica"
               className={`flex items-center gap-2 transition font-medium ${
                 isCurrent("/kosarica")
-                  ? "text-emerald-400"
+                  ? "text-sky-400"
                   : "text-zinc-300 hover:text-white"
               }`}
             >
@@ -89,7 +93,7 @@ export default function Navbar() {
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1.5 font-mono text-[11px] font-bold text-zinc-950 shadow-sm shadow-emerald-500/30"
+                  className="flex h-5 min-w-5 items-center justify-center rounded-full bg-sky-400 px-1.5 font-mono text-[11px] font-bold text-zinc-950 shadow-sm shadow-sky-500/30"
                 >
                   {itemCount}
                 </motion.span>
@@ -103,7 +107,7 @@ export default function Navbar() {
                 onClick={() => setLanguage("hr")}
                 className={`rounded-full px-2.5 py-1 font-semibold transition ${
                   language === "hr"
-                    ? "bg-emerald-400 text-zinc-950 shadow-sm"
+                    ? "bg-sky-400 text-zinc-950 shadow-sm"
                     : "text-zinc-400 hover:text-zinc-200"
                 }`}
               >
@@ -114,7 +118,7 @@ export default function Navbar() {
                 onClick={() => setLanguage("en")}
                 className={`rounded-full px-2.5 py-1 font-semibold transition ${
                   language === "en"
-                    ? "bg-emerald-400 text-zinc-950 shadow-sm"
+                    ? "bg-sky-400 text-zinc-950 shadow-sm"
                     : "text-zinc-400 hover:text-zinc-200"
                 }`}
               >
@@ -129,7 +133,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setLanguage(language === "hr" ? "en" : "hr")}
-              className="flex h-9 items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/80 px-2.5 text-xs font-mono font-bold text-emerald-400"
+              className="flex h-9 items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/80 px-2.5 text-xs font-mono font-bold text-sky-400"
               aria-label={t.nav.toggleLang}
             >
               <Globe size={14} />
@@ -150,7 +154,7 @@ export default function Navbar() {
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  className="absolute -right-1.5 -top-1.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-emerald-400 px-1 font-mono text-[10px] font-bold text-zinc-950"
+                  className="absolute -right-1.5 -top-1.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-sky-400 px-1 font-mono text-[10px] font-bold text-zinc-950"
                 >
                   {itemCount}
                 </motion.span>
@@ -178,7 +182,7 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={`rounded-xl px-3.5 py-2.5 transition font-medium ${
                   isCurrent("/")
-                    ? "bg-zinc-900 text-emerald-400"
+                    ? "bg-zinc-900 text-sky-400"
                     : "text-zinc-300 hover:bg-zinc-900 hover:text-white"
                 }`}
               >
@@ -190,7 +194,7 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={`rounded-xl px-3.5 py-2.5 transition font-medium ${
                   isCurrent("/proizvod")
-                    ? "bg-zinc-900 text-emerald-400"
+                    ? "bg-zinc-900 text-sky-400"
                     : "text-zinc-300 hover:bg-zinc-900 hover:text-white"
                 }`}
               >
@@ -202,7 +206,7 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={`rounded-xl px-3.5 py-2.5 transition font-medium ${
                   isCurrent("/kontakt")
-                    ? "bg-zinc-900 text-emerald-400"
+                    ? "bg-zinc-900 text-sky-400"
                     : "text-zinc-300 hover:bg-zinc-900 hover:text-white"
                 }`}
               >
@@ -214,14 +218,14 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={`flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition font-medium ${
                   isCurrent("/kosarica")
-                    ? "bg-zinc-900 text-emerald-400"
+                    ? "bg-zinc-900 text-sky-400"
                     : "text-zinc-300 hover:bg-zinc-900 hover:text-white"
                 }`}
               >
                 <ShoppingCart size={18} />
                 <span>{t.nav.cart}</span>
                 {itemCount > 0 && (
-                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1.5 text-xs font-bold text-zinc-950 font-mono">
+                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-sky-400 px-1.5 text-xs font-bold text-zinc-950 font-mono">
                     {itemCount}
                   </span>
                 )}
