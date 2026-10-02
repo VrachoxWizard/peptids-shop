@@ -3,6 +3,7 @@ import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
+import ProductVisual from "../components/product/ProductVisual";
 import { useCartStore } from "../store/cartStore";
 
 export default function Cart() {
@@ -84,9 +85,16 @@ export default function Cart() {
           >
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
               {/* Product visual */}
-              <div className="flex h-24 w-20 shrink-0 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-800">
-                <span className="text-xs font-bold text-emerald-400">LAB</span>
-              </div>
+              <Link
+                to={`/proizvod/${item.slug}`}
+                className="w-full overflow-hidden rounded-xl border border-zinc-800 sm:w-28 sm:shrink-0"
+              >
+                <ProductVisual
+                  name={item.name}
+                  category={item.category}
+                  amount={item.amount}
+                />
+              </Link>
 
               {/* Info */}
               <div className="flex-1">
