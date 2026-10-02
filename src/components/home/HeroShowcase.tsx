@@ -1,8 +1,11 @@
 import { motion } from "motion/react";
 import { CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
 import ProductVisual from "../product/ProductVisual";
+import { useTranslation } from "../../i18n/useTranslation";
 
 export default function HeroShowcase() {
+  const { t, language } = useTranslation();
+
   return (
     <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
       {/* Ambient background glow */}
@@ -18,13 +21,13 @@ export default function HeroShowcase() {
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
             </span>
             <span className="font-mono text-[11px] font-semibold tracking-wider text-emerald-400">
-              HPLC VALIDIRANO
+              {t.hero.showcaseBadge}
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-950/60 px-3 py-1 font-mono text-[11px] text-zinc-400">
             <ShieldCheck size={13} className="text-emerald-400" />
-            <span>ČISTOĆA ≥ 99.4%</span>
+            <span>{t.hero.showcasePurity}</span>
           </div>
         </div>
 
@@ -40,8 +43,9 @@ export default function HeroShowcase() {
         >
           <ProductVisual
             name="BPC-157 Arginate"
-            category="Peptidi"
+            category={language === "en" ? "Peptides" : "Peptidi"}
             amount="10 mg"
+            image="/images/products/bpc-157-arginate.jpg"
             large
           />
         </motion.div>
@@ -50,7 +54,7 @@ export default function HeroShowcase() {
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
           <div className="rounded-xl border border-white/5 bg-zinc-950/50 p-2.5 text-center">
             <span className="block font-mono text-[10px] text-zinc-500 uppercase">
-              CAS BROJ
+              {t.hero.casNumber}
             </span>
             <span className="mt-0.5 block font-mono text-xs font-medium text-zinc-200">
               137525-51-0
@@ -59,19 +63,19 @@ export default function HeroShowcase() {
 
           <div className="rounded-xl border border-white/5 bg-zinc-950/50 p-2.5 text-center">
             <span className="block font-mono text-[10px] text-zinc-500 uppercase">
-              FORMAT
+              {t.hero.format}
             </span>
             <span className="mt-0.5 block font-mono text-xs font-medium text-zinc-200">
-              Liofilizirano
+              {t.hero.formatValue}
             </span>
           </div>
 
           <div className="col-span-2 sm:col-span-1 rounded-xl border border-emerald-500/20 bg-emerald-950/20 p-2.5 text-center">
             <span className="block font-mono text-[10px] text-emerald-400/80 uppercase">
-              SKLADIŠTENJE
+              {t.hero.storage}
             </span>
             <span className="mt-0.5 block font-mono text-xs font-semibold text-emerald-300">
-              -20°C Stabilno
+              {t.hero.storageValue}
             </span>
           </div>
         </div>
@@ -80,11 +84,13 @@ export default function HeroShowcase() {
         <div className="mt-4 flex items-center justify-between rounded-xl border border-white/5 bg-zinc-950/70 px-3.5 py-2.5 text-xs text-zinc-400">
           <div className="flex items-center gap-2">
             <Sparkles size={15} className="text-emerald-400" />
-            <span>Serija: <strong className="font-mono text-zinc-200">2026-BPC-157</strong></span>
+            <span>
+              {t.hero.batch}: <strong className="font-mono text-zinc-200">2026-BPC-157</strong>
+            </span>
           </div>
           <div className="flex items-center gap-1 text-emerald-400">
             <CheckCircle2 size={14} />
-            <span className="text-[11px] font-medium">COA Dostupan</span>
+            <span className="text-[11px] font-medium">{t.hero.coaAvailable}</span>
           </div>
         </div>
       </div>

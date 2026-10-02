@@ -11,10 +11,12 @@ import { motion } from "motion/react";
 
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
+import { useTranslation } from "../i18n/useTranslation";
 
 const PRODUCTS_PER_PAGE = 6;
 
 export default function Products() {
+  const { t, language } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";
@@ -24,9 +26,11 @@ export default function Products() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const categories = [
-    "Sve",
-    ...Array.from(new Set(products.map((product) => product.category))),
+  const categoryOptions = [
+    { value: "Sve", label: t.catalog.allCategories },
+    { value: "Peptidi", label: language === "en" ? "Peptides" : "Peptidi" },
+    { value: "Istraživački spojevi", label: language === "en" ? "Research Compounds" : "Istraživački spojevi" },
+    { value: "Referentni uzorci", label: language === "en" ? "Reference Standards" : "Referentni uzorci" },
   ];
 
   function updateParam(key: string, value: string) {
@@ -57,13 +61,25 @@ export default function Products() {
       result = result.filter(
         (product) =>
           product.name.toLowerCase().includes(searchValue) ||
+          (product.nameEn?.toLowerCase().includes(searchValue) ?? false) ||
           product.description.toLowerCase().includes(searchValue) ||
-          product.category.toLowerCase().includes(searchValue),
+          (product.descriptionEn?.toLowerCase().includes(searchValue) ?? false) ||
+          product.category.toLowerCase().includes(searchValue) ||
+          (product.categoryEn?.toLowerCase().includes(searchValue) ?? false) ||
+          (product.casNumber?.toLowerCase().includes(searchValue) ?? false),
       );
     }
 
     if (category !== "Sve") {
-      result = result.filter((product) => product.category === category);
+      result = result.filter(
+        (product) =>
+          product.category === category ||
+          product.categoryEn === category ||
+          (category === "Peptidi" && product.category === "Peptidi") ||
+          (category === "Peptides" && product.category === "Peptidi") ||
+          (category === "Research Compounds" && product.category === "Istraživački spojevi") ||
+          (category === "Reference Standards" && product.category === "Referentni uzorci")
+      );
     }
 
     result = result.filter((product) => product.price <= maxPrice);
@@ -78,16 +94,24 @@ export default function Products() {
         break;
 
       case "name-asc":
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        result.sort((a, b) => {
+          const nameA = (language === "en" ? a.nameEn : a.name) || a.name;
+          const nameB = (language === "en" ? b.nameEn : b.name) || b.name;
+          return nameA.localeCompare(nameB);
+        });
         break;
 
       case "name-desc":
-        result.sort((a, b) => b.name.localeCompare(a.name));
+        result.sort((a, b) => {
+          const nameA = (language === "en" ? a.nameEn : a.name) || a.name;
+          const nameB = (language === "en" ? b.nameEn : b.name) || b.name;
+          return nameB.localeCompare(nameA);
+        });
         break;
     }
 
     return result;
-  }, [search, category, sort, maxPrice]);
+  }, [search, category, sort, maxPrice, language]);
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
@@ -122,15 +146,15 @@ export default function Products() {
       <div className="mb-8 sm:mb-10">
         <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          ANALITIČKI KATALOG
+          {t.catalog.badge}
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tighter text-white mt-2">
-          Istraživački biokemijski spojevi
+          {t.catalog.title}
         </h1>
 
         <p className="text-zinc-400 mt-2 text-sm sm:text-base max-w-2xl">
-          Pregledajte liofilizirane peptide, istraživačke spojeve i certificirane referentne uzorke sa specifikacijama čistoće.
+          {t.catalog.description}
         </p>
       </div>
 
@@ -143,7 +167,7 @@ export default function Products() {
 
         <input
           type="text"
-          placeholder="Pretraži prema nazivu, kategoriji ili CAS broju..."
+          placeholder={t.catalog.searchPlaceholder}
           value={search}
           onChange={(event) =>
             updateParam("search", event.target.value)
@@ -157,13 +181,13 @@ export default function Products() {
         <div className="flex items-center gap-2 mb-4 sm:mb-5">
           <SlidersHorizontal size={18} className="text-emerald-400" />
 
-          <h2 className="font-semibold text-base sm:text-lg text-white">Filteri kataloga</h2>
+          <h2 className="font-semibold text-base sm:text-lg text-white">{t.catalog.filtersTitle}</h2>
         </div>
 
         <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
           <div>
             <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
-              Kategorija
+              {t.catalog.categoryLabel}
             </label>
 
             <select
@@ -173,9 +197,9 @@ export default function Products() {
               }
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
             >
-              {categories.map((categoryName) => (
-                <option key={categoryName} value={categoryName}>
-                  {categoryName}
+              {categoryOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
                 </option>
               ))}
             </select>
@@ -183,7 +207,7 @@ export default function Products() {
 
           <div>
             <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
-              Maksimalna cijena: {maxPrice} €
+              {t.catalog.maxPriceLabel}: {maxPrice} €
             </label>
 
             <input
@@ -201,7 +225,7 @@ export default function Products() {
 
           <div>
             <label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">
-              Sortiranje
+              {t.catalog.sortLabel}
             </label>
 
             <select
@@ -211,15 +235,15 @@ export default function Products() {
               }
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm sm:text-base outline-none focus:border-emerald-400"
             >
-              <option value="default">Zadano</option>
+              <option value="default">{t.catalog.sortDefault}</option>
 
-              <option value="price-low">Cijena: najniža</option>
+              <option value="price-low">{t.catalog.sortPriceLow}</option>
 
-              <option value="price-high">Cijena: najviša</option>
+              <option value="price-high">{t.catalog.sortPriceHigh}</option>
 
-              <option value="name-asc">Naziv: A-Z</option>
+              <option value="name-asc">{t.catalog.sortNameAsc}</option>
 
-              <option value="name-desc">Naziv: Z-A</option>
+              <option value="name-desc">{t.catalog.sortNameDesc}</option>
             </select>
           </div>
         </div>
@@ -231,7 +255,7 @@ export default function Products() {
             className="mt-4 sm:mt-5 inline-flex items-center gap-2 text-xs sm:text-sm text-zinc-400 hover:text-white transition"
           >
             <X size={16} />
-            Resetiraj filtere
+            {t.catalog.resetFilters}
           </button>
         )}
       </div>
@@ -239,7 +263,7 @@ export default function Products() {
       {/* Broj rezultata */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs sm:text-sm text-zinc-500">
         <p>
-          Pronađeno proizvoda:{" "}
+          {t.catalog.foundCount}:{" "}
           <span className="text-white font-semibold">
             {filteredProducts.length}
           </span>
@@ -247,7 +271,7 @@ export default function Products() {
 
         {totalPages > 0 && (
           <p>
-            Stranica <span className="text-white">{currentPage}</span> od{" "}
+            {t.catalog.page} <span className="text-white">{currentPage}</span> {t.catalog.of}{" "}
             <span className="text-white">{totalPages}</span>
           </p>
         )}
@@ -282,7 +306,7 @@ export default function Products() {
                 aria-label="Prethodna stranica"
               >
                 <ChevronLeft size={16} />
-                <span className="hidden sm:inline">Prethodna</span>
+                <span className="hidden sm:inline">{t.catalog.previousPage}</span>
               </button>
 
               {Array.from({ length: totalPages }, (_, index) => {
@@ -312,7 +336,7 @@ export default function Products() {
                 className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-zinc-700 px-2.5 sm:px-4 text-xs sm:text-sm font-medium transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label="Sljedeća stranica"
               >
-                <span className="hidden sm:inline">Sljedeća</span>
+                <span className="hidden sm:inline">{t.catalog.nextPage}</span>
                 <ChevronRight size={16} />
               </button>
             </nav>
@@ -323,18 +347,18 @@ export default function Products() {
           <Search size={40} className="mx-auto text-zinc-600" />
 
           <h2 className="text-lg sm:text-xl font-semibold mt-5">
-            Nema pronađenih proizvoda
+            {t.catalog.noResultsTitle}
           </h2>
 
           <p className="text-zinc-500 text-xs sm:text-sm mt-2">
-            Pokušaj promijeniti pretragu ili filtere.
+            {t.catalog.noResultsDesc}
           </p>
 
           <button
             onClick={resetFilters}
             className="mt-6 rounded-lg bg-emerald-400 px-5 py-2.5 font-semibold text-zinc-950 hover:bg-emerald-300 transition text-sm"
           >
-            Resetiraj filtere
+            {t.catalog.resetFilters}
           </button>
         </div>
       )}

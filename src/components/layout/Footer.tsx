@@ -1,7 +1,9 @@
 import { FlaskConical } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "../../i18n/useTranslation";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -12,72 +14,71 @@ export default function Footer() {
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold tracking-tight"
+              className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold tracking-tight text-white"
             >
               <FlaskConical size={22} className="text-emerald-400" />
-              PEPTIDE
-              <span className="text-emerald-400">LAB</span>
+              {t.nav.brand}
+              <span className="text-emerald-400">{t.nav.brandHighlight}</span>
             </Link>
 
             <p className="mt-3 sm:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-zinc-500">
-              Demo frontend katalog za prikaz modernog laboratorijskog i
-              istraživačkog webshop sučelja.
+              {t.footer.brandDesc}
             </p>
           </div>
 
           {/* Navigacija */}
           <div>
-            <h3 className="font-semibold text-sm sm:text-base">Navigacija</h3>
+            <h3 className="font-semibold text-sm sm:text-base text-zinc-200">{t.footer.navTitle}</h3>
 
             <div className="mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 text-xs sm:text-sm">
               <Link
                 to="/"
                 className="text-zinc-400 hover:text-white transition"
               >
-                Početna
+                {t.nav.home}
               </Link>
 
               <Link
                 to="/proizvodi"
                 className="text-zinc-400 hover:text-white transition"
               >
-                Proizvodi
+                {t.nav.products}
               </Link>
 
               <Link
                 to="/kosarica"
                 className="text-zinc-400 hover:text-white transition"
               >
-                Košarica
+                {t.nav.cart}
               </Link>
 
               <Link
                 to="/kontakt"
                 className="text-zinc-400 hover:text-white transition"
               >
-                Kontakt
+                {t.nav.contact}
               </Link>
             </div>
           </div>
 
           {/* Informacije */}
           <div>
-            <h3 className="font-semibold text-sm sm:text-base">Informacije</h3>
+            <h3 className="font-semibold text-sm sm:text-base text-zinc-200">{t.footer.infoTitle}</h3>
 
             <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-zinc-500">
-              <p>Demo aplikacija za razvoj korisničkog sučelja.</p>
+              <p>{t.footer.info1}</p>
 
-              <p>Kupnja i stvarna narudžba nisu omogućene.</p>
+              <p>{t.footer.info2}</p>
 
-              <p>Svi proizvodi u katalogu su fiktivni demo podaci.</p>
+              <p>{t.footer.info3}</p>
             </div>
           </div>
         </div>
 
         <div className="mt-8 sm:mt-10 flex flex-col gap-3 border-t border-zinc-800 pt-6 text-xs sm:text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {currentYear} PeptideLab Demo</p>
+          <p>© {currentYear} {t.footer.copyright}</p>
 
-          <p>Izrađeno kao frontend projekt.</p>
+          <p>{t.footer.builtAs}</p>
         </div>
       </div>
     </footer>

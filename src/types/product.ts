@@ -2,8 +2,11 @@ export type Product = {
   id: number;
   slug: string;
   name: string;
+  nameEn?: string;
   category: string;
+  categoryEn?: string;
   description: string;
+  descriptionEn?: string;
   amount: string;
   price: number;
   image?: string;
@@ -12,3 +15,13 @@ export type Product = {
   casNumber?: string;
   molecularWeight?: string;
 };
+
+export function getLocalizedProduct(product: Product, lang: "hr" | "en") {
+  return {
+    ...product,
+    name: lang === "en" && product.nameEn ? product.nameEn : product.name,
+    category: lang === "en" && product.categoryEn ? product.categoryEn : product.category,
+    description:
+      lang === "en" && product.descriptionEn ? product.descriptionEn : product.description,
+  };
+}

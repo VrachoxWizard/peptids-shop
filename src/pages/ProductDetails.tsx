@@ -1,39 +1,41 @@
 import { useState } from "react";
-
 import { ChevronRight, Minus, Plus, ShoppingCart } from "lucide-react";
-
 import { Link, useNavigate, useParams } from "react-router-dom";
-
 import { toast } from "sonner";
 
 import ProductVisual from "../components/product/ProductVisual";
 import { products } from "../data/products";
 import { useCartStore } from "../store/cartStore";
+import { useTranslation } from "../i18n/useTranslation";
+import { getLocalizedProduct } from "../types/product";
 
 export default function ProductDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t, language } = useTranslation();
 
   const [quantity, setQuantity] = useState(1);
 
   const addItem = useCartStore((state) => state.addItem);
 
-  const product = products.find((product) => product.slug === slug);
+  const rawProduct = products.find((product) => product.slug === slug);
 
-  if (!product) {
+  if (!rawProduct) {
     return (
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <h1 className="text-2xl sm:text-4xl font-bold">Proizvod nije pronađen</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold">{t.product.notFound}</h1>
 
         <Link
           to="/proizvodi"
           className="mt-6 inline-block text-emerald-400 hover:text-emerald-300 text-sm sm:text-base"
         >
-          ← Povratak na proizvode
+          {t.product.backToProducts}
         </Link>
       </main>
     );
   }
+
+  const product = getLocalizedProduct(rawProduct, language);
 
   function decreaseQuantity() {
     setQuantity((current) => Math.max(1, current - 1));
@@ -44,14 +46,14 @@ export default function ProductDetails() {
   }
 
   function handleAddToCart() {
-    if (!product) return;
+    if (!rawProduct) return;
 
-    addItem(product, quantity);
+    addItem(rawProduct, quantity);
 
-    toast.success("Proizvod dodan u košaricu", {
+    toast.success(t.product.addedToast, {
       description: `${product.name} × ${quantity}`,
       action: {
-        label: "Otvori košaricu",
+        label: t.product.openCart,
         onClick: () => navigate("/kosarica"),
       },
     });
@@ -67,13 +69,13 @@ export default function ProductDetails() {
         className="mb-6 sm:mb-10 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-zinc-500 min-w-0"
       >
         <Link to="/" className="transition hover:text-white shrink-0">
-          Početna
+          {t.nav.home}
         </Link>
 
         <ChevronRight size={14} className="shrink-0" />
 
         <Link to="/proizvodi" className="transition hover:text-white shrink-0">
-          Proizvodi
+          {t.nav.products}
         </Link>
 
         <ChevronRight size={14} className="shrink-0" />
@@ -86,8 +88,9 @@ export default function ProductDetails() {
         <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-zinc-800">
           <ProductVisual
             name={product.name}
-            category={product.category}
+            category={rawProduct.category}
             amount={product.amount}
+            image={product.image}
             large
           />
         </div>
@@ -108,45 +111,45 @@ export default function ProductDetails() {
 
           <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 border-t border-zinc-800 pt-6 sm:pt-8 text-xs sm:text-sm">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-zinc-500">Količina pakiranja</span>
+              <span className="text-zinc-500">{t.product.packaging}</span>
               <span className="font-medium text-white">{product.amount}</span>
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-zinc-500">Kategorija</span>
+              <span className="text-zinc-500">{t.product.category}</span>
               <span className="font-medium text-white">{product.category}</span>
             </div>
 
             {product.purity && (
               <div className="flex items-center justify-between gap-4">
-                <span className="text-zinc-500">HPLC Čistoća</span>
+                <span className="text-zinc-500">{t.product.hplcPurity}</span>
                 <span className="font-mono font-semibold text-emerald-400">{product.purity}</span>
               </div>
             )}
 
             {product.casNumber && (
               <div className="flex items-center justify-between gap-4">
-                <span className="text-zinc-500">CAS Registar</span>
+                <span className="text-zinc-500">{t.product.casRegistry}</span>
                 <span className="font-mono font-medium text-zinc-300">{product.casNumber}</span>
               </div>
             )}
 
             {product.molecularWeight && (
               <div className="flex items-center justify-between gap-4">
-                <span className="text-zinc-500">Molarna masa</span>
+                <span className="text-zinc-500">{t.product.molecularWeight}</span>
                 <span className="font-mono font-medium text-zinc-300">{product.molecularWeight}</span>
               </div>
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <span className="text-zinc-500">Namjena</span>
-              <span className="font-medium text-right text-white">Laboratorijska biokemijska istraživanja</span>
+              <span className="text-zinc-500">{t.product.purpose}</span>
+              <span className="font-medium text-right text-white">{t.product.purposeValue}</span>
             </div>
           </div>
 
           {/* Price */}
           <div className="mt-8 sm:mt-10">
-            <span className="block text-xs sm:text-sm text-zinc-500">Cijena</span>
+            <span className="block text-xs sm:text-sm text-zinc-500">{t.product.priceLabel}</span>
 
             <span className="mt-0.5 sm:mt-1 inline-block text-3xl sm:text-4xl font-bold">
               {product.price.toFixed(2)}
@@ -158,7 +161,7 @@ export default function ProductDetails() {
           {/* Quantity */}
           <div className="mt-6 sm:mt-8">
             <span className="mb-2 sm:mb-3 block text-xs sm:text-sm font-medium text-zinc-400">
-              Količina
+              {t.product.quantity}
             </span>
 
             <div className="inline-flex items-center rounded-xl border border-zinc-700 bg-zinc-900 p-1">
@@ -190,7 +193,7 @@ export default function ProductDetails() {
 
           {/* Total */}
           <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-5 sm:pt-6">
-            <span className="text-sm sm:text-base text-zinc-500">Ukupno</span>
+            <span className="text-sm sm:text-base text-zinc-500">{t.product.total}</span>
 
             <span className="text-xl sm:text-2xl font-bold">
               {(product.price * quantity).toFixed(2)} €
@@ -204,7 +207,7 @@ export default function ProductDetails() {
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-zinc-950 transition hover:bg-emerald-300 active:scale-[0.99]"
           >
             <ShoppingCart size={19} />
-            Dodaj {quantity} u košaricu
+            {t.product.addToCartWithQty} {quantity > 1 ? `(${quantity})` : ""}
           </button>
         </div>
       </div>

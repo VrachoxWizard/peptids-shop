@@ -11,8 +11,10 @@ import BentoCategories from "../components/home/BentoCategories";
 import HeroShowcase from "../components/home/HeroShowcase";
 import ProductCard from "../components/product/ProductCard";
 import { products } from "../data/products";
+import { useTranslation } from "../i18n/useTranslation";
 
 export default function Home() {
+  const { t } = useTranslation();
   const featuredProducts = products.filter((product) => product.featured);
 
   return (
@@ -29,16 +31,16 @@ export default function Home() {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
                 <span className="font-mono text-xs font-semibold uppercase tracking-wider text-emerald-300">
-                  LABORATORIJSKI STANDARD ČISTOĆE ≥ 99%
+                  {t.hero.badge}
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-[1.08] text-white">
-                Precizni biokemijski spojevi za istraživanja
+                {t.hero.headline}
               </h1>
 
               <p className="text-base sm:text-lg text-zinc-400 max-w-[55ch] leading-relaxed">
-                Katalog visokopročišćenih liofiliziranih peptida i referentnih analitičkih standarda. Svaka serija popraćena je HPLC kromatografskim profilom i masenom spektrometrijom.
+                {t.hero.description}
               </p>
 
               {/* Action Buttons */}
@@ -47,7 +49,7 @@ export default function Home() {
                   to="/proizvodi"
                   className="tactile-press inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-zinc-950 hover:bg-emerald-300 shadow-lg shadow-emerald-500/20"
                 >
-                  Istraži katalog
+                  {t.hero.ctaExplore}
                   <ArrowRight size={18} />
                 </Link>
 
@@ -56,7 +58,7 @@ export default function Home() {
                   className="tactile-press inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-900/80 px-6 py-3.5 font-medium text-zinc-200 hover:border-white/20 hover:bg-zinc-800 backdrop-blur-sm"
                 >
                   <FileText size={17} className="text-zinc-400" />
-                  Zatraži specifikacije
+                  {t.hero.ctaSpecs}
                 </Link>
               </div>
 
@@ -65,24 +67,24 @@ export default function Home() {
                 <div>
                   <div className="flex items-center gap-1.5 text-emerald-400 font-mono text-sm sm:text-base font-bold">
                     <ShieldCheck size={16} />
-                    <span>≥99%</span>
+                    <span>{t.hero.metricPurity}</span>
                   </div>
-                  <p className="mt-0.5 text-xs text-zinc-500">HPLC Čistoća</p>
+                  <p className="mt-0.5 text-xs text-zinc-500">{t.hero.metricPurityLabel}</p>
                 </div>
 
                 <div>
                   <div className="flex items-center gap-1.5 text-zinc-200 font-mono text-sm sm:text-base font-bold">
                     <Sparkles size={16} className="text-emerald-400" />
-                    <span>Liofilizirano</span>
+                    <span>{t.hero.metricLyophilized}</span>
                   </div>
-                  <p className="mt-0.5 text-xs text-zinc-500">Zaštićen integritet</p>
+                  <p className="mt-0.5 text-xs text-zinc-500">{t.hero.metricLyophilizedLabel}</p>
                 </div>
 
                 <div>
                   <div className="flex items-center gap-1.5 text-zinc-200 font-mono text-sm sm:text-base font-bold">
-                    <span>COA</span>
+                    <span>{t.hero.metricCoa}</span>
                   </div>
-                  <p className="mt-0.5 text-xs text-zinc-500">Verificirana serija</p>
+                  <p className="mt-0.5 text-xs text-zinc-500">{t.hero.metricCoaLabel}</p>
                 </div>
               </div>
             </div>
@@ -103,15 +105,15 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-10">
           <div>
             <p className="text-emerald-400 font-medium text-xs sm:text-sm tracking-wider">
-              ISTAKNUTO
+              {t.featured.badge}
             </p>
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-1.5 sm:mt-2">
-              Istaknuti proizvodi
+              {t.featured.title}
             </h2>
 
             <p className="text-zinc-400 mt-2 sm:mt-3 text-sm sm:text-base">
-              Odabrani proizvodi iz našeg demo kataloga.
+              {t.featured.description}
             </p>
           </div>
 
@@ -119,7 +121,7 @@ export default function Home() {
             to="/proizvodi"
             className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-sm sm:text-base transition"
           >
-            Pogledaj sve proizvode
+            {t.featured.viewAll}
             <ArrowRight size={18} />
           </Link>
         </div>
