@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, ChevronRight, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { Check, ChevronRight, FileText, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
 import ProductVisual from "../components/product/ProductVisual";
 import StockBadge from "../components/product/StockBadge";
+import CoAModal from "../components/product/CoAModal";
 import { products as fallbackProducts } from "../data/products";
 import { fetchProductBySlug } from "../services/catalogApi";
 import { useCartStore } from "../store/cartStore";
@@ -17,6 +18,7 @@ export default function ProductDetails() {
 
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const [isCoaOpen, setIsCoaOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [rawProduct, setRawProduct] = useState<Product | null>(() => {
@@ -283,8 +285,39 @@ export default function ProductDetails() {
               {t.trustBar.payment}
             </span>
           </div>
+
+          {/* Certificate of Analysis (CoA) Action Banner */}
+          <div className="mt-4 p-3.5 rounded-xl border border-sky-100 bg-sky-50/50 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center shrink-0">
+                <FileText size={17} />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-900 block leading-tight">
+                  {language === "en" ? "Certificate of Analysis (CoA)" : "Certifikat analize (CoA)"}
+                </span>
+                <span className="text-[11px] text-slate-500 block">
+                  {language === "en" ? "HPLC purity verification & MS assay" : "Verifikacija čistoće serije HPLC kromatografijom"}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsCoaOpen(true)}
+              className="px-3 py-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-semibold rounded-lg shadow-xs transition cursor-pointer shrink-0"
+            >
+              {language === "en" ? "View CoA" : "Pregledaj CoA"}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Interactive Certificate of Analysis Modal */}
+      <CoAModal
+        isOpen={isCoaOpen}
+        onClose={() => setIsCoaOpen(false)}
+        product={product}
+      />
     </main>
   );
 }

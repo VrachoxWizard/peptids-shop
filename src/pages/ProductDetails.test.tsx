@@ -78,6 +78,25 @@ describe("ProductDetails Page", () => {
     expect(screen.getByText(/dostupno odmah/i)).toBeInTheDocument();
   });
 
+  it("opens Certificate of Analysis modal when clicking View CoA button", () => {
+    render(
+      <MemoryRouter initialEntries={[`/proizvod/${products[0].slug}`]}>
+        <Routes>
+          <Route path="/proizvod/:slug" element={<ProductDetails />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const coaBtn = screen.getByRole("button", { name: /pregledaj coa/i });
+    fireEvent.click(coaBtn);
+
+    expect(
+      screen.getByRole("heading", { name: /certifikat analize \(coa\)/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/rezultati analitičkog ispitivanja/i)).toBeInTheDocument();
+    expect(screen.getByText(/rp-hplc chromatogram/i)).toBeInTheDocument();
+  });
+
   it("renders not found state when slug does not match any product", async () => {
     render(
       <MemoryRouter initialEntries={["/proizvod/nepostojeci-proizvod"]}>
