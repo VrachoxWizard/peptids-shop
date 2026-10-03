@@ -21,6 +21,8 @@ type CartStore = {
   clearCart: () => void;
 };
 
+export const MAX_ITEM_QUANTITY = 99;
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set) => ({
@@ -43,7 +45,7 @@ export const useCartStore = create<CartStore>()(
                 item.id === product.id
                   ? {
                       ...item,
-                      quantity: item.quantity + safeQuantity,
+                      quantity: Math.min(MAX_ITEM_QUANTITY, item.quantity + safeQuantity),
                     }
                   : item,
               ),
@@ -55,7 +57,7 @@ export const useCartStore = create<CartStore>()(
               ...state.items,
               {
                 ...product,
-                quantity: safeQuantity,
+                quantity: Math.min(MAX_ITEM_QUANTITY, safeQuantity),
               },
             ],
           };
@@ -72,7 +74,7 @@ export const useCartStore = create<CartStore>()(
             item.id === id
               ? {
                   ...item,
-                  quantity: item.quantity + 1,
+                  quantity: Math.min(MAX_ITEM_QUANTITY, item.quantity + 1),
                 }
               : item,
           ),

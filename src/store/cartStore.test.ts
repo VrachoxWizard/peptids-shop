@@ -36,4 +36,24 @@ describe("useCartStore", () => {
     useCartStore.getState().addItem(mockProduct, 2.7);
     expect(useCartStore.getState().items[0].quantity).toBe(2);
   });
+
+  it("caps quantity at MAX_ITEM_QUANTITY (99) when increasing item", () => {
+    useCartStore.getState().addItem(mockProduct, 98);
+    expect(useCartStore.getState().items[0].quantity).toBe(98);
+
+    useCartStore.getState().increaseItem(mockProduct.id);
+    expect(useCartStore.getState().items[0].quantity).toBe(99);
+
+    // Try increasing beyond 99
+    useCartStore.getState().increaseItem(mockProduct.id);
+    expect(useCartStore.getState().items[0].quantity).toBe(99);
+  });
+
+  it("caps quantity at MAX_ITEM_QUANTITY (99) when adding items", () => {
+    useCartStore.getState().addItem(mockProduct, 150);
+    expect(useCartStore.getState().items[0].quantity).toBe(99);
+
+    useCartStore.getState().addItem(mockProduct, 10);
+    expect(useCartStore.getState().items[0].quantity).toBe(99);
+  });
 });

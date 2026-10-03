@@ -40,6 +40,8 @@ export interface OrderResponse {
 
 import { ApiError, getApiBaseUrl } from "./apiClient";
 
+export const DEV_FALLBACK_ITEM_UNIT_PRICE_EUR = 49.9;
+
 export async function submitOrder(payload: CreateOrderPayload): Promise<OrderResponse> {
   const baseUrl = getApiBaseUrl();
   try {
@@ -83,7 +85,10 @@ export async function submitOrder(payload: CreateOrderPayload): Promise<OrderRes
       const year = new Date().getFullYear();
       const randomSuffix = Math.floor(100000 + Math.random() * 900000);
       const mockOrderNumber = `ORD-${year}-${randomSuffix}`;
-      const totalAmount = payload.items.reduce((sum, item) => sum + item.quantity * 49.9, 0);
+      const totalAmount = payload.items.reduce(
+        (sum, item) => sum + item.quantity * DEV_FALLBACK_ITEM_UNIT_PRICE_EUR,
+        0,
+      );
 
       let paymentDetails: Hub3PaymentSlip | null = null;
       if (payload.paymentMethod === "transfer") {
