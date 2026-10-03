@@ -4,8 +4,10 @@ import { z } from "zod";
 import { env } from "../../config/env";
 import { adminService } from "./admin.service";
 import {
+  adminCreateProductSchema,
   adminListOrdersQuerySchema,
   adminUpdateOrderStatusSchema,
+  adminUpdateProductSchema,
 } from "./admin.schema";
 
 function verifyAdminAuth(request: FastifyRequest, reply: FastifyReply) {
@@ -146,6 +148,79 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return reply.status(400).send({
         error: {
           code: "UPDATE_STATUS_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Dohvat svih artikala za administrativni CMS (uključujući zalihe i neaktivne artikle)
+  fastify.get("/admin/products", { config: adminRouteConfig }, async () => {
+    const productsList = await adminService.listAdminProducts();
+    return {
+      data: productsList,
+      meta: { timestamp: new Date().toISOString() },
+    };
+  });
+
+  // Dodavanje novog artikla
+  fastify.post("/admin/products", { config: adminRouteConfig }, async (request, reply) => {
+    const input = adminCreateProductSchema.parse(request.body);
+    const ipAddress = request.ip;
+    try {
+      const created = await adminService.createProduct(input, ipAddress);
+      return reply.status(201).send({
+        data: created,
+        meta: { timestamp: new Date().toISOString() },
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo dodavanje artikla.";
+      return reply.status(400).send({
+        error: {
+          code: "CREATE_PRODUCT_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Uređivanje artikla
+  fastify.put("/admin/products/:id", { config: adminRouteConfig }, async (request, reply) => {
+    const { id } = z.object({ id: z.coerce.number().positive() }).parse(request.params);
+    const input = adminUpdateProductSchema.parse(request.body);
+    const ipAddress = request.ip;
+    try {
+      const updated = await adminService.updateProduct(id, input, ipAddress);
+      return {
+        data: updated,
+        meta: { timestamp: new Date().toISOString() },
+      };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo ažuriranje artikla.";
+      return reply.status(400).send({
+        error: {
+          code: "UPDATE_PRODUCT_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Deaktivacija artikla
+  fastify.delete("/admin/products/:id", { config: adminRouteConfig }, async (request, reply) => {
+    const { id } = z.object({ id: z.coerce.number().positive() }).parse(request.params);
+    const ipAddress = request.ip;
+    try {
+      const deactivated = await adminService.deleteProduct(id, ipAddress);
+      return {
+        data: { id: deactivated.id, slug: deactivated.slug, isActive: deactivated.isActive },
+        meta: { timestamp: new Date().toISOString() },
+      };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjela deaktivacija artikla.";
+      return reply.status(400).send({
+        error: {
+          code: "DELETE_PRODUCT_FAILED",
           message,
         },
       });

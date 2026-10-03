@@ -5,11 +5,14 @@ import {
   orderItems,
   orders,
   productBatches,
+  products,
   shippingAddresses,
 } from "../../db/schema";
 import type {
+  AdminCreateProductInput,
   AdminListOrdersQuery,
   AdminUpdateOrderStatusInput,
+  AdminUpdateProductInput,
 } from "./admin.schema";
 
 export class AdminService {
@@ -245,6 +248,161 @@ export class AdminService {
       pendingFulfillment: Number(pendingOrdersRes?.count || 0),
       currency: "EUR",
     };
+  }
+
+  async listAdminProducts() {
+    const rows = await db
+      .select()
+      .from(products)
+      .orderBy(desc(products.createdAt));
+
+    const batches = await db.select().from(productBatches);
+
+    return rows.map((p) => {
+      const productBatchesList = batches.filter((b) => b.productId === p.id);
+      const totalStock = productBatchesList.reduce(
+        (acc, b) => acc + (b.isReleased ? b.stockQuantity : 0),
+        0,
+      );
+      const latestBatch = productBatchesList.sort((a, b) => b.id - a.id)[0] || null;
+
+      return {
+        ...p,
+        price: Number(p.price),
+        stockQuantity: totalStock,
+        currentBatch: latestBatch
+          ? {
+              id: latestBatch.id,
+              batchNumber: latestBatch.batchNumber,
+              purityPercentage: latestBatch.purityPercentage,
+              stockQuantity: latestBatch.stockQuantity,
+              expiryDate: latestBatch.expiryDate,
+              isReleased: latestBatch.isReleased,
+            }
+          : null,
+      };
+    });
+  }
+
+  async createProduct(input: AdminCreateProductInput, ipAddress?: string) {
+    const [created] = await db
+      .insert(products)
+      .values({
+        slug: input.slug,
+        nameHr: input.nameHr,
+        nameEn: input.nameEn || null,
+        category: input.category,
+        categoryEn: input.categoryEn || null,
+        descriptionHr: input.descriptionHr,
+        descriptionEn: input.descriptionEn || null,
+        amount: input.amount,
+        price: input.price.toString(),
+        imageUrl: input.imageUrl || null,
+        featured: input.featured ?? false,
+        purity: input.purity || null,
+        casNumber: input.casNumber || null,
+        molecularWeight: input.molecularWeight || null,
+        isActive: input.isActive ?? true,
+      })
+      .returning();
+
+    await db.insert(auditLogs).values({
+      entityName: "PRODUCT",
+      entityId: created.id.toString(),
+      action: "PRODUCT_CREATED",
+      details: JSON.stringify({ slug: created.slug, name: created.nameHr, price: created.price }),
+      ipAddress: ipAddress || null,
+    });
+
+    return {
+      ...created,
+      price: Number(created.price),
+    };
+  }
+
+  async updateProduct(id: number, input: AdminUpdateProductInput, ipAddress?: string) {
+    type ProductUpdates = {
+      updatedAt: Date;
+      slug?: string;
+      nameHr?: string;
+      nameEn?: string | null;
+      category?: string;
+      categoryEn?: string | null;
+      descriptionHr?: string;
+      descriptionEn?: string | null;
+      amount?: string;
+      price?: string;
+      imageUrl?: string | null;
+      featured?: boolean;
+      purity?: string | null;
+      casNumber?: string | null;
+      molecularWeight?: string | null;
+      isActive?: boolean;
+    };
+
+    const updateValues: ProductUpdates = {
+      updatedAt: new Date(),
+    };
+    if (input.slug !== undefined) updateValues.slug = input.slug;
+    if (input.nameHr !== undefined) updateValues.nameHr = input.nameHr;
+    if (input.nameEn !== undefined) updateValues.nameEn = input.nameEn;
+    if (input.category !== undefined) updateValues.category = input.category;
+    if (input.categoryEn !== undefined) updateValues.categoryEn = input.categoryEn;
+    if (input.descriptionHr !== undefined) updateValues.descriptionHr = input.descriptionHr;
+    if (input.descriptionEn !== undefined) updateValues.descriptionEn = input.descriptionEn;
+    if (input.amount !== undefined) updateValues.amount = input.amount;
+    if (input.price !== undefined) updateValues.price = input.price.toString();
+    if (input.imageUrl !== undefined) updateValues.imageUrl = input.imageUrl;
+    if (input.featured !== undefined) updateValues.featured = input.featured;
+    if (input.purity !== undefined) updateValues.purity = input.purity;
+    if (input.casNumber !== undefined) updateValues.casNumber = input.casNumber;
+    if (input.molecularWeight !== undefined) updateValues.molecularWeight = input.molecularWeight;
+    if (input.isActive !== undefined) updateValues.isActive = input.isActive;
+
+    const [updated] = await db
+      .update(products)
+      .set(updateValues)
+      .where(eq(products.id, id))
+      .returning();
+
+    if (!updated) {
+      throw new Error(`Artikl s ID-om ${id} nije pronađen.`);
+    }
+
+    await db.insert(auditLogs).values({
+      entityName: "PRODUCT",
+      entityId: id.toString(),
+      action: "PRODUCT_UPDATED",
+      details: JSON.stringify(input),
+      ipAddress: ipAddress || null,
+    });
+
+    return {
+      ...updated,
+      price: Number(updated.price),
+    };
+  }
+
+  async deleteProduct(id: number, ipAddress?: string) {
+    const [deactivated] = await db
+      .update(products)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(eq(products.id, id))
+      .returning();
+
+    if (!deactivated) {
+      throw new Error(`Artikl s ID-om ${id} nije pronađen.`);
+    }
+
+    await db.insert(auditLogs).values({
+      entityName: "PRODUCT",
+      entityId: id.toString(),
+      action: "PRODUCT_DEACTIVATED",
+      details: JSON.stringify({ id, slug: deactivated.slug }),
+      ipAddress: ipAddress || null,
+    });
+
+    return deactivated;
   }
 }
 
