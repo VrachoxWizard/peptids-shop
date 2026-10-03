@@ -27,6 +27,11 @@ export default function Navbar() {
   const navLinks = [
     { path: "/", label: t.nav.home, matchPrefix: "/" },
     { path: "/proizvodi", label: t.nav.products, matchPrefix: "/proizvod" },
+    {
+      path: "/prati-posiljku",
+      label: language === "en" ? "Track Order" : "Praćenje pošiljke",
+      matchPrefix: "/prati-posiljku",
+    },
     { path: "/kontakt", label: t.nav.contact, matchPrefix: "/kontakt" },
   ];
 

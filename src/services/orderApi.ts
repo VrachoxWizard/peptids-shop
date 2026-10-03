@@ -115,3 +115,50 @@ export async function submitOrder(payload: CreateOrderPayload): Promise<OrderRes
     throw new Error(errMessage, { cause: error });
   }
 }
+
+export interface TrackedOrder {
+  orderNumber: string;
+  status: "CONFIRMED" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+  paymentMethod: "cod" | "keks" | "transfer";
+  paymentStatus: "PENDING" | "PAID" | "REFUNDED";
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+  currency: string;
+  createdAt: string;
+  items: Array<{
+    name: string;
+    unitPrice: number;
+    quantity: number;
+    totalPrice: number;
+  }>;
+  trackingNumber: string | null;
+  shippingCarrier: string | null;
+  shipping: {
+    recipientName: string | null;
+    city: string;
+    country: string;
+  } | null;
+  paymentDetails?: Hub3PaymentSlip | null;
+}
+
+export async function trackOrder(orderNumber: string): Promise<TrackedOrder> {
+  const baseUrl = getApiBaseUrl();
+  const cleanNumber = orderNumber.trim();
+
+  const res = await fetch(`${baseUrl}/orders/${encodeURIComponent(cleanNumber)}`);
+
+  if (!res.ok) {
+    const errorJson = await res.json().catch(() => null);
+    const message =
+      errorJson?.error?.message ||
+      (res.status === 404
+        ? "Narudžba s navedenim brojem nije pronađena."
+        : "Greška pri dohvatu statusa narudžbe.");
+    throw new ApiError(message, res.status, errorJson?.error?.code);
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+

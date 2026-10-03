@@ -14,6 +14,7 @@ const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Admin = lazy(() => import("./pages/Admin"));
+const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -41,6 +42,9 @@ function App() {
             <Route path="/kosarica" element={<Cart />} />
 
             <Route path="/kontakt" element={<Contact />} />
+
+            <Route path="/prati-posiljku" element={<OrderTracking />} />
+            <Route path="/narudzba/:orderNumber" element={<OrderTracking />} />
 
             <Route path="/admin" element={<Admin />} />
 
