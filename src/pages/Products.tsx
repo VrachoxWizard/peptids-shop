@@ -6,11 +6,13 @@ import { motion } from "motion/react";
 import ProductCard from "../components/product/ProductCard";
 import CatalogFilters from "../components/catalog/CatalogFilters";
 import CatalogPagination from "../components/catalog/CatalogPagination";
-import { products } from "../data/products";
+import { fetchProducts } from "../services/catalogApi";
+import { products as fallbackProducts } from "../data/products";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import { SHOP_CONFIG } from "../config/shop";
 import { filterAndSortProducts } from "../utils/productFilters";
+import type { Product } from "../types/product";
 
 export default function Products() {
   const { t, language } = useTranslation();
@@ -24,6 +26,37 @@ export default function Products() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchInput, setSearchInput] = useState(search);
+  const [loadedProducts, setLoadedProducts] = useState<Product[]>(fallbackProducts);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+    async function load() {
+      setIsLoading(true);
+      try {
+        const res = await fetchProducts(
+          {
+            search,
+            category,
+            sort,
+            maxPrice,
+          },
+          language,
+        );
+        if (!isCancelled) {
+          setLoadedProducts(res.items);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+    void load();
+    return () => {
+      isCancelled = true;
+    };
+  }, [search, category, sort, maxPrice, language]);
 
   const updateParam = useCallback(
     (key: string, value: string) => {
@@ -69,13 +102,13 @@ export default function Products() {
   ];
 
   const filteredProducts = useMemo(() => {
-    return filterAndSortProducts(products, {
+    return filterAndSortProducts(loadedProducts, {
       search,
       category,
       maxPrice,
       sort,
     });
-  }, [search, category, sort, maxPrice]);
+  }, [loadedProducts, search, category, sort, maxPrice]);
 
   const totalPages = Math.ceil(
     filteredProducts.length / SHOP_CONFIG.PRODUCTS_PER_PAGE,
@@ -161,7 +194,9 @@ export default function Products() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className={`grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 transition-opacity duration-200 ${
+              isLoading ? "opacity-60 pointer-events-none" : "opacity-100"
+            }`}
           >
             {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

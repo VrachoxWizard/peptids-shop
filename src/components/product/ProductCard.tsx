@@ -6,6 +6,7 @@ import { getLocalizedProduct, type Product } from "../../types/product";
 import { useCartStore } from "../../store/cartStore";
 import { useTranslation } from "../../i18n/useTranslation";
 import ProductVisual from "./ProductVisual";
+import StockBadge from "./StockBadge";
 
 type ProductCardProps = {
   product: Product;
@@ -93,10 +94,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             {loc.description}
           </p>
 
-          {/* Delivery & origin trust signal - Flat row without card-in-card */}
-          <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-600 font-medium">
-            <Truck size={14} className="text-sky-700 shrink-0" />
-            <span>{t.product.stockReassurance}</span>
+          {/* Delivery & origin trust signal with StockBadge */}
+          <div className="mt-3 flex items-center justify-between gap-1.5 text-xs text-slate-600 font-medium">
+            <div className="flex items-center gap-1.5">
+              <Truck size={14} className="text-sky-700 shrink-0" />
+              <span>{t.product.stockReassurance}</span>
+            </div>
+            <StockBadge inStock={product.inStock} stockQuantity={product.stockQuantity} />
           </div>
 
           {/* Optional CAS specification line */}
@@ -125,27 +129,37 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            className={`tactile-press flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-colors duration-150 ${
-              justAdded
-                ? "bg-emerald-600 text-white shadow-xs"
-                : "bg-slate-900 text-white hover:bg-slate-800 shadow-xs"
-            }`}
-          >
-            {justAdded ? (
-              <>
-                <Check size={15} />
-                <span>{t.product.addedInline}</span>
-              </>
-            ) : (
-              <>
-                <ShoppingCart size={15} />
-                <span>{t.product.addBtn}</span>
-              </>
-            )}
-          </button>
+          {product.inStock === false || product.stockQuantity === 0 ? (
+            <button
+              type="button"
+              disabled
+              className="flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+            >
+              <span>{language === "en" ? "Sold Out" : "Rasprodano"}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className={`tactile-press flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-colors duration-150 ${
+                justAdded
+                  ? "bg-emerald-600 text-white shadow-xs"
+                  : "bg-slate-900 text-white hover:bg-slate-800 shadow-xs"
+              }`}
+            >
+              {justAdded ? (
+                <>
+                  <Check size={15} />
+                  <span>{t.product.addedInline}</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingCart size={15} />
+                  <span>{t.product.addBtn}</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
     </article>

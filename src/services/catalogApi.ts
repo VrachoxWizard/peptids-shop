@@ -131,7 +131,7 @@ export async function fetchProducts(
       page: json.pagination?.page ?? 1,
       totalPages: json.pagination?.totalPages ?? 1,
     };
-  } catch (err: unknown) {
+  } catch {
     // Ako poslužitelj nije dostupan, koristimo lokalne podatke
     const filtered = filterAndSortProducts(localProducts, {
       search: query.search || "",

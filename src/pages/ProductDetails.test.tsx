@@ -66,7 +66,19 @@ describe("ProductDetails Page", () => {
     expect(items[0].quantity).toBe(2);
   });
 
-  it("renders not found state when slug does not match any product", () => {
+  it("renders stock badge when product is loaded", () => {
+    render(
+      <MemoryRouter initialEntries={[`/proizvod/${products[0].slug}`]}>
+        <Routes>
+          <Route path="/proizvod/:slug" element={<ProductDetails />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/dostupno odmah/i)).toBeInTheDocument();
+  });
+
+  it("renders not found state when slug does not match any product", async () => {
     render(
       <MemoryRouter initialEntries={["/proizvod/nepostojeci-proizvod"]}>
         <Routes>
@@ -75,6 +87,6 @@ describe("ProductDetails Page", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/proizvod nije pronađen/i)).toBeInTheDocument();
+    expect(await screen.findByText(/proizvod nije pronađen/i)).toBeInTheDocument();
   });
 });

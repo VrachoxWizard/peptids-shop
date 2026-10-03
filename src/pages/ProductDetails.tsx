@@ -3,11 +3,13 @@ import { Check, ChevronRight, Minus, Plus, ShieldCheck, ShoppingCart, Truck } fr
 import { Link, useParams } from "react-router-dom";
 
 import ProductVisual from "../components/product/ProductVisual";
-import { products } from "../data/products";
+import StockBadge from "../components/product/StockBadge";
+import { products as fallbackProducts } from "../data/products";
+import { fetchProductBySlug } from "../services/catalogApi";
 import { useCartStore } from "../store/cartStore";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
-import { getLocalizedProduct } from "../types/product";
+import { getLocalizedProduct, type Product } from "../types/product";
 
 export default function ProductDetails() {
   const { slug } = useParams();
@@ -16,6 +18,25 @@ export default function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [rawProduct, setRawProduct] = useState<Product | null>(() => {
+    return fallbackProducts.find((product) => product.slug === slug) || null;
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(!rawProduct);
+
+  useEffect(() => {
+    if (!slug) return;
+    let isCancelled = false;
+    void fetchProductBySlug(slug, language).then((prod) => {
+      if (!isCancelled) {
+        setRawProduct(prod);
+        setIsLoading(false);
+      }
+    });
+    return () => {
+      isCancelled = true;
+    };
+  }, [slug, language]);
 
   useEffect(() => {
     return () => {
@@ -27,10 +48,19 @@ export default function ProductDetails() {
 
   const addItem = useCartStore((state) => state.addItem);
 
-  const rawProduct = products.find((product) => product.slug === slug);
   const product = rawProduct ? getLocalizedProduct(rawProduct, language) : null;
 
   useDocumentTitle(product ? product.name : t.product.notFound);
+
+  if (isLoading) {
+    return (
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-slate-900 animate-pulse">
+        <div className="h-6 w-32 bg-slate-200 rounded mb-4" />
+        <div className="h-10 w-96 bg-slate-200 rounded mb-8" />
+        <div className="h-64 bg-slate-100 rounded-2xl" />
+      </main>
+    );
+  }
 
   if (!rawProduct || !product) {
     return (
@@ -104,9 +134,12 @@ export default function ProductDetails() {
 
         {/* Product info */}
         <div className="flex flex-col justify-center">
-          <span className="text-xs sm:text-sm font-mono font-semibold uppercase tracking-wider text-sky-700">
-            {product.category}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs sm:text-sm font-mono font-semibold uppercase tracking-wider text-sky-700">
+              {product.category}
+            </span>
+            <StockBadge inStock={rawProduct.inStock} stockQuantity={rawProduct.stockQuantity} />
+          </div>
 
           <h1 className="font-serif mt-2 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-950 break-words leading-tight">
             {product.name}
@@ -207,27 +240,37 @@ export default function ProductDetails() {
           </div>
 
           {/* Add to cart button */}
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            className={`tactile-press mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm sm:text-base font-bold transition-colors duration-150 shadow-xs ${
-              justAdded
-                ? "bg-emerald-700 text-white"
-                : "bg-slate-950 text-white hover:bg-slate-800"
-            }`}
-          >
-            {justAdded ? (
-              <>
-                <Check size={18} />
-                <span>{t.product.addedToast}</span>
-              </>
-            ) : (
-              <>
-                <ShoppingCart size={18} />
-                <span>{t.product.addToCartWithQty} {quantity > 1 ? `(${quantity})` : ""}</span>
-              </>
-            )}
-          </button>
+          {rawProduct.inStock === false || rawProduct.stockQuantity === 0 ? (
+            <button
+              type="button"
+              disabled
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm sm:text-base font-bold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
+            >
+              <span>{language === "en" ? "Sold Out" : "Trenutno rasprodano"}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className={`tactile-press mt-6 flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm sm:text-base font-bold transition-colors duration-150 shadow-xs ${
+                justAdded
+                  ? "bg-emerald-700 text-white"
+                  : "bg-slate-950 text-white hover:bg-slate-800"
+              }`}
+            >
+              {justAdded ? (
+                <>
+                  <Check size={18} />
+                  <span>{t.product.addedToast}</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingCart size={18} />
+                  <span>{t.product.addToCartWithQty} {quantity > 1 ? `(${quantity})` : ""}</span>
+                </>
+              )}
+            </button>
+          )}
 
           {/* Croatian buyer reassurance */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-700">
