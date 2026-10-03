@@ -117,7 +117,7 @@ export function buildApp(): FastifyInstance {
   });
 
   // Health check endpoint s provjerom stanja baze
-  app.get("/health", async () => {
+  app.get("/health", async (_request, reply) => {
     let dbStatus = "connected";
     try {
       await pool.query("SELECT 1");
@@ -125,13 +125,14 @@ export function buildApp(): FastifyInstance {
       dbStatus = "disconnected";
     }
 
-    return {
-      status: "ok",
+    const isHealthy = dbStatus === "connected";
+    return reply.status(isHealthy ? 200 : 503).send({
+      status: isHealthy ? "ok" : "degraded",
       database: dbStatus,
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),
       service: "PeptideLab API",
-    };
+    });
   });
 
   // Registracija API v1 modula

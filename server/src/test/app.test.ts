@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildApp } from "../app";
+import { pool } from "../db";
 import { generateHub3Payload } from "../modules/payments/hub3";
 
 describe("PeptideLab Fastify Server", () => {
   it("GET /health vraća status ok i service naziv", async () => {
+    const querySpy = vi.spyOn(pool, "query").mockResolvedValueOnce({ rows: [{ "?column?": 1 }] } as never);
     const app = buildApp();
     const response = await app.inject({
       method: "GET",
@@ -16,6 +18,22 @@ describe("PeptideLab Fastify Server", () => {
     expect(body.service).toBe("PeptideLab API");
     expect(body).toHaveProperty("database");
     expect(body).toHaveProperty("uptime");
+    querySpy.mockRestore();
+  });
+
+  it("GET /health vraća status 503 i degraded kada baza nije dostupna", async () => {
+    const querySpy = vi.spyOn(pool, "query").mockRejectedValueOnce(new Error("Connection refused"));
+    const app = buildApp();
+    const response = await app.inject({
+      method: "GET",
+      url: "/health",
+    });
+
+    expect(response.statusCode).toBe(503);
+    const body = response.json();
+    expect(body.status).toBe("degraded");
+    expect(body.database).toBe("disconnected");
+    querySpy.mockRestore();
   });
 
   it("POST /api/v1/inquiries odbija neispravne podatke sa Zod greškom", async () => {
@@ -158,6 +176,7 @@ describe("PeptideLab Fastify Server", () => {
   });
 
   it("Poslužitelj postavlja sigurnosna HTTP zaglavlja (Helmet)", async () => {
+    const querySpy = vi.spyOn(pool, "query").mockResolvedValueOnce({ rows: [{ "?column?": 1 }] } as never);
     const app = buildApp();
     const response = await app.inject({
       method: "GET",
@@ -167,6 +186,7 @@ describe("PeptideLab Fastify Server", () => {
     expect(response.statusCode).toBe(200);
     expect(response.headers["x-content-type-options"]).toBe("nosniff");
     expect(response.headers["x-frame-options"]).toBe("SAMEORIGIN");
+    querySpy.mockRestore();
   });
 
   it("POST /api/v1/orders odbija prekomjerno dugačke podatke (DoS zaštita)", async () => {
