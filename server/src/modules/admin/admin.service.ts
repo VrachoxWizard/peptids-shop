@@ -2,6 +2,7 @@ import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { db } from "../../db";
 import {
   auditLogs,
+  inquiries,
   orderItems,
   orders,
   productBatches,
@@ -9,8 +10,10 @@ import {
   shippingAddresses,
 } from "../../db/schema";
 import type {
+  AdminCreateBatchInput,
   AdminCreateProductInput,
   AdminListOrdersQuery,
+  AdminUpdateBatchStockInput,
   AdminUpdateOrderStatusInput,
   AdminUpdateProductInput,
 } from "./admin.schema";
@@ -403,6 +406,102 @@ export class AdminService {
     });
 
     return deactivated;
+  }
+
+  async createBatch(input: AdminCreateBatchInput, ipAddress?: string) {
+    const [created] = await db
+      .insert(productBatches)
+      .values({
+        productId: input.productId,
+        batchNumber: input.batchNumber,
+        purityPercentage:
+          input.purityPercentage !== undefined
+            ? input.purityPercentage.toString()
+            : null,
+        synthesisDate: input.synthesisDate || null,
+        expiryDate: input.expiryDate || null,
+        coaPdfUrl: input.coaPdfUrl || null,
+        stockQuantity: input.stockQuantity ?? 100,
+        isReleased: input.isReleased ?? true,
+      })
+      .returning();
+
+    await db.insert(auditLogs).values({
+      entityName: "BATCH",
+      entityId: created.id.toString(),
+      action: "BATCH_CREATED",
+      details: JSON.stringify({
+        productId: created.productId,
+        batchNumber: created.batchNumber,
+        stockQuantity: created.stockQuantity,
+      }),
+      ipAddress: ipAddress || null,
+    });
+
+    return created;
+  }
+
+  async updateBatchStock(
+    batchId: number,
+    input: AdminUpdateBatchStockInput,
+    ipAddress?: string,
+  ) {
+    type BatchUpdates = {
+      stockQuantity?: number;
+      isReleased?: boolean;
+    };
+
+    const updateValues: BatchUpdates = {};
+    if (input.stockQuantity !== undefined)
+      updateValues.stockQuantity = input.stockQuantity;
+    if (input.isReleased !== undefined)
+      updateValues.isReleased = input.isReleased;
+
+    const [updated] = await db
+      .update(productBatches)
+      .set(updateValues)
+      .where(eq(productBatches.id, batchId))
+      .returning();
+
+    if (!updated) {
+      throw new Error(`Serija s ID-om ${batchId} nije pronađena.`);
+    }
+
+    await db.insert(auditLogs).values({
+      entityName: "BATCH",
+      entityId: batchId.toString(),
+      action: "BATCH_STOCK_UPDATED",
+      details: JSON.stringify(input),
+      ipAddress: ipAddress || null,
+    });
+
+    return updated;
+  }
+
+  async listInquiries() {
+    return await db.select().from(inquiries).orderBy(desc(inquiries.createdAt));
+  }
+
+  async updateInquiryStatus(id: number, status: string, ipAddress?: string) {
+    const [updated] = await db
+      .update(inquiries)
+      .set({ status })
+      .where(eq(inquiries.id, id))
+      .returning();
+
+    if (!updated) {
+      throw new Error(`Upit s ID-om ${id} nije pronađen.`);
+    }
+
+    await db.insert(auditLogs).values({
+      entityName: "INQUIRY",
+      entityId: id.toString(),
+      action: "INQUIRY_STATUS_UPDATED",
+      details: JSON.stringify({ status }),
+      ipAddress: ipAddress || null,
+    });
+
+    return updated;
   }
 }
 

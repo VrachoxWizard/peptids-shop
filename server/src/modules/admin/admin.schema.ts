@@ -51,3 +51,27 @@ export const adminUpdateProductSchema = adminCreateProductSchema.partial();
 export type AdminCreateProductInput = z.infer<typeof adminCreateProductSchema>;
 export type AdminUpdateProductInput = z.infer<typeof adminUpdateProductSchema>;
 
+export const adminCreateBatchSchema = z.object({
+  productId: z.coerce.number().positive("ID proizvoda mora biti pozitivan broj"),
+  batchNumber: z.string().min(2).max(100),
+  purityPercentage: z.coerce.number().min(0).max(100).optional(),
+  synthesisDate: z.string().optional(),
+  expiryDate: z.string().optional(),
+  coaPdfUrl: z.string().max(512).optional(),
+  stockQuantity: z.coerce.number().min(0, "Zaliha ne može biti negativna").default(100),
+  isReleased: z.boolean().default(true),
+});
+
+export const adminUpdateBatchStockSchema = z.object({
+  stockQuantity: z.coerce.number().min(0, "Zaliha ne može biti negativna"),
+  isReleased: z.boolean().optional(),
+});
+
+export type AdminCreateBatchInput = z.infer<typeof adminCreateBatchSchema>;
+export type AdminUpdateBatchStockInput = z.infer<typeof adminUpdateBatchStockSchema>;
+
+export const adminUpdateInquiryStatusSchema = z.object({
+  status: z.enum(["NEW", "IN_PROGRESS", "ANSWERED", "ARCHIVED"]),
+});
+
+export type AdminUpdateInquiryStatusInput = z.infer<typeof adminUpdateInquiryStatusSchema>;

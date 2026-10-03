@@ -4,8 +4,11 @@ import { z } from "zod";
 import { env } from "../../config/env";
 import { adminService } from "./admin.service";
 import {
+  adminCreateBatchSchema,
   adminCreateProductSchema,
   adminListOrdersQuerySchema,
+  adminUpdateBatchStockSchema,
+  adminUpdateInquiryStatusSchema,
   adminUpdateOrderStatusSchema,
   adminUpdateProductSchema,
 } from "./admin.schema";
@@ -221,6 +224,80 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return reply.status(400).send({
         error: {
           code: "DELETE_PRODUCT_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Dodavanje nove serije (batch) za artikl
+  fastify.post("/admin/batches", { config: adminRouteConfig }, async (request, reply) => {
+    const input = adminCreateBatchSchema.parse(request.body);
+    const ipAddress = request.ip;
+    try {
+      const created = await adminService.createBatch(input, ipAddress);
+      return reply.status(201).send({
+        data: created,
+        meta: { timestamp: new Date().toISOString() },
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo dodavanje serije.";
+      return reply.status(400).send({
+        error: {
+          code: "CREATE_BATCH_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Ažuriranje zaliha serije artikla
+  fastify.patch("/admin/batches/:id/stock", { config: adminRouteConfig }, async (request, reply) => {
+    const { id } = z.object({ id: z.coerce.number().positive() }).parse(request.params);
+    const input = adminUpdateBatchStockSchema.parse(request.body);
+    const ipAddress = request.ip;
+    try {
+      const updated = await adminService.updateBatchStock(id, input, ipAddress);
+      return {
+        data: updated,
+        meta: { timestamp: new Date().toISOString() },
+      };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo ažuriranje zaliha serije.";
+      return reply.status(400).send({
+        error: {
+          code: "UPDATE_BATCH_STOCK_FAILED",
+          message,
+        },
+      });
+    }
+  });
+
+  // Dohvat svih kontakt upita
+  fastify.get("/admin/inquiries", { config: adminRouteConfig }, async () => {
+    const inquiriesList = await adminService.listInquiries();
+    return {
+      data: inquiriesList,
+      meta: { timestamp: new Date().toISOString() },
+    };
+  });
+
+  // Ažuriranje statusa kontakt upita (npr. IN_PROGRESS, ANSWERED, ARCHIVED)
+  fastify.patch("/admin/inquiries/:id/status", { config: adminRouteConfig }, async (request, reply) => {
+    const { id } = z.object({ id: z.coerce.number().positive() }).parse(request.params);
+    const input = adminUpdateInquiryStatusSchema.parse(request.body);
+    const ipAddress = request.ip;
+    try {
+      const updated = await adminService.updateInquiryStatus(id, input.status, ipAddress);
+      return {
+        data: updated,
+        meta: { timestamp: new Date().toISOString() },
+      };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo ažuriranje statusa upita.";
+      return reply.status(400).send({
+        error: {
+          code: "UPDATE_INQUIRY_STATUS_FAILED",
           message,
         },
       });
