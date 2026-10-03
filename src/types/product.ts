@@ -14,6 +14,15 @@ export type Product = {
   purity?: string;
   casNumber?: string;
   molecularWeight?: string;
+  inStock?: boolean;
+  stockQuantity?: number;
+  currentBatch?: {
+    batchNumber: string;
+    purityPercentage: string | number | null;
+    inStock: boolean;
+    coaUrl?: string | null;
+    stockQuantity?: number;
+  } | null;
 };
 
 export function getLocalizedProduct(product: Product, lang: "hr" | "en") {
