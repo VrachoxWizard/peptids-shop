@@ -2,10 +2,12 @@ import { useState } from "react";
 import {
   AlertTriangle,
   Building2,
+  Mail,
   MapPin,
   Phone,
   User,
 } from "lucide-react";
+import FormFieldInput from "./FormFieldInput";
 
 export interface CheckoutFormData {
   recipientName: string;
@@ -27,7 +29,7 @@ export type CheckoutFormErrors = Partial<Record<keyof CheckoutFormData, string>>
 interface CheckoutFormProps {
   formData: CheckoutFormData;
   errors: CheckoutFormErrors;
-  onChange: (field: keyof CheckoutFormData, value: any) => void;
+  onChange: <K extends keyof CheckoutFormData>(field: K, value: CheckoutFormData[K]) => void;
   language: "hr" | "en";
 }
 
@@ -69,141 +71,73 @@ export default function CheckoutForm({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* Ime i prezime */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Ime i prezime *" : "Full Name *"}
-          </label>
-          <div className="relative">
-            <User size={15} className="absolute left-3 top-3 text-slate-400" />
-            <input
-              type="text"
-              value={formData.recipientName}
-              onChange={(e) => onChange("recipientName", e.target.value)}
-              placeholder={isHr ? "Dr. Ivan Horvat" : "John Doe"}
-              className={`w-full rounded-lg border bg-white pl-9 pr-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-                errors.recipientName ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-              }`}
-            />
-          </div>
-          {errors.recipientName && (
-            <p className="text-xs text-red-600 mt-1">{errors.recipientName}</p>
-          )}
-        </div>
+        <FormFieldInput
+          label={isHr ? "Ime i prezime *" : "Full Name *"}
+          value={formData.recipientName}
+          onChange={(val) => onChange("recipientName", val)}
+          placeholder={isHr ? "Dr. Ivan Horvat" : "John Doe"}
+          error={errors.recipientName}
+          icon={<User size={15} />}
+        />
 
-        {/* Email */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Email adresa za potvrdu *" : "Email Address *"}
-          </label>
-          <input
-            type="email"
-            value={formData.customerEmail}
-            onChange={(e) => onChange("customerEmail", e.target.value)}
-            placeholder="ivan.horvat@lab.hr"
-            className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-              errors.customerEmail ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-            }`}
-          />
-          {errors.customerEmail && (
-            <p className="text-xs text-red-600 mt-1">{errors.customerEmail}</p>
-          )}
-        </div>
+        <FormFieldInput
+          label={isHr ? "Email adresa za potvrdu *" : "Email Address *"}
+          type="email"
+          value={formData.customerEmail}
+          onChange={(val) => onChange("customerEmail", val)}
+          placeholder="ivan.horvat@lab.hr"
+          error={errors.customerEmail}
+          icon={<Mail size={15} />}
+        />
 
-        {/* Broj mobitela */}
-        <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Broj mobitela (za SMS najavu kurira) *" : "Phone Number (for SMS delivery) *"}
-          </label>
-          <div className="relative">
-            <Phone size={15} className="absolute left-3 top-3 text-slate-400" />
-            <input
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={(e) => onChange("phoneNumber", e.target.value)}
-              placeholder="+385 91 234 5678"
-              className={`w-full rounded-lg border bg-white pl-9 pr-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-                errors.phoneNumber ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-              }`}
-            />
-          </div>
-          <p className="text-[11px] text-slate-500 mt-1">
-            {isHr
+        <FormFieldInput
+          className="sm:col-span-2"
+          label={isHr ? "Broj mobitela (za SMS najavu kurira) *" : "Phone Number (for SMS delivery) *"}
+          type="tel"
+          value={formData.phoneNumber}
+          onChange={(val) => onChange("phoneNumber", val)}
+          placeholder="+385 91 234 5678"
+          error={errors.phoneNumber}
+          helperText={
+            isHr
               ? "Kurir šalje SMS s vremenskim okvirom dostave i poveznicom za preusmjeravanje."
-              : "Used strictly for courier notification and delivery scheduling."}
-          </p>
-          {errors.phoneNumber && (
-            <p className="text-xs text-red-600 mt-1">{errors.phoneNumber}</p>
-          )}
-        </div>
+              : "Used strictly for courier notification and delivery scheduling."
+          }
+          icon={<Phone size={15} />}
+        />
 
-        {/* Ulica i kućni broj */}
-        <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Ulica i kućni broj *" : "Street Address *"}
-          </label>
-          <input
-            type="text"
-            value={formData.streetAddress}
-            onChange={(e) => onChange("streetAddress", e.target.value)}
-            placeholder={isHr ? "Ilica 120, Stan 4B" : "Main Street 12"}
-            className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-              errors.streetAddress ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-            }`}
-          />
-          {errors.streetAddress && (
-            <p className="text-xs text-red-600 mt-1">{errors.streetAddress}</p>
-          )}
-        </div>
+        <FormFieldInput
+          className="sm:col-span-2"
+          label={isHr ? "Ulica i kućni broj *" : "Street Address *"}
+          value={formData.streetAddress}
+          onChange={(val) => onChange("streetAddress", val)}
+          placeholder={isHr ? "Ilica 120, Stan 4B" : "Main Street 12"}
+          error={errors.streetAddress}
+        />
 
-        {/* Grad */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Grad *" : "City *"}
-          </label>
-          <input
-            type="text"
-            value={formData.city}
-            onChange={(e) => onChange("city", e.target.value)}
-            placeholder={isHr ? "Zagreb" : "Zagreb"}
-            className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-              errors.city ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-            }`}
-          />
-          {errors.city && <p className="text-xs text-red-600 mt-1">{errors.city}</p>}
-        </div>
+        <FormFieldInput
+          label={isHr ? "Grad *" : "City *"}
+          value={formData.city}
+          onChange={(val) => onChange("city", val)}
+          placeholder={isHr ? "Zagreb" : "Zagreb"}
+          error={errors.city}
+        />
 
-        {/* Poštanski broj */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Poštanski broj *" : "Postal Code *"}
-          </label>
-          <input
-            type="text"
-            value={formData.postalCode}
-            onChange={(e) => onChange("postalCode", e.target.value)}
-            placeholder="10000"
-            className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 shadow-xs ${
-              errors.postalCode ? "border-red-400" : "border-slate-300 focus:border-sky-700"
-            }`}
-          />
-          {errors.postalCode && (
-            <p className="text-xs text-red-600 mt-1">{errors.postalCode}</p>
-          )}
-        </div>
+        <FormFieldInput
+          label={isHr ? "Poštanski broj *" : "Postal Code *"}
+          value={formData.postalCode}
+          onChange={(val) => onChange("postalCode", val)}
+          placeholder="10000"
+          error={errors.postalCode}
+        />
 
-        {/* Država */}
-        <div className="sm:col-span-2">
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
-            {isHr ? "Država" : "Country"}
-          </label>
-          <input
-            type="text"
-            readOnly
-            value={isHr ? "Hrvatska (Isporuka 24–48h)" : "Croatia (Delivery 24–48h)"}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-600 cursor-not-allowed"
-          />
-        </div>
+        <FormFieldInput
+          className="sm:col-span-2"
+          label={isHr ? "Država" : "Country"}
+          value={isHr ? "Hrvatska (Isporuka 24–48h)" : "Croatia (Delivery 24–48h)"}
+          onChange={() => {}}
+          readOnly
+        />
       </div>
 
       {/* R1 Račun Toggle */}
@@ -221,59 +155,39 @@ export default function CheckoutForm({
 
         {showR1 && (
           <div className="mt-3 grid gap-3 sm:grid-cols-2 rounded-lg border border-slate-200 bg-slate-50/70 p-3.5">
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                {isHr ? "Naziv pravne osobe *" : "Company Name *"}
-              </label>
-              <input
-                type="text"
-                value={formData.companyName}
-                onChange={(e) => onChange("companyName", e.target.value)}
-                placeholder={isHr ? "Institut za biotehnologiju d.o.o." : "Biotech Institute Ltd."}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs sm:text-sm text-slate-900 outline-none"
-              />
-              {errors.companyName && (
-                <p className="text-xs text-red-600 mt-1">{errors.companyName}</p>
-              )}
-            </div>
+            <FormFieldInput
+              label={isHr ? "Naziv pravne osobe *" : "Company Name *"}
+              value={formData.companyName}
+              onChange={(val) => onChange("companyName", val)}
+              placeholder={isHr ? "Institut za biotehnologiju d.o.o." : "Biotech Institute Ltd."}
+              error={errors.companyName}
+            />
 
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                {isHr ? "OIB / Porezni broj *" : "Tax ID / VAT number *"}
-              </label>
-              <input
-                type="text"
-                value={formData.companyOib}
-                onChange={(e) => onChange("companyOib", e.target.value)}
-                placeholder="12345678901"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs sm:text-sm text-slate-900 outline-none"
-              />
-              {errors.companyOib && (
-                <p className="text-xs text-red-600 mt-1">{errors.companyOib}</p>
-              )}
-            </div>
+            <FormFieldInput
+              label={isHr ? "OIB / Porezni broj *" : "Tax ID / VAT number *"}
+              value={formData.companyOib}
+              onChange={(val) => onChange("companyOib", val)}
+              placeholder="12345678901"
+              error={errors.companyOib}
+            />
           </div>
         )}
       </div>
 
       {/* Napomena za kurira */}
-      <div>
-        <label className="block text-xs font-semibold text-slate-700 mb-1">
-          {isHr ? "Napomena za dostavu / Paketomat (opcionalno)" : "Delivery Note / Parcel Locker ID (optional)"}
-        </label>
-        <input
-          type="text"
-          value={formData.deliveryInstructions}
-          onChange={(e) => onChange("deliveryInstructions", e.target.value)}
-          placeholder={isHr ? "Npr. Ostaviti u paketomatu Dubrava ili kod susjeda" : "e.g., Leave at locker or reception"}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-slate-900 outline-none placeholder:text-slate-400"
-        />
-      </div>
+      <FormFieldInput
+        label={isHr ? "Napomena za dostavu / Paketomat (opcionalno)" : "Delivery Note / Parcel Locker ID (optional)"}
+        value={formData.deliveryInstructions}
+        onChange={(val) => onChange("deliveryInstructions", val)}
+        placeholder={isHr ? "Npr. Ostaviti u paketomatu Dubrava ili kod susjeda" : "e.g., Leave at locker or reception"}
+      />
 
       {/* RUO (Research Use Only) Zakonska Potvrda */}
-      <div className={`rounded-xl border p-4 transition ${
-        errors.ruoAccepted ? "border-red-400 bg-red-50/60" : "border-amber-200 bg-amber-50/50"
-      }`}>
+      <div
+        className={`rounded-xl border p-4 transition ${
+          errors.ruoAccepted ? "border-red-400 bg-red-50/60" : "border-amber-200 bg-amber-50/50"
+        }`}
+      >
         <div className="flex items-start gap-3">
           <div className="mt-0.5 shrink-0 text-amber-700">
             <AlertTriangle size={18} />

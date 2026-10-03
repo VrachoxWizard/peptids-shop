@@ -1,15 +1,16 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import Contact from "./Contact";
 import { translations } from "../i18n/translations";
+import * as inquiryApi from "../services/inquiryApi";
 
 describe("Contact Page", () => {
   it("renders contact info and form", () => {
     render(
       <MemoryRouter>
         <Contact />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText(translations.hr.contact.title)).toBeInTheDocument();
@@ -21,7 +22,7 @@ describe("Contact Page", () => {
     render(
       <MemoryRouter>
         <Contact />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const submitBtn = screen.getByRole("button", { name: translations.hr.contact.sendBtn });
@@ -32,11 +33,17 @@ describe("Contact Page", () => {
     expect(screen.getByText(translations.hr.contact.valMessage)).toBeInTheDocument();
   });
 
-  it("submits successfully with valid data", () => {
+  it("submits successfully with valid data", async () => {
+    vi.spyOn(inquiryApi, "submitInquiry").mockResolvedValueOnce({
+      id: 1,
+      status: "NEW",
+      createdAt: new Date().toISOString(),
+    });
+
     render(
       <MemoryRouter>
         <Contact />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.change(screen.getByPlaceholderText(translations.hr.contact.namePlaceholder), {
@@ -52,6 +59,6 @@ describe("Contact Page", () => {
     const submitBtn = screen.getByRole("button", { name: translations.hr.contact.sendBtn });
     fireEvent.click(submitBtn);
 
-    expect(screen.getByText(translations.hr.contact.successTitle)).toBeInTheDocument();
+    expect(await screen.findByText(translations.hr.contact.successTitle)).toBeInTheDocument();
   });
 });

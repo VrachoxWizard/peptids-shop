@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validateContactForm, isValidEmail } from "./validation";
+import { validateContactForm, isValidEmail, validateCheckoutForm } from "./validation";
 
 describe("validation utils", () => {
   it("validates correct emails", () => {
@@ -45,5 +45,34 @@ describe("validation utils", () => {
     expect(result.errors.name).toBe("Ime prekratko");
     expect(result.errors.email).toBe("Email nevalja");
     expect(result.errors.message).toBe("Poruka prekratka");
+  });
+
+  it("validates checkout form correctly and checks RUO acceptance", () => {
+    const validCheckout = {
+      recipientName: "Dr. Marko",
+      customerEmail: "marko@lab.hr",
+      phoneNumber: "+385912345678",
+      streetAddress: "Ilica 10",
+      city: "Zagreb",
+      postalCode: "10000",
+      country: "HR",
+      needR1: false,
+      companyName: "",
+      companyOib: "",
+      deliveryInstructions: "",
+      ruoAccepted: true,
+    };
+
+    const validResult = validateCheckoutForm(validCheckout, "hr");
+    expect(validResult.isValid).toBe(true);
+    expect(validResult.errors).toEqual({});
+
+    const invalidResult = validateCheckoutForm(
+      { ...validCheckout, ruoAccepted: false, customerEmail: "bad" },
+      "hr",
+    );
+    expect(invalidResult.isValid).toBe(false);
+    expect(invalidResult.errors.ruoAccepted).toBeDefined();
+    expect(invalidResult.errors.customerEmail).toBeDefined();
   });
 });

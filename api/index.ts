@@ -8,7 +8,8 @@ export const config = {
   },
 };
 
-let app: any = null;
+type AppInstance = ReturnType<typeof buildApp>;
+let app: AppInstance | null = null;
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (!app) {

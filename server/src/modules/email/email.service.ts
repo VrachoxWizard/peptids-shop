@@ -30,15 +30,36 @@ export interface SendOrderEmailPayload {
   paymentDetails?: Hub3PaymentSlip | null;
 }
 
+function escapeHtml(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export class EmailService {
   async sendOrderConfirmation(payload: SendOrderEmailPayload): Promise<boolean> {
     const paymentInstructions = this.formatPaymentInstructions(payload);
+
+    const safeCustomerName = escapeHtml(payload.customerName);
+    const safeOrderNumber = escapeHtml(payload.orderNumber);
+    const safeRecipientName = escapeHtml(payload.shippingAddress.recipientName);
+    const safeStreet = escapeHtml(payload.shippingAddress.streetAddress);
+    const safeCity = escapeHtml(payload.shippingAddress.city);
+    const safePostalCode = escapeHtml(payload.shippingAddress.postalCode);
+    const safeCountry = escapeHtml(payload.shippingAddress.country);
+    const safePhone = escapeHtml(payload.customerPhone);
+    const safeCompanyName = payload.shippingAddress.companyName ? escapeHtml(payload.shippingAddress.companyName) : null;
+    const safeCompanyOib = payload.shippingAddress.companyOib ? escapeHtml(payload.shippingAddress.companyOib) : null;
 
     const itemsHtml = payload.items
       .map(
         (i) => `
         <tr>
-          <td style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-weight: 500;">${i.name}</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-weight: 500;">${escapeHtml(i.name)}</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; text-align: center; font-family: monospace;">${i.quantity}x</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; text-align: right; font-family: monospace;">${i.unitPrice.toFixed(2)} ${payload.currency}</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e2e8f0; text-align: right; font-family: monospace; font-weight: bold;">${i.totalPrice.toFixed(2)} ${payload.currency}</td>
@@ -54,8 +75,8 @@ export class EmailService {
         </div>
 
         <div style="padding: 24px; background-color: #ffffff; border: 1px solid #e2e8f0; border-top: none;">
-          <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">Zahvaljujemo na narudžbi, ${payload.customerName}!</h2>
-          <p style="font-size: 14px; color: #64748b;">Vaša narudžba <strong>${payload.orderNumber}</strong> je uspješno zaprimljena i nalazi se u sustavu.</p>
+          <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">Zahvaljujemo na narudžbi, ${safeCustomerName}!</h2>
+          <p style="font-size: 14px; color: #64748b;">Vaša narudžba <strong>${safeOrderNumber}</strong> je uspješno zaprimljena i nalazi se u sustavu.</p>
 
           <div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
             <h3 style="margin: 0 0 12px; font-size: 14px; text-transform: uppercase; color: #475569; letter-spacing: 0.5px;">Stavke narudžbe</h3>
@@ -90,11 +111,11 @@ export class EmailService {
 
           <div style="margin: 20px 0; padding: 16px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px;">
             <h3 style="margin: 0 0 8px; font-size: 14px; text-transform: uppercase; color: #475569; letter-spacing: 0.5px;">Adresa dostave</h3>
-            <p style="margin: 2px 0;"><strong>${payload.shippingAddress.recipientName}</strong></p>
-            <p style="margin: 2px 0;">${payload.shippingAddress.streetAddress}</p>
-            <p style="margin: 2px 0;">${payload.shippingAddress.postalCode} ${payload.shippingAddress.city}, ${payload.shippingAddress.country}</p>
-            <p style="margin: 2px 0; color: #64748b;">Kontakt telefon: ${payload.customerPhone}</p>
-            ${payload.shippingAddress.companyName ? `<p style="margin: 2px 0; color: #0369a1;">R1 račun: ${payload.shippingAddress.companyName} (OIB: ${payload.shippingAddress.companyOib})</p>` : ""}
+            <p style="margin: 2px 0;"><strong>${safeRecipientName}</strong></p>
+            <p style="margin: 2px 0;">${safeStreet}</p>
+            <p style="margin: 2px 0;">${safePostalCode} ${safeCity}, ${safeCountry}</p>
+            <p style="margin: 2px 0; color: #64748b;">Kontakt telefon: ${safePhone}</p>
+            ${safeCompanyName ? `<p style="margin: 2px 0; color: #0369a1;">R1 račun: ${safeCompanyName} (OIB: ${safeCompanyOib})</p>` : ""}
           </div>
 
           ${paymentInstructions}
@@ -120,19 +141,28 @@ export class EmailService {
   async sendMerchantAlert(payload: SendOrderEmailPayload): Promise<boolean> {
     if (!env.STORE_OWNER_EMAIL) return false;
 
+    const safeOrderNumber = escapeHtml(payload.orderNumber);
+    const safeCustomerName = escapeHtml(payload.customerName);
+    const safeCustomerPhone = escapeHtml(payload.customerPhone);
+    const safeCustomerEmail = escapeHtml(payload.customerEmail);
+    const safeStreet = escapeHtml(payload.shippingAddress.streetAddress);
+    const safePostalCode = escapeHtml(payload.shippingAddress.postalCode);
+    const safeCity = escapeHtml(payload.shippingAddress.city);
+    const safePaymentMethod = escapeHtml(payload.paymentMethod.toUpperCase());
+
     const htmlBody = `
       <div style="font-family: sans-serif; font-size: 14px; color: #0f172a;">
-        <h2>Nova narudžba: ${payload.orderNumber}</h2>
-        <p><strong>Iznos:</strong> ${payload.total.toFixed(2)} ${payload.currency} (${payload.paymentMethod.toUpperCase()})</p>
-        <p><strong>Kupac:</strong> ${payload.customerName} (${payload.customerPhone}, ${payload.customerEmail})</p>
-        <p><strong>Dostava:</strong> ${payload.shippingAddress.streetAddress}, ${payload.shippingAddress.postalCode} ${payload.shippingAddress.city}</p>
+        <h2>Nova narudžba: ${safeOrderNumber}</h2>
+        <p><strong>Iznos:</strong> ${payload.total.toFixed(2)} ${payload.currency} (${safePaymentMethod})</p>
+        <p><strong>Kupac:</strong> ${safeCustomerName} (${safeCustomerPhone}, ${safeCustomerEmail})</p>
+        <p><strong>Dostava:</strong> ${safeStreet}, ${safePostalCode} ${safeCity}</p>
         <p><strong>Broj stavki:</strong> ${payload.items.length}</p>
       </div>
     `;
 
     return this.sendViaResend({
       to: env.STORE_OWNER_EMAIL,
-      subject: `[NOVA NARUDŽBA] ${payload.orderNumber} - ${payload.total.toFixed(2)} EUR`,
+      subject: `[NOVA NARUDŽBA] ${safeOrderNumber} - ${payload.total.toFixed(2)} EUR`,
       html: htmlBody,
     });
   }

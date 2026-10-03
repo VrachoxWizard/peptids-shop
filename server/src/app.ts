@@ -2,7 +2,7 @@ import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
 import fastifySensible from "@fastify/sensible";
-import Fastify, { type FastifyInstance } from "fastify";
+import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import { ZodError } from "zod";
 import { env } from "./config/env";
 import { pool } from "./db";
@@ -10,9 +10,12 @@ import { catalogRoutes } from "./modules/catalog/catalog.routes";
 import { ordersRoutes } from "./modules/orders/orders.routes";
 import { inquiriesRoutes } from "./modules/inquiries/inquiries.routes";
 import { adminRoutes } from "./modules/admin/admin.routes";
-
 export function buildApp(): FastifyInstance {
+  const allowedOrigins = env.CORS_ORIGIN.split(",").map((o) => o.trim());
+
   const app = Fastify({
+    trustProxy: true,
+    bodyLimit: 131072, // 128 KB limit za sprječavanje DoS/memory exhaustion napada
     logger: {
       level: env.NODE_ENV === "production" ? "info" : "debug",
       transport:
@@ -35,14 +38,24 @@ export function buildApp(): FastifyInstance {
     crossOriginResourcePolicy: { policy: "cross-origin" },
   });
 
-  // 2. CORS pravila (u produkciji dozvoljava samo konfigurirani CORS_ORIGIN)
+  // 2. CORS pravila s podrškom za više produkcijskih domena i lokalni razvoj
   app.register(fastifyCors, {
-    origin:
-      env.NODE_ENV === "production"
-        ? env.CORS_ORIGIN
-        : env.CORS_ORIGIN === "*"
-        ? true
-        : [env.CORS_ORIGIN, "http://localhost:5173", "http://localhost:3000"],
+    origin: (origin, cb) => {
+      // Zahtjevi bez origin zaglavlja (server-to-server, cURL, healthcheck)
+      if (!origin) {
+        return cb(null, true);
+      }
+
+      if (env.NODE_ENV !== "production") {
+        return cb(null, true);
+      }
+
+      if (allowedOrigins.includes(origin) || allowedOrigins.includes("*")) {
+        return cb(null, true);
+      }
+
+      return cb(new Error("CORS unauthorized origin"), false);
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   });
@@ -57,7 +70,7 @@ export function buildApp(): FastifyInstance {
   app.register(fastifySensible);
 
   // 5. Globalno rukovanje greškama s podrškom za Zod format
-  app.setErrorHandler((error: any, request, reply) => {
+  app.setErrorHandler((error: FastifyError | Error, request, reply) => {
     request.log.error(error);
 
     if (error instanceof ZodError) {
@@ -79,10 +92,18 @@ export function buildApp(): FastifyInstance {
       });
     }
 
-    const statusCode = error.statusCode || 500;
+    const statusCode =
+      "statusCode" in error && typeof error.statusCode === "number"
+        ? error.statusCode
+        : 500;
+    const errorCode =
+      "code" in error && typeof error.code === "string"
+        ? error.code
+        : "INTERNAL_SERVER_ERROR";
+
     return reply.status(statusCode).send({
       error: {
-        code: error.code || "INTERNAL_SERVER_ERROR",
+        code: errorCode,
         message:
           statusCode === 500 && env.NODE_ENV === "production"
             ? "Došlo je do neočekivane pogreške na poslužitelju."

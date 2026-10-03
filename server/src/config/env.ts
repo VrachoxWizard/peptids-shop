@@ -23,6 +23,23 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
   STORE_OWNER_EMAIL: z.string().email().optional(),
   EMAIL_FROM: z.string().default("PeptideLab <narudzbe@peptidelab.hr>"),
+}).superRefine((data, ctx) => {
+  if (data.NODE_ENV === "production") {
+    if (!data.ADMIN_API_KEY || data.ADMIN_API_KEY === "dev_admin_secret_key_replace_in_prod") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["ADMIN_API_KEY"],
+        message:
+          "U produkcijskom okruženju (NODE_ENV=production) ADMIN_API_KEY mora biti postavljen na jedinstven i siguran tajni ključ.",
+      });
+    } else if (data.ADMIN_API_KEY.length < 16) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["ADMIN_API_KEY"],
+        message: "ADMIN_API_KEY u produkciji mora sadržavati barem 16 znakova.",
+      });
+    }
+  }
 });
 
 const parsed = envSchema.safeParse(process.env);

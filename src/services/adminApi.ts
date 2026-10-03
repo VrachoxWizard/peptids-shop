@@ -1,9 +1,4 @@
-function getApiBaseUrl(): string {
-  if (typeof window !== "undefined" && window.location?.origin) {
-    return import.meta.env.VITE_API_URL || `${window.location.origin}/api/v1`;
-  }
-  return import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
-}
+import { getApiBaseUrl } from "./apiClient";
 
 export interface AdminOrderSummary {
   id: string;

@@ -5,7 +5,9 @@ import {
   Mail,
   MapPin,
   MessageSquare,
+  RefreshCw,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import {
@@ -13,6 +15,7 @@ import {
   type ContactFormErrors,
   validateContactForm,
 } from "../utils/validation";
+import { submitInquiry } from "../services/inquiryApi";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -26,6 +29,7 @@ export default function Contact() {
 
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function handleChange(
     event:
@@ -47,7 +51,7 @@ export default function Contact() {
     setSubmitted(false);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const result = validateContactForm(formData, {
@@ -61,14 +65,23 @@ export default function Contact() {
       return;
     }
 
-    setErrors({});
-    setSubmitted(true);
-
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
+    setIsSubmitting(true);
+    try {
+      await submitInquiry(formData);
+      setErrors({});
+      setSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+      toast.success(t.contact.successTitle);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Došlo je do greške pri slanju upita.";
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -244,9 +257,17 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="tactile-press w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-slate-950 px-6 py-3 font-semibold text-white hover:bg-slate-800 transition text-sm cursor-pointer shadow-sm"
+              disabled={isSubmitting}
+              className="tactile-press w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3 font-semibold text-white hover:bg-slate-800 transition text-sm cursor-pointer shadow-sm disabled:opacity-50"
             >
-              {t.contact.sendBtn}
+              {isSubmitting ? (
+                <>
+                  <RefreshCw size={16} className="animate-spin" />
+                  <span>Slanje upita...</span>
+                </>
+              ) : (
+                <span>{t.contact.sendBtn}</span>
+              )}
             </button>
           </form>
         </div>

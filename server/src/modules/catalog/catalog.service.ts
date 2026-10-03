@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gte, ilike, lte, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, lte, or, sql } from "drizzle-orm";
 import { db } from "../../db";
 import { products, productBatches } from "../../db/schema";
 import type { GetProductsQuery } from "./catalog.schema";
@@ -57,20 +57,20 @@ export class CatalogService {
 
     const whereClause = and(...conditions);
 
-    // Dohvati paginirane proizvode
-    const rows = await db
-      .select()
-      .from(products)
-      .where(whereClause)
-      .orderBy(orderByClause)
-      .limit(limit)
-      .offset(offset);
-
-    // Dohvati ukupan broj rezultata za paginaciju
-    const [{ count }] = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(products)
-      .where(whereClause);
+    // Dohvati paginirane proizvode i ukupan broj rezultata paralelno
+    const [rows, [{ count }]] = await Promise.all([
+      db
+        .select()
+        .from(products)
+        .where(whereClause)
+        .orderBy(orderByClause)
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(products)
+        .where(whereClause),
+    ]);
 
     const localizedProducts = rows.map((p) => ({
       id: p.id,

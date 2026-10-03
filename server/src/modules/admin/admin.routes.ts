@@ -9,49 +9,75 @@ import {
 } from "./admin.schema";
 
 function verifyAdminAuth(request: FastifyRequest, reply: FastifyReply) {
-  const headerKey = request.headers["x-admin-key"] as string | undefined;
-  const authHeader = request.headers.authorization;
+  const rawHeaderKey = request.headers["x-admin-key"];
+  const headerKey = Array.isArray(rawHeaderKey)
+    ? rawHeaderKey[0]
+    : typeof rawHeaderKey === "string"
+    ? rawHeaderKey
+    : undefined;
+
+  const authHeader = Array.isArray(request.headers.authorization)
+    ? request.headers.authorization[0]
+    : request.headers.authorization;
   const bearerKey = authHeader?.startsWith("Bearer ")
     ? authHeader.slice(7).trim()
     : undefined;
 
   const keyToTest = headerKey || bearerKey;
 
+  if (
+    env.NODE_ENV === "production" &&
+    (!env.ADMIN_API_KEY ||
+      env.ADMIN_API_KEY === "dev_admin_secret_key_replace_in_prod")
+  ) {
+    return reply.status(500).send({
+      error: {
+        code: "SERVER_MISCONFIGURATION",
+        message:
+          "Administratorski pristup je onemogućen jer poslužitelj nema postavljen siguran produkcijski ključ.",
+      },
+    });
+  }
+
   if (!keyToTest || !env.ADMIN_API_KEY) {
-    reply.status(401).send({
+    return reply.status(401).send({
       error: {
         code: "UNAUTHORIZED",
         message: "Nedostaje administratorski autorizacijski ključ.",
       },
     });
-    return;
   }
 
-  const providedBuf = Buffer.from(keyToTest);
-  const secretBuf = Buffer.from(env.ADMIN_API_KEY);
+  const hashKey = (key: string) =>
+    crypto.createHash("sha256").update(key).digest();
+  const providedHash = hashKey(keyToTest);
+  const secretHash = hashKey(env.ADMIN_API_KEY);
 
-  if (
-    providedBuf.length !== secretBuf.length ||
-    !crypto.timingSafeEqual(providedBuf, secretBuf)
-  ) {
-    reply.status(403).send({
+  if (!crypto.timingSafeEqual(providedHash, secretHash)) {
+    return reply.status(403).send({
       error: {
         code: "FORBIDDEN",
         message: "Neispravan administratorski ključ.",
       },
     });
-    return;
   }
 }
+
+const adminRouteConfig = {
+  rateLimit: {
+    max: 15,
+    timeWindow: "1 minute",
+  },
+};
 
 export async function adminRoutes(fastify: FastifyInstance) {
   // Primijeni provjeru administratorskih ovlasti na sve rute unutar ovog modula
   fastify.addHook("preHandler", async (request, reply) => {
-    verifyAdminAuth(request, reply);
+    return verifyAdminAuth(request, reply);
   });
 
   // Statistika za administratorsku kontrolnu ploču
-  fastify.get("/admin/stats", async () => {
+  fastify.get("/admin/stats", { config: adminRouteConfig }, async () => {
     const stats = await adminService.getDashboardStats();
     return {
       data: stats,
@@ -60,7 +86,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Pregled svih narudžbi uz filtriranje i pretraživanje
-  fastify.get("/admin/orders", async (request) => {
+  fastify.get("/admin/orders", { config: adminRouteConfig }, async (request) => {
     const query = adminListOrdersQuerySchema.parse(request.query);
     const result = await adminService.listOrders(query);
 
@@ -76,7 +102,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Detaljan pregled jedne narudžbe
-  fastify.get("/admin/orders/:id", async (request, reply) => {
+  fastify.get("/admin/orders/:id", { config: adminRouteConfig }, async (request, reply) => {
     const { id } = z.object({ id: z.string().uuid() }).parse(request.params);
     const orderDetails = await adminService.getOrderDetails(id);
 
@@ -96,7 +122,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Ažuriranje statusa narudžbe i unos koda za praćenje pošiljke (GLS)
-  fastify.patch("/admin/orders/:id/status", async (request, reply) => {
+  fastify.patch("/admin/orders/:id/status", { config: adminRouteConfig }, async (request, reply) => {
     const { id } = z.object({ id: z.string().uuid() }).parse(request.params);
     const input = adminUpdateOrderStatusSchema.parse(request.body);
     const ipAddress = request.ip;
@@ -115,11 +141,12 @@ export async function adminRoutes(fastify: FastifyInstance) {
         },
         meta: { timestamp: new Date().toISOString() },
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Neuspjelo ažuriranje statusa narudžbe.";
       return reply.status(400).send({
         error: {
           code: "UPDATE_STATUS_FAILED",
-          message: err.message || "Neuspjelo ažuriranje statusa narudžbe.",
+          message,
         },
       });
     }

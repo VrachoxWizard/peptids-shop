@@ -60,7 +60,8 @@ describe("PeptideLab Fastify Server", () => {
     expect(response.statusCode).toBe(400);
     const body = response.json();
     expect(body.error.code).toBe("VALIDATION_ERROR");
-    const ruoError = body.error.details.find((d: any) =>
+    type Detail = { field: string; message: string };
+    const ruoError = (body.error.details as Detail[]).find((d) =>
       d.field.includes("ruoDeclarationAccepted"),
     );
     expect(ruoError).toBeDefined();
@@ -90,7 +91,8 @@ describe("PeptideLab Fastify Server", () => {
     expect(response.statusCode).toBe(400);
     const body = response.json();
     expect(body.error.code).toBe("VALIDATION_ERROR");
-    const itemsError = body.error.details.find((d: any) =>
+    type Detail = { field: string; message: string };
+    const itemsError = (body.error.details as Detail[]).find((d) =>
       d.field.includes("items"),
     );
     expect(itemsError).toBeDefined();
@@ -137,5 +139,59 @@ describe("PeptideLab Fastify Server", () => {
     expect(response.statusCode).toBe(403);
     const body = response.json();
     expect(body.error.code).toBe("FORBIDDEN");
+  });
+
+  it("GET /api/v1/admin/orders sigurno rukuje višestrukim/nizom admin zaglavlja bez rušenja poslužitelja", async () => {
+    const app = buildApp();
+    const response = await app.inject({
+      method: "GET",
+      url: "/api/v1/admin/orders",
+      headers: {
+        // Višestruka zaglavlja se prenose kao niz stringova
+        "x-admin-key": ["key1", "key2"] as unknown as string,
+      },
+    });
+
+    expect(response.statusCode).toBe(403);
+    const body = response.json();
+    expect(body.error.code).toBe("FORBIDDEN");
+  });
+
+  it("Poslužitelj postavlja sigurnosna HTTP zaglavlja (Helmet)", async () => {
+    const app = buildApp();
+    const response = await app.inject({
+      method: "GET",
+      url: "/health",
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["x-content-type-options"]).toBe("nosniff");
+    expect(response.headers["x-frame-options"]).toBe("SAMEORIGIN");
+  });
+
+  it("POST /api/v1/orders odbija prekomjerno dugačke podatke (DoS zaštita)", async () => {
+    const app = buildApp();
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/v1/orders",
+      payload: {
+        items: [{ productId: 1, quantity: 1 }],
+        customerEmail: "ivan@lab.hr",
+        shippingAddress: {
+          recipientName: "A".repeat(250), // Prekoračuje limit od 200 znakova
+          streetAddress: "Ilica 10",
+          city: "Zagreb",
+          postalCode: "10000",
+          country: "HR",
+          phoneNumber: "+385912345678",
+        },
+        paymentMethod: "cod",
+        ruoDeclarationAccepted: true,
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+    const body = response.json();
+    expect(body.error.code).toBe("VALIDATION_ERROR");
   });
 });

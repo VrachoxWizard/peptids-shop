@@ -11,6 +11,12 @@
       "version": "1.0.2",
       "installedAt": "2026-10-03T05:31:51.632Z",
       "platform": "gemini"
+    },
+    "security-audit": {
+      "version": "1.0.0",
+      "installedAt": "2026-10-03T09:04:06.813Z",
+      "platform": "gemini",
+      "contentHash": "00c1fd837d045d7906629543c8f3d2268e8800365083373c7ed151fb53828230"
     }
   }
 }

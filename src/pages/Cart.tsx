@@ -18,6 +18,7 @@ import { products } from "../data/products";
 import { getLocalizedProduct } from "../types/product";
 import { calculateShipping } from "../config/shop";
 import { submitOrder, type Hub3PaymentSlip } from "../services/orderApi";
+import { validateCheckoutForm } from "../utils/validation";
 
 export default function Cart() {
   const { t, language } = useTranslation();
@@ -62,7 +63,10 @@ export default function Cart() {
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
 
-  function handleFormFieldChange(field: keyof CheckoutFormData, value: any) {
+  function handleFormFieldChange<K extends keyof CheckoutFormData>(
+    field: K,
+    value: CheckoutFormData[K],
+  ) {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -88,64 +92,10 @@ export default function Cart() {
     toast.success(t.cart.clearedToast);
   }
 
-  function validateCheckout(): boolean {
-    const errors: CheckoutFormErrors = {};
-    const isHr = language === "hr";
-
-    if (!formData.recipientName.trim() || formData.recipientName.trim().length < 2) {
-      errors.recipientName = isHr
-        ? "Ime i prezime moraju imati barem 2 znaka."
-        : "Name must be at least 2 characters.";
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.customerEmail.trim() || !emailRegex.test(formData.customerEmail)) {
-      errors.customerEmail = isHr
-        ? "Unesite valjanu email adresu."
-        : "Please enter a valid email address.";
-    }
-
-    if (!formData.phoneNumber.trim() || formData.phoneNumber.trim().length < 6) {
-      errors.phoneNumber = isHr
-        ? "Broj mobitela je obavezan radi SMS najave dostave."
-        : "Phone number is required for SMS delivery scheduling.";
-    }
-
-    if (!formData.streetAddress.trim() || formData.streetAddress.trim().length < 3) {
-      errors.streetAddress = isHr
-        ? "Ulica i kućni broj su obavezni."
-        : "Street address is required.";
-    }
-
-    if (!formData.city.trim() || formData.city.trim().length < 2) {
-      errors.city = isHr ? "Grad je obavezan." : "City is required.";
-    }
-
-    if (!formData.postalCode.trim() || formData.postalCode.trim().length < 4) {
-      errors.postalCode = isHr ? "Poštanski broj je obavezan." : "Postal code is required.";
-    }
-
-    if (formData.needR1) {
-      if (!formData.companyName.trim()) {
-        errors.companyName = isHr ? "Naziv tvrtke je obavezan." : "Company name is required.";
-      }
-      if (!formData.companyOib.trim() || formData.companyOib.trim().length < 8) {
-        errors.companyOib = isHr ? "Unesite valjani OIB / porezni broj." : "Invalid Tax ID.";
-      }
-    }
-
-    if (!formData.ruoAccepted) {
-      errors.ruoAccepted = isHr
-        ? "Obavezno je potvrditi izjavu o laboratorijskoj namjeni (RUO)."
-        : "You must confirm the laboratory research declaration (RUO).";
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
   async function handleCheckout() {
-    if (!validateCheckout()) {
+    const validation = validateCheckoutForm(formData, language);
+    if (!validation.isValid) {
+      setFormErrors(validation.errors);
       toast.error(
         language === "hr"
           ? "Molimo ispunite sve obavezne podatke za dostavu i potvrdite RUO izjavu."
@@ -154,6 +104,7 @@ export default function Cart() {
       return;
     }
 
+    setFormErrors({});
     setIsSubmitting(true);
 
     try {
@@ -194,8 +145,12 @@ export default function Cart() {
           ? "Narudžba zaprimljena! Podaci za uplatu su generirani."
           : "Narudžba zaprimljena! Upute za Keks Pay su prikazane.",
       );
-    } catch (error: any) {
-      toast.error(error.message || "Došlo je do greške pri obradi narudžbe.");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Došlo je do greške pri obradi narudžbe.";
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

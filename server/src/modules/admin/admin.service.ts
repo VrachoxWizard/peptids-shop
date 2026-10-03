@@ -148,50 +148,81 @@ export class AdminService {
     input: AdminUpdateOrderStatusInput,
     ipAddress?: string,
   ) {
-    const [existing] = await db
-      .select()
-      .from(orders)
-      .where(eq(orders.id, orderId));
+    return await db.transaction(async (tx) => {
+      const [existing] = await tx
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId));
 
-    if (!existing) {
-      throw new Error(`Narudžba s ID-om ${orderId} ne postoji.`);
-    }
+      if (!existing) {
+        throw new Error(`Narudžba s ID-om ${orderId} ne postoji.`);
+      }
 
-    const updates: Record<string, any> = {
-      updatedAt: new Date(),
-    };
+      // Ako se status mijenja u CANCELLED, vrati zalihe u dodijeljene serije
+      const isCancelling = existing.status !== "CANCELLED" && input.status === "CANCELLED";
+      if (isCancelling) {
+        const items = await tx
+          .select()
+          .from(orderItems)
+          .where(eq(orderItems.orderId, orderId));
 
-    if (input.status) updates.status = input.status;
-    if (input.paymentStatus) updates.paymentStatus = input.paymentStatus;
-    if (input.trackingNumber !== undefined)
-      updates.trackingNumber = input.trackingNumber;
-    if (input.shippingCarrier !== undefined)
-      updates.shippingCarrier = input.shippingCarrier;
+        for (const item of items) {
+          if (item.batchId) {
+            await tx
+              .update(productBatches)
+              .set({
+                stockQuantity: sql`${productBatches.stockQuantity} + ${item.quantity}`,
+              })
+              .where(eq(productBatches.id, item.batchId));
+          }
+        }
+      }
 
-    const [updated] = await db
-      .update(orders)
-      .set(updates)
-      .where(eq(orders.id, orderId))
-      .returning();
+      type OrderUpdateData = {
+        updatedAt: Date;
+        status?: "CONFIRMED" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
+        paymentStatus?: "PENDING" | "PAID" | "REFUNDED";
+        trackingNumber?: string | null;
+        shippingCarrier?: string;
+      };
 
-    // Zabilježi u audit log
-    await db.insert(auditLogs).values({
-      entityName: "ORDER",
-      entityId: orderId,
-      action: "STATUS_UPDATED",
-      details: JSON.stringify({
-        previousStatus: existing.status,
-        newStatus: input.status || existing.status,
-        previousPaymentStatus: existing.paymentStatus,
-        newPaymentStatus: input.paymentStatus || existing.paymentStatus,
-        trackingNumber: input.trackingNumber,
-        carrier: input.shippingCarrier,
-        note: input.note,
-      }),
-      ipAddress: ipAddress || null,
+      const updates: OrderUpdateData = {
+        updatedAt: new Date(),
+      };
+
+      if (input.status) updates.status = input.status;
+      if (input.paymentStatus) updates.paymentStatus = input.paymentStatus;
+      if (input.trackingNumber !== undefined)
+        updates.trackingNumber = input.trackingNumber;
+      if (input.shippingCarrier !== undefined)
+        updates.shippingCarrier = input.shippingCarrier;
+
+      const [updated] = await tx
+        .update(orders)
+        .set(updates)
+        .where(eq(orders.id, orderId))
+        .returning();
+
+      // Zabilježi u audit log
+      await tx.insert(auditLogs).values({
+        entityName: "ORDER",
+        entityId: orderId,
+        action: isCancelling ? "ORDER_CANCELLED_RESTOCKED" : "STATUS_UPDATED",
+        details: JSON.stringify({
+          previousStatus: existing.status,
+          newStatus: input.status || existing.status,
+          previousPaymentStatus: existing.paymentStatus,
+          newPaymentStatus: input.paymentStatus || existing.paymentStatus,
+          trackingNumber: input.trackingNumber,
+          carrier: input.shippingCarrier,
+          note: input.note,
+          restocked: isCancelling,
+        }),
+        ipAddress: ipAddress || null,
+      });
+
+      return updated;
     });
-
-    return updated;
   }
 
   async getDashboardStats() {

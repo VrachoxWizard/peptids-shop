@@ -125,7 +125,8 @@ export class OrdersService {
               eq(productBatches.isReleased, true),
             ),
           )
-          .limit(1);
+          .limit(1)
+          .for("update");
 
         if (batch) {
           if (batch.stockQuantity < item.quantity) {
@@ -272,9 +273,16 @@ export class OrdersService {
         quantity: i.quantity,
         totalPrice: Number(i.totalPrice),
       })),
+      trackingNumber: order.trackingNumber || null,
+      shippingCarrier: order.shippingCarrier || null,
       shipping: address
         ? {
-            recipientName: address.recipientName,
+            recipientName: address.recipientName
+              ? address.recipientName
+                  .split(" ")
+                  .map((w) => (w.length > 1 ? `${w[0]}***` : w))
+                  .join(" ")
+              : null,
             city: address.city,
             country: address.country,
           }

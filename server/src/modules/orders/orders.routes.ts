@@ -44,38 +44,51 @@ export async function ordersRoutes(fastify: FastifyInstance) {
           timestamp: new Date().toISOString(),
         },
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Neuspjelo kreiranje narudžbe.";
       return reply.status(400).send({
         error: {
           code: "ORDER_CREATION_FAILED",
-          message: err.message || "Neuspjelo kreiranje narudžbe.",
+          message,
         },
       });
     }
   });
 
-  // Praćenje statusa narudžbe
-  fastify.get("/orders/:orderNumber", async (request, reply) => {
-    const { orderNumber } = z
-      .object({ orderNumber: z.string().min(1) })
-      .parse(request.params);
-
-    const order = await ordersService.getOrderByNumber(orderNumber);
-
-    if (!order) {
-      return reply.status(404).send({
-        error: {
-          code: "ORDER_NOT_FOUND",
-          message: "Narudžba s navedenim brojem nije pronađena.",
+  // Praćenje statusa narudžbe sa zaštitom od prekomjernog broja upita
+  fastify.get(
+    "/orders/:orderNumber",
+    {
+      config: {
+        rateLimit: {
+          max: 10,
+          timeWindow: "1 minute",
         },
-      });
-    }
-
-    return {
-      data: order,
-      meta: {
-        timestamp: new Date().toISOString(),
       },
-    };
-  });
+    },
+    async (request, reply) => {
+      const { orderNumber } = z
+        .object({ orderNumber: z.string().min(1) })
+        .parse(request.params);
+
+      const order = await ordersService.getOrderByNumber(orderNumber);
+
+      if (!order) {
+        return reply.status(404).send({
+          error: {
+            code: "ORDER_NOT_FOUND",
+            message: "Narudžba s navedenim brojem nije pronađena.",
+          },
+        });
+      }
+
+      return {
+        data: order,
+        meta: {
+          timestamp: new Date().toISOString(),
+        },
+      };
+    },
+  );
 }
