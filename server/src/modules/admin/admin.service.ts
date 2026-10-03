@@ -99,7 +99,7 @@ export class AdminService {
       .select()
       .from(auditLogs)
       .where(eq(auditLogs.entityId, order.id))
-      .orderBy(desc(auditLogs.createdAt));
+      .orderBy(desc(auditLogs.timestamp));
 
     return {
       order: {
@@ -138,7 +138,7 @@ export class AdminService {
         id: l.id,
         action: l.action,
         details: l.details,
-        createdAt: l.createdAt,
+        createdAt: l.timestamp,
       })),
     };
   }

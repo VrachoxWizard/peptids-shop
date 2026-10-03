@@ -19,6 +19,8 @@ export interface Hub3SlipResponse {
   amountFormatted: string;
 }
 
+export type Hub3PaymentSlip = Hub3SlipResponse;
+
 /**
  * Generira standardni hrvatski HUB3 string payload za 2D crtični kod (SEPA uplatnica).
  * Format propisuje Hrvatska udruga banaka (HUB30 specifikacija).
