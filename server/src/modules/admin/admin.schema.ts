@@ -75,3 +75,11 @@ export const adminUpdateInquiryStatusSchema = z.object({
 });
 
 export type AdminUpdateInquiryStatusInput = z.infer<typeof adminUpdateInquiryStatusSchema>;
+
+export const adminListInquiriesQuerySchema = z.object({
+  status: z.enum(["NEW", "IN_PROGRESS", "ANSWERED", "ARCHIVED"]).optional(),
+  limit: z.coerce.number().min(1).max(100).default(50),
+  offset: z.coerce.number().min(0).default(0),
+});
+
+export type AdminListInquiriesQuery = z.infer<typeof adminListInquiriesQuerySchema>;

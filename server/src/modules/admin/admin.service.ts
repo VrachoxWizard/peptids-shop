@@ -12,6 +12,7 @@ import {
 import type {
   AdminCreateBatchInput,
   AdminCreateProductInput,
+  AdminListInquiriesQuery,
   AdminListOrdersQuery,
   AdminUpdateBatchStockInput,
   AdminUpdateOrderStatusInput,
@@ -493,8 +494,34 @@ export class AdminService {
     return updated;
   }
 
-  async listInquiries() {
-    return await db.select().from(inquiries).orderBy(desc(inquiries.createdAt));
+  async listInquiries(query?: AdminListInquiriesQuery) {
+    const limit = query?.limit ?? 50;
+    const offset = query?.offset ?? 0;
+    const conditions = [];
+
+    if (query?.status) {
+      conditions.push(eq(inquiries.status, query.status));
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const [totalRes] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(inquiries)
+      .where(whereClause);
+
+    const rows = await db
+      .select()
+      .from(inquiries)
+      .where(whereClause)
+      .orderBy(desc(inquiries.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    return {
+      inquiries: rows,
+      total: Number(totalRes?.count || 0),
+    };
   }
 
   async updateInquiryStatus(id: number, status: string, ipAddress?: string) {

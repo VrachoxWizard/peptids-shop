@@ -6,6 +6,7 @@ import { adminService } from "./admin.service";
 import {
   adminCreateBatchSchema,
   adminCreateProductSchema,
+  adminListInquiriesQuerySchema,
   adminListOrdersQuerySchema,
   adminUpdateBatchStockSchema,
   adminUpdateInquiryStatusSchema,
@@ -274,10 +275,16 @@ export async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Dohvat svih kontakt upita
-  fastify.get("/admin/inquiries", { config: adminRouteConfig }, async () => {
-    const inquiriesList = await adminService.listInquiries();
+  fastify.get("/admin/inquiries", { config: adminRouteConfig }, async (request) => {
+    const query = adminListInquiriesQuerySchema.parse(request.query);
+    const result = await adminService.listInquiries(query);
     return {
-      data: inquiriesList,
+      data: result.inquiries,
+      pagination: {
+        total: result.total,
+        limit: query.limit,
+        offset: query.offset,
+      },
       meta: { timestamp: new Date().toISOString() },
     };
   });
