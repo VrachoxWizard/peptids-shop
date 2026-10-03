@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Sparkles, X } from "lucide-react";
 import type { AdminCreateProductInput, AdminProduct } from "../../services/adminApi";
+import { slugifyHr } from "../../utils/slugify";
 
 interface AdminProductFormModalProps {
   isOpen: boolean;
@@ -64,16 +65,7 @@ function AdminProductFormModalContent({
 
   function generateSlug() {
     if (!formData.nameHr) return;
-    const generated = formData.nameHr
-      .toLowerCase()
-      .trim()
-      .replace(/[čć]/g, "c")
-      .replace(/đ/g, "dj")
-      .replace(/š/g, "s")
-      .replace(/ž/g, "z")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    setFormData((prev) => ({ ...prev, slug: generated }));
+    setFormData((prev) => ({ ...prev, slug: slugifyHr(formData.nameHr) }));
   }
 
   function validate() {

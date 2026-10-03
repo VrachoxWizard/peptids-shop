@@ -2,18 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
-  CheckCircle2,
-  Clock,
   ExternalLink,
   Package,
   RefreshCw,
   Search,
   Truck,
-  XCircle,
 } from "lucide-react";
 import { trackOrder, type TrackedOrder } from "../services/orderApi";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
+import OrderStatusBadge from "../components/common/OrderStatusBadge";
 
 export default function OrderTracking() {
   const { orderNumber: paramOrderNumber } = useParams<{ orderNumber?: string }>();
@@ -73,40 +71,6 @@ export default function OrderTracking() {
     void executeTrack(inputNumber);
   }
 
-  const getStatusBadge = (status: TrackedOrder["status"]) => {
-    switch (status) {
-      case "CONFIRMED":
-        return {
-          label: language === "en" ? "Confirmed" : "Potvrđeno",
-          bg: "bg-sky-50 text-sky-800 border-sky-200",
-          icon: Clock,
-        };
-      case "PROCESSING":
-        return {
-          label: language === "en" ? "Processing in Lab" : "U pripremi",
-          bg: "bg-amber-50 text-amber-800 border-amber-200",
-          icon: RefreshCw,
-        };
-      case "SHIPPED":
-        return {
-          label: language === "en" ? "Shipped" : "Poslano",
-          bg: "bg-emerald-50 text-emerald-800 border-emerald-200",
-          icon: Truck,
-        };
-      case "DELIVERED":
-        return {
-          label: language === "en" ? "Delivered" : "Isporučeno",
-          bg: "bg-teal-50 text-teal-800 border-teal-200",
-          icon: CheckCircle2,
-        };
-      case "CANCELLED":
-        return {
-          label: language === "en" ? "Cancelled" : "Otkazano",
-          bg: "bg-rose-50 text-rose-800 border-rose-200",
-          icon: XCircle,
-        };
-    }
-  };
 
   const getStepProgress = (status: TrackedOrder["status"]) => {
     switch (status) {
@@ -204,18 +168,12 @@ export default function OrderTracking() {
               </span>
             </div>
 
-            {(() => {
-              const badge = getStatusBadge(order.status);
-              const BadgeIcon = badge.icon;
-              return (
-                <div
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs sm:text-sm font-semibold ${badge.bg}`}
-                >
-                  <BadgeIcon size={16} />
-                  <span>{badge.label}</span>
-                </div>
-              );
-            })()}
+            <OrderStatusBadge
+              status={order.status}
+              language={language}
+              showIcon
+              className="px-3.5 py-1.5 text-xs sm:text-sm font-semibold"
+            />
           </div>
 
           {/* Timeline visualization (if not cancelled) */}

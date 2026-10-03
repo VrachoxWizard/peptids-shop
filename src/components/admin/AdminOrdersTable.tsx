@@ -1,18 +1,11 @@
 import type { AdminOrderSummary } from "../../services/adminApi";
+import OrderStatusBadge from "../common/OrderStatusBadge";
 
 interface AdminOrdersTableProps {
   orders: AdminOrderSummary[];
   totalOrdersCount?: number;
   onSelectOrder: (id: string) => void;
 }
-
-const STATUS_COLORS: Record<string, string> = {
-  CONFIRMED: "bg-amber-50 text-amber-700 border-amber-200",
-  PROCESSING: "bg-blue-50 text-blue-700 border-blue-200",
-  SHIPPED: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  DELIVERED: "bg-slate-100 text-slate-600 border-slate-200",
-  CANCELLED: "bg-rose-50 text-rose-700 border-rose-200",
-};
 
 const PAYMENT_LABELS: Record<string, string> = {
   cod: "Pouzeće",
@@ -82,14 +75,7 @@ export default function AdminOrdersTable({
                     {order.total.toFixed(2)} {order.currency}
                   </td>
                   <td className="py-3.5 px-4">
-                    <span
-                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${
-                        STATUS_COLORS[order.status] ||
-                        "bg-slate-100 text-slate-600 border-slate-200"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
+                    <OrderStatusBadge status={order.status} />
                   </td>
                   <td className="py-3.5 px-4 font-mono text-[11px] text-slate-500">
                     {order.trackingNumber ? (
