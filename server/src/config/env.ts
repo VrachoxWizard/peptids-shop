@@ -20,6 +20,9 @@ const envSchema = z.object({
   COMPANY_STREET: z.string().default("Istraživačka 10"),
   COMPANY_CITY: z.string().default("Zagreb"),
   ADMIN_API_KEY: z.string().default("dev_admin_secret_key_replace_in_prod"),
+  RESEND_API_KEY: z.string().optional(),
+  STORE_OWNER_EMAIL: z.string().email().optional(),
+  EMAIL_FROM: z.string().default("PeptideLab <narudzbe@peptidelab.hr>"),
 });
 
 const parsed = envSchema.safeParse(process.env);

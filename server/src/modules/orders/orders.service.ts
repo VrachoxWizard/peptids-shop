@@ -11,6 +11,7 @@ import {
 } from "../../db/schema";
 import { env } from "../../config/env";
 import { generateHub3Payload } from "../payments/hub3";
+import { emailService } from "../email/email.service";
 import type { CreateOrderInput, QuoteOrderInput } from "./orders.schema";
 
 export class OrdersService {
@@ -181,6 +182,50 @@ export class OrdersService {
         customerCity: input.shippingAddress.city,
       });
     }
+
+    // 5. Asinkrono slanje email potvrde kupcu i obavijesti vlasniku trgovine
+    emailService
+      .sendOrderConfirmation({
+        orderNumber: result.orderNumber,
+        customerName: input.shippingAddress.recipientName,
+        customerEmail: input.customerEmail,
+        customerPhone: input.shippingAddress.phoneNumber,
+        paymentMethod: input.paymentMethod,
+        total: quote.total,
+        subtotal: quote.subtotal,
+        shippingFee: quote.shippingFee,
+        currency: env.SHOP_CURRENCY,
+        items: quote.items.map((i) => ({
+          name: i.name,
+          unitPrice: i.unitPrice,
+          quantity: i.quantity,
+          totalPrice: i.totalPrice,
+        })),
+        shippingAddress: input.shippingAddress,
+        paymentDetails,
+      })
+      .catch(() => {});
+
+    emailService
+      .sendMerchantAlert({
+        orderNumber: result.orderNumber,
+        customerName: input.shippingAddress.recipientName,
+        customerEmail: input.customerEmail,
+        customerPhone: input.shippingAddress.phoneNumber,
+        paymentMethod: input.paymentMethod,
+        total: quote.total,
+        subtotal: quote.subtotal,
+        shippingFee: quote.shippingFee,
+        currency: env.SHOP_CURRENCY,
+        items: quote.items.map((i) => ({
+          name: i.name,
+          unitPrice: i.unitPrice,
+          quantity: i.quantity,
+          totalPrice: i.totalPrice,
+        })),
+        shippingAddress: input.shippingAddress,
+      })
+      .catch(() => {});
 
     return {
       orderNumber: result.orderNumber,

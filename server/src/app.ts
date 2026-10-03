@@ -9,6 +9,7 @@ import { pool } from "./db";
 import { catalogRoutes } from "./modules/catalog/catalog.routes";
 import { ordersRoutes } from "./modules/orders/orders.routes";
 import { inquiriesRoutes } from "./modules/inquiries/inquiries.routes";
+import { adminRoutes } from "./modules/admin/admin.routes";
 
 export function buildApp(): FastifyInstance {
   const app = Fastify({
@@ -118,6 +119,7 @@ export function buildApp(): FastifyInstance {
       apiV1.register(catalogRoutes);
       apiV1.register(ordersRoutes);
       apiV1.register(inquiriesRoutes);
+      apiV1.register(adminRoutes);
     },
     { prefix: "/api/v1" },
   );

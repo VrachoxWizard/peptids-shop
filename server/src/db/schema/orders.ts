@@ -24,6 +24,8 @@ export const orders = pgTable(
     status: varchar("status", { length: 50 }).default("PENDING").notNull(),
     paymentMethod: varchar("payment_method", { length: 50 }).notNull(), // 'cod' | 'keks' | 'transfer'
     paymentStatus: varchar("payment_status", { length: 50 }).default("PENDING").notNull(),
+    trackingNumber: varchar("tracking_number", { length: 100 }),
+    shippingCarrier: varchar("shipping_carrier", { length: 50 }).default("GLS"),
     ruoAccepted: boolean("ruo_accepted").default(true).notNull(), // Research Use Only
     ruoAcceptedAt: timestamp("ruo_accepted_at").defaultNow().notNull(),
     ipAddress: varchar("ip_address", { length: 100 }),

@@ -111,4 +111,31 @@ describe("PeptideLab Fastify Server", () => {
     expect(payload.formattedBarcodePayload).toContain("EUR");
     expect(payload.formattedBarcodePayload).toContain("000000000004990"); // 49.90 EUR = 4990 centi
   });
+
+  it("GET /api/v1/admin/orders odbija neautoriziran zahtjev bez admin ključa", async () => {
+    const app = buildApp();
+    const response = await app.inject({
+      method: "GET",
+      url: "/api/v1/admin/orders",
+    });
+
+    expect(response.statusCode).toBe(401);
+    const body = response.json();
+    expect(body.error.code).toBe("UNAUTHORIZED");
+  });
+
+  it("GET /api/v1/admin/orders odbija neispravan admin ključ sa statusom 403 Forbidden", async () => {
+    const app = buildApp();
+    const response = await app.inject({
+      method: "GET",
+      url: "/api/v1/admin/orders",
+      headers: {
+        "x-admin-key": "pogresna_lozinka_123",
+      },
+    });
+
+    expect(response.statusCode).toBe(403);
+    const body = response.json();
+    expect(body.error.code).toBe("FORBIDDEN");
+  });
 });
