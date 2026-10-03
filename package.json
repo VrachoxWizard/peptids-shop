@@ -3,12 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "server"
+  ],
   "scripts": {
     "dev": "vite",
+    "dev:server": "npm --workspace=server run dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:push": "npm --workspace=server run db:push",
+    "db:seed": "npm --workspace=server run db:seed"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

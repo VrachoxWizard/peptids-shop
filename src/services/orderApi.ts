@@ -38,11 +38,17 @@ export interface OrderResponse {
   paymentDetails?: Hub3PaymentSlip | null;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return import.meta.env.VITE_API_URL || `${window.location.origin}/api/v1`;
+  }
+  return import.meta.env.VITE_API_URL || "http://localhost:4000/api/v1";
+}
 
 export async function submitOrder(payload: CreateOrderPayload): Promise<OrderResponse> {
+  const baseUrl = getApiBaseUrl();
   try {
-    const res = await fetch(`${API_BASE_URL}/orders`, {
+    const res = await fetch(`${baseUrl}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
