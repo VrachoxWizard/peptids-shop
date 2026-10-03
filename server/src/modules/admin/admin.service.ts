@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "../../db";
 import {
   auditLogs,
@@ -259,10 +259,25 @@ export class AdminService {
       .from(products)
       .orderBy(desc(products.createdAt));
 
-    const batches = await db.select().from(productBatches);
+    if (rows.length === 0) {
+      return [];
+    }
+
+    const productIds = rows.map((p) => p.id);
+    const batches = await db
+      .select()
+      .from(productBatches)
+      .where(inArray(productBatches.productId, productIds));
+
+    const batchesByProduct = new Map<number, typeof batches>();
+    for (const b of batches) {
+      const list = batchesByProduct.get(b.productId) || [];
+      list.push(b);
+      batchesByProduct.set(b.productId, list);
+    }
 
     return rows.map((p) => {
-      const productBatchesList = batches.filter((b) => b.productId === p.id);
+      const productBatchesList = batchesByProduct.get(p.id) || [];
       const totalStock = productBatchesList.reduce(
         (acc, b) => acc + (b.isReleased ? b.stockQuantity : 0),
         0,
