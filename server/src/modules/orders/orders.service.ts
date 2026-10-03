@@ -1,5 +1,5 @@
 import { randomInt } from "node:crypto";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { db } from "../../db";
 import {
   auditLogs,
@@ -115,7 +115,7 @@ export class OrdersService {
 
       // c) Provjeri zalihe, rezerviraj i spremi stavke narudžbe s dodijeljenom serijom
       for (const item of quote.items) {
-        // Pronađi aktivnu seriju za ovaj spoj
+        // Pronađi aktivnu seriju za ovaj spoj uz FIFO poredak (najraniji rok trajanja)
         const [batch] = await tx
           .select()
           .from(productBatches)
@@ -125,24 +125,29 @@ export class OrdersService {
               eq(productBatches.isReleased, true),
             ),
           )
+          .orderBy(asc(productBatches.expiryDate), asc(productBatches.id))
           .limit(1)
           .for("update");
 
-        if (batch) {
-          if (batch.stockQuantity < item.quantity) {
-            throw new Error(
-              `Nedovoljna zaliha za proizvod "${item.name}". Na skladištu preostalo: ${batch.stockQuantity} kom.`,
-            );
-          }
-
-          // Transakcijsko smanjivanje zaliha
-          await tx
-            .update(productBatches)
-            .set({
-              stockQuantity: batch.stockQuantity - item.quantity,
-            })
-            .where(eq(productBatches.id, batch.id));
+        if (!batch) {
+          throw new Error(
+            `Proizvod "${item.name}" trenutno nema dostupnih aktivnih serija na zalihama.`,
+          );
         }
+
+        if (batch.stockQuantity < item.quantity) {
+          throw new Error(
+            `Nedovoljna zaliha za proizvod "${item.name}". Na skladištu preostalo: ${batch.stockQuantity} kom.`,
+          );
+        }
+
+        // Transakcijsko smanjivanje zaliha
+        await tx
+          .update(productBatches)
+          .set({
+            stockQuantity: batch.stockQuantity - item.quantity,
+          })
+          .where(eq(productBatches.id, batch.id));
 
         await tx.insert(orderItems).values({
           orderId: newOrder.id,
@@ -151,7 +156,7 @@ export class OrdersService {
           unitPriceSnapshot: item.unitPrice.toFixed(2),
           quantity: item.quantity,
           totalPrice: item.totalPrice.toFixed(2),
-          batchId: batch ? batch.id : null,
+          batchId: batch.id,
         });
       }
 
@@ -205,7 +210,9 @@ export class OrdersService {
         shippingAddress: input.shippingAddress,
         paymentDetails,
       })
-      .catch(() => {});
+      .catch((err: unknown) => {
+        console.error("Asinkrono slanje potvrde narudžbe kupcu nije uspjelo:", err);
+      });
 
     emailService
       .sendMerchantAlert({
@@ -226,7 +233,9 @@ export class OrdersService {
         })),
         shippingAddress: input.shippingAddress,
       })
-      .catch(() => {});
+      .catch((err: unknown) => {
+        console.error("Asinkrono slanje obavijesti vlasniku trgovine nije uspjelo:", err);
+      });
 
     return {
       orderNumber: result.orderNumber,
