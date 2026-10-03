@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -20,40 +20,53 @@ export default function OrderTracking() {
   const { language } = useTranslation();
   useDocumentTitle(language === "en" ? "Track Order | PeptideLab" : "Praćenje narudžbe | PeptideLab");
 
-  const [inputNumber, setInputNumber] = useState(paramOrderNumber || "");
+  const [userTypedNumber, setUserTypedNumber] = useState<string | null>(null);
+  const inputNumber = userTypedNumber ?? (paramOrderNumber || "");
   const [order, setOrder] = useState<TrackedOrder | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const executeTrack = useCallback(
+    async (num: string) => {
+      const clean = num.trim();
+      if (!clean) return;
+
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await trackOrder(clean);
+        setOrder(data);
+      } catch (err: unknown) {
+        setOrder(null);
+        setError(
+          err instanceof Error
+            ? err.message
+            : language === "en"
+            ? "Order not found."
+            : "Narudžba s navedenim brojem nije pronađena.",
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [language],
+  );
+
   useEffect(() => {
-    if (paramOrderNumber) {
-      setInputNumber(paramOrderNumber);
-      void executeTrack(paramOrderNumber);
-    }
-  }, [paramOrderNumber]);
+    if (!paramOrderNumber) return;
+    let cancelled = false;
 
-  async function executeTrack(num: string) {
-    const clean = num.trim();
-    if (!clean) return;
+    const timer = setTimeout(() => {
+      if (!cancelled) {
+        void executeTrack(paramOrderNumber);
+      }
+    }, 0);
 
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await trackOrder(clean);
-      setOrder(data);
-    } catch (err: unknown) {
-      setOrder(null);
-      setError(
-        err instanceof Error
-          ? err.message
-          : language === "en"
-          ? "Order not found."
-          : "Narudžba s navedenim brojem nije pronađena.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [paramOrderNumber, executeTrack]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -145,7 +158,7 @@ export default function OrderTracking() {
             <input
               type="text"
               value={inputNumber}
-              onChange={(e) => setInputNumber(e.target.value)}
+              onChange={(e) => setUserTypedNumber(e.target.value)}
               placeholder="ORD-2026-XXXXXX"
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-700/20 focus:border-sky-700 uppercase"
             />
