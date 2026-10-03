@@ -1,4 +1,4 @@
-import { Banknote, CreditCard, QrCode, Smartphone } from "lucide-react";
+import { Banknote, QrCode, Smartphone } from "lucide-react";
 import type { PaymentMethod } from "./OrderSuccessView";
 import type { translations } from "../../i18n/translations";
 
@@ -44,14 +44,6 @@ export default function PaymentMethodSelector({
       selectedStyle: "border-sky-600 bg-sky-50/70",
       iconColor: "text-sky-700",
       badgeStyle: "bg-slate-100 text-slate-700",
-    },
-    {
-      id: "card",
-      label: tPayments.card,
-      detail: tPayments.cardDetail,
-      icon: <CreditCard size={15} className="text-sky-700 shrink-0" />,
-      selectedStyle: "border-sky-600 bg-sky-50/70",
-      iconColor: "text-sky-700",
     },
     {
       id: "transfer",

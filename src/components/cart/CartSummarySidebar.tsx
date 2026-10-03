@@ -1,4 +1,4 @@
-import { Lock, PackageCheck, ShieldCheck, Truck } from "lucide-react";
+import { Loader2, Lock, PackageCheck, ShieldCheck, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 import PaymentMethodSelector from "./PaymentMethodSelector";
 import type { PaymentMethod } from "./OrderSuccessView";
@@ -20,6 +20,7 @@ interface CartSummarySidebarProps {
   paymentMethod: PaymentMethod;
   onSelectPaymentMethod: (method: PaymentMethod) => void;
   onCheckout: () => void;
+  isSubmitting?: boolean;
 }
 
 export default function CartSummarySidebar({
@@ -33,6 +34,7 @@ export default function CartSummarySidebar({
   paymentMethod,
   onSelectPaymentMethod,
   onCheckout,
+  isSubmitting = false,
 }: CartSummarySidebarProps) {
   const remainingForFreeShipping = Math.max(
     0,
@@ -125,14 +127,26 @@ export default function CartSummarySidebar({
       <button
         type="button"
         onClick={onCheckout}
-        className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 shadow-sm"
+        disabled={isSubmitting}
+        className="tactile-press mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
       >
-        <ShieldCheck size={18} />
-        <span>
-          {language === "hr"
-            ? `Dovrši narudžbu (${paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})`
-            : `Complete Order (${paymentMethod === "cod" ? "Cash on Delivery" : "Secure Pay"})`}
-        </span>
+        {isSubmitting ? (
+          <>
+            <Loader2 size={18} className="animate-spin" />
+            <span>
+              {language === "hr" ? "Obrada narudžbe..." : "Processing Order..."}
+            </span>
+          </>
+        ) : (
+          <>
+            <ShieldCheck size={18} />
+            <span>
+              {language === "hr"
+                ? `Dovrši narudžbu (${paymentMethod === "cod" ? "Pouzeće" : "Sigurno"})`
+                : `Complete Order (${paymentMethod === "cod" ? "Cash on Delivery" : "Secure Pay"})`}
+            </span>
+          </>
+        )}
       </button>
 
       {/* Trust Guarantees Box */}

@@ -7,12 +7,17 @@ import OrderSuccessView, {
 import EmptyCartView from "../components/cart/EmptyCartView";
 import CartItemRow from "../components/cart/CartItemRow";
 import CartSummarySidebar from "../components/cart/CartSummarySidebar";
+import CheckoutForm, {
+  type CheckoutFormData,
+  type CheckoutFormErrors,
+} from "../components/cart/CheckoutForm";
 import { useCartStore } from "../store/cartStore";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useTranslation } from "../i18n/useTranslation";
 import { products } from "../data/products";
 import { getLocalizedProduct } from "../types/product";
 import { calculateShipping } from "../config/shop";
+import { submitOrder, type Hub3PaymentSlip } from "../services/orderApi";
 
 export default function Cart() {
   const { t, language } = useTranslation();
@@ -24,9 +29,30 @@ export default function Cart() {
   const clearCart = useCartStore((state) => state.clearCart);
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState<CheckoutFormData>({
+    recipientName: "",
+    customerEmail: "",
+    phoneNumber: "",
+    streetAddress: "",
+    city: "",
+    postalCode: "",
+    country: "HR",
+    needR1: false,
+    companyName: "",
+    companyOib: "",
+    deliveryInstructions: "",
+    ruoAccepted: false,
+  });
+
+  const [formErrors, setFormErrors] = useState<CheckoutFormErrors>({});
+
   const [completedOrder, setCompletedOrder] = useState<{
+    orderNumber?: string;
     total: number;
     paymentMethod: PaymentMethod;
+    paymentDetails?: Hub3PaymentSlip | null;
   } | null>(null);
 
   const subtotal = items.reduce(
@@ -35,6 +61,20 @@ export default function Cart() {
   );
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
+
+  function handleFormFieldChange(field: keyof CheckoutFormData, value: any) {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    // Očisti grešku za to polje
+    if (formErrors[field]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        [field]: undefined,
+      }));
+    }
+  }
 
   function handleRemove(id: number, name: string) {
     removeItem(id);
@@ -48,16 +88,117 @@ export default function Cart() {
     toast.success(t.cart.clearedToast);
   }
 
-  function handleCheckout() {
-    const finalTotal = total;
-    const method = paymentMethod;
-    setCompletedOrder({ total: finalTotal, paymentMethod: method });
-    clearCart();
-    toast.success(
-      method === "cod"
-        ? t.cart.orderSuccessCodDesc
-        : t.cart.orderSuccessSecureDesc,
-    );
+  function validateCheckout(): boolean {
+    const errors: CheckoutFormErrors = {};
+    const isHr = language === "hr";
+
+    if (!formData.recipientName.trim() || formData.recipientName.trim().length < 2) {
+      errors.recipientName = isHr
+        ? "Ime i prezime moraju imati barem 2 znaka."
+        : "Name must be at least 2 characters.";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.customerEmail.trim() || !emailRegex.test(formData.customerEmail)) {
+      errors.customerEmail = isHr
+        ? "Unesite valjanu email adresu."
+        : "Please enter a valid email address.";
+    }
+
+    if (!formData.phoneNumber.trim() || formData.phoneNumber.trim().length < 6) {
+      errors.phoneNumber = isHr
+        ? "Broj mobitela je obavezan radi SMS najave dostave."
+        : "Phone number is required for SMS delivery scheduling.";
+    }
+
+    if (!formData.streetAddress.trim() || formData.streetAddress.trim().length < 3) {
+      errors.streetAddress = isHr
+        ? "Ulica i kućni broj su obavezni."
+        : "Street address is required.";
+    }
+
+    if (!formData.city.trim() || formData.city.trim().length < 2) {
+      errors.city = isHr ? "Grad je obavezan." : "City is required.";
+    }
+
+    if (!formData.postalCode.trim() || formData.postalCode.trim().length < 4) {
+      errors.postalCode = isHr ? "Poštanski broj je obavezan." : "Postal code is required.";
+    }
+
+    if (formData.needR1) {
+      if (!formData.companyName.trim()) {
+        errors.companyName = isHr ? "Naziv tvrtke je obavezan." : "Company name is required.";
+      }
+      if (!formData.companyOib.trim() || formData.companyOib.trim().length < 8) {
+        errors.companyOib = isHr ? "Unesite valjani OIB / porezni broj." : "Invalid Tax ID.";
+      }
+    }
+
+    if (!formData.ruoAccepted) {
+      errors.ruoAccepted = isHr
+        ? "Obavezno je potvrditi izjavu o laboratorijskoj namjeni (RUO)."
+        : "You must confirm the laboratory research declaration (RUO).";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
+  async function handleCheckout() {
+    if (!validateCheckout()) {
+      toast.error(
+        language === "hr"
+          ? "Molimo ispunite sve obavezne podatke za dostavu i potvrdite RUO izjavu."
+          : "Please complete all required shipping fields and confirm the RUO declaration.",
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const orderPayload = {
+        items: items.map((i) => ({ productId: i.id, quantity: i.quantity })),
+        customerEmail: formData.customerEmail,
+        shippingAddress: {
+          recipientName: formData.recipientName,
+          streetAddress: formData.streetAddress,
+          city: formData.city,
+          postalCode: formData.postalCode,
+          country: formData.country,
+          phoneNumber: formData.phoneNumber,
+          companyName: formData.needR1 ? formData.companyName : undefined,
+          companyOib: formData.needR1 ? formData.companyOib : undefined,
+          deliveryInstructions: formData.deliveryInstructions || undefined,
+        },
+        paymentMethod,
+        ruoDeclarationAccepted: true as const,
+        notes: formData.deliveryInstructions,
+      };
+
+      const response = await submitOrder(orderPayload);
+
+      setCompletedOrder({
+        orderNumber: response.orderNumber,
+        total: response.total || total,
+        paymentMethod: response.paymentMethod,
+        paymentDetails: response.paymentDetails,
+      });
+
+      clearCart();
+
+      toast.success(
+        paymentMethod === "cod"
+          ? t.cart.orderSuccessCodDesc
+          : paymentMethod === "transfer"
+          ? "Narudžba zaprimljena! Podaci za uplatu su generirani."
+          : "Narudžba zaprimljena! Upute za Keks Pay su prikazane.",
+      );
+    } catch (error: any) {
+      toast.error(error.message || "Došlo je do greške pri obradi narudžbe.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (completedOrder) {
@@ -92,37 +233,53 @@ export default function Cart() {
         <button
           type="button"
           onClick={handleClearCart}
-          className="text-xs sm:text-sm text-slate-500 transition hover:text-red-600 font-medium"
+          className="text-xs sm:text-sm text-slate-500 transition hover:text-red-600 font-medium cursor-pointer"
         >
           {t.cart.clearCart}
         </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-        {/* Products list */}
-        <div className="space-y-4">
-          {items.map((item) => {
-            const rawProduct = products.find((p) => p.id === item.id);
-            const localizedProduct = rawProduct
-              ? getLocalizedProduct(rawProduct, language)
-              : item;
+      <div className="grid gap-8 lg:grid-cols-[1fr_380px] items-start">
+        {/* Left Column: Products list + Delivery details */}
+        <div className="space-y-6">
+          {/* Products list */}
+          <div className="space-y-3">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 mb-2">
+              {language === "hr" ? "Pregled stavki u košarici" : "Selected Cart Items"}
+            </h2>
+            {items.map((item) => {
+              const rawProduct = products.find((p) => p.id === item.id);
+              const localizedProduct = rawProduct
+                ? getLocalizedProduct(rawProduct, language)
+                : item;
 
-            return (
-              <CartItemRow
-                key={item.id}
-                item={item}
-                rawProduct={rawProduct}
-                localizedProduct={localizedProduct}
-                tCart={t.cart}
-                onIncrease={increaseItem}
-                onDecrease={decreaseItem}
-                onRemove={handleRemove}
-              />
-            );
-          })}
+              return (
+                <CartItemRow
+                  key={item.id}
+                  item={item}
+                  rawProduct={rawProduct}
+                  localizedProduct={localizedProduct}
+                  tCart={t.cart}
+                  onIncrease={increaseItem}
+                  onDecrease={decreaseItem}
+                  onRemove={handleRemove}
+                />
+              );
+            })}
+          </div>
+
+          {/* Forma za dostavu i RUO suglasnost */}
+          <div className="pt-2">
+            <CheckoutForm
+              formData={formData}
+              errors={formErrors}
+              onChange={handleFormFieldChange}
+              language={language}
+            />
+          </div>
         </div>
 
-        {/* Summary Sidebar */}
+        {/* Right Column: Summary Sidebar */}
         <CartSummarySidebar
           tCart={t.cart}
           tPayments={t.payments}
@@ -134,6 +291,7 @@ export default function Cart() {
           paymentMethod={paymentMethod}
           onSelectPaymentMethod={setPaymentMethod}
           onCheckout={handleCheckout}
+          isSubmitting={isSubmitting}
         />
       </div>
     </main>

@@ -31,7 +31,7 @@ describe("Cart Component", () => {
     expect(screen.getByText(/diskrecija/i)).toBeInTheDocument();
   });
 
-  it("clears cart and displays order success confirmation when checkout button is clicked", () => {
+  it("clears cart and displays order success confirmation when checkout form is filled and submitted", async () => {
     useCartStore.getState().addItem(products[0], 1);
     render(
       <MemoryRouter>
@@ -39,13 +39,39 @@ describe("Cart Component", () => {
       </MemoryRouter>
     );
 
+    // Popuni formu za dostavu
+    fireEvent.change(screen.getByPlaceholderText(/dr\. ivan horvat/i), {
+      target: { value: "Dr. Marko Maric" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/ivan\.horvat@lab\.hr/i), {
+      target: { value: "marko.maric@institut.hr" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/\+385 91 234 5678/i), {
+      target: { value: "+385 91 555 4321" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/ilica 120/i), {
+      target: { value: "Vukovarska 78" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/^zagreb$/i), {
+      target: { value: "Zagreb" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/10000/i), {
+      target: { value: "10000" },
+    });
+
+    // Označi RUO zakonsku izjavu
+    const ruoCheckbox = screen.getByRole("checkbox", {
+      name: /potvrđujem da naručene spojeve/i,
+    });
+    fireEvent.click(ruoCheckbox);
+
     const checkoutBtn = screen.getByRole("button", { name: /dovrši narudžbu/i });
     fireEvent.click(checkoutBtn);
 
-    // Cart state must now be empty
-    expect(useCartStore.getState().items).toHaveLength(0);
+    // Prikaz ekrana potvrde narudžbe
+    expect(await screen.findByText(/narudžba zaprimljena!/i)).toBeInTheDocument();
 
-    // Confirmation screen should be displayed
-    expect(screen.getByText(/narudžba zaprimljena!/i)).toBeInTheDocument();
+    // Košarica mora biti ispražnjena
+    expect(useCartStore.getState().items).toHaveLength(0);
   });
 });
