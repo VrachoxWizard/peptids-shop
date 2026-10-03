@@ -1,4 +1,4 @@
-import { FlaskConical, ShieldAlert } from "lucide-react";
+import { FlaskConical, Lock, ShieldAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "../../i18n/useTranslation";
 
@@ -118,9 +118,19 @@ export default function Footer() {
         {/* Bottom Colophon Bar */}
         <div className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
           <p>© {currentYear} PeptideLab d.o.o. {t.footer.rightsReserved} Zagreb, Hrvatska.</p>
-          <p className="font-mono text-[11px] text-slate-400">
-            Swiss & EU Pharma Research Standards · ISO 9001:2015 Compliant HPLC
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="font-mono text-[11px] text-slate-400">
+              Swiss & EU Pharma Research Standards · ISO 9001:2015 Compliant HPLC
+            </p>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-400 hover:text-slate-700 transition"
+              title="Administratorski pristup"
+            >
+              <Lock size={11} />
+              <span>Admin</span>
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

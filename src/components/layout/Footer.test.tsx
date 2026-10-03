@@ -14,4 +14,16 @@ describe("Footer Trust Elements", () => {
     expect(screen.getByText(/DPD/i)).toBeInTheDocument();
     expect(screen.getByText(/Keks Pay/i)).toBeInTheDocument();
   });
+
+  it("renders discrete admin portal link in footer", () => {
+    render(
+      <MemoryRouter>
+        <Footer />
+      </MemoryRouter>
+    );
+
+    const adminLink = screen.getByRole("link", { name: /admin/i });
+    expect(adminLink).toBeInTheDocument();
+    expect(adminLink).toHaveAttribute("href", "/admin");
+  });
 });
