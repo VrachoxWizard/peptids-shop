@@ -74,6 +74,73 @@ export interface AdminDashboardStats {
   currency: string;
 }
 
+export interface AdminProduct {
+  id: number;
+  slug: string;
+  nameHr: string;
+  nameEn?: string | null;
+  category: string;
+  categoryEn?: string | null;
+  descriptionHr: string;
+  descriptionEn?: string | null;
+  amount: string;
+  price: number;
+  imageUrl?: string | null;
+  featured: boolean;
+  purity?: string | null;
+  casNumber?: string | null;
+  molecularWeight?: string | null;
+  isActive: boolean;
+  stockQuantity: number;
+  currentBatch?: {
+    id: number;
+    batchNumber: string;
+    purityPercentage?: string | number | null;
+    stockQuantity: number;
+    expiryDate?: string | null;
+    isReleased: boolean;
+  } | null;
+}
+
+export interface AdminCreateProductInput {
+  slug: string;
+  nameHr: string;
+  nameEn?: string;
+  category: string;
+  categoryEn?: string;
+  descriptionHr: string;
+  descriptionEn?: string;
+  amount: string;
+  price: number;
+  imageUrl?: string;
+  featured?: boolean;
+  purity?: string;
+  casNumber?: string;
+  molecularWeight?: string;
+  isActive?: boolean;
+}
+
+export interface AdminCreateBatchInput {
+  productId: number;
+  batchNumber: string;
+  purityPercentage?: number;
+  synthesisDate?: string;
+  expiryDate?: string;
+  coaPdfUrl?: string;
+  stockQuantity: number;
+  isReleased?: boolean;
+}
+
+export interface AdminInquiry {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  ipAddress?: string | null;
+  status: "NEW" | "IN_PROGRESS" | "ANSWERED" | "ARCHIVED";
+  createdAt: string;
+}
+
 export async function fetchAdminStats(adminKey: string): Promise<AdminDashboardStats> {
   const baseUrl = getApiBaseUrl();
   const res = await fetch(`${baseUrl}/admin/stats`, {
@@ -164,6 +231,177 @@ export async function updateAdminOrderStatus(
   if (!res.ok) {
     const errorJson = await res.json().catch(() => null);
     throw new Error(errorJson?.error?.message || "Greška pri ažuriranju statusa narudžbe.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function fetchAdminProducts(adminKey: string): Promise<AdminProduct[]> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/products`, {
+    headers: {
+      "x-admin-key": adminKey,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Neuspjelo dohvaćanje kataloga artikala.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function createAdminProduct(
+  adminKey: string,
+  data: AdminCreateProductInput,
+): Promise<AdminProduct> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": adminKey,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjelo dodavanje artikla.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function updateAdminProduct(
+  adminKey: string,
+  id: number,
+  data: Partial<AdminCreateProductInput>,
+): Promise<AdminProduct> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/products/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": adminKey,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjelo ažuriranje artikla.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function deleteAdminProduct(
+  adminKey: string,
+  id: number,
+): Promise<{ id: number; slug: string; isActive: boolean }> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/products/${id}`, {
+    method: "DELETE",
+    headers: {
+      "x-admin-key": adminKey,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjela deaktivacija artikla.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function createAdminBatch(
+  adminKey: string,
+  data: AdminCreateBatchInput,
+) {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/batches`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": adminKey,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjelo dodavanje serije.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function updateAdminBatchStock(
+  adminKey: string,
+  batchId: number,
+  data: { stockQuantity: number; isReleased?: boolean },
+) {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/batches/${batchId}/stock`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": adminKey,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjelo ažuriranje zaliha serije.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function fetchAdminInquiries(adminKey: string): Promise<AdminInquiry[]> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/inquiries`, {
+    headers: {
+      "x-admin-key": adminKey,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Neuspjelo dohvaćanje kontakt upita.");
+  }
+
+  const json = await res.json();
+  return json.data;
+}
+
+export async function updateAdminInquiryStatus(
+  adminKey: string,
+  id: number,
+  status: "NEW" | "IN_PROGRESS" | "ANSWERED" | "ARCHIVED",
+): Promise<AdminInquiry> {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/admin/inquiries/${id}/status`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-key": adminKey,
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.error?.message || "Neuspjelo ažuriranje statusa upita.");
   }
 
   const json = await res.json();
